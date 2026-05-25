@@ -7,6 +7,10 @@ dotenv.config();
 
 import authRoutes from './routes/authRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
+import parentRoute from './routes/parentRoute.js';
+import childRoute from './routes/childRoute.js';
+import categoryRoute from './routes/categoryRoute.js';
+import userRoutes from './routes/userRoutes.js'; // test
 
 const app = express();
 
@@ -17,8 +21,13 @@ app.get('/', (req, res) => {
     res.send('Curio API Running');
 });
 
+app.use('/api/users', userRoutes); //test
+
 app.use('/api/ai', aiRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/parent', parentRoute);
+app.use('/api/child', childRoute);
+app.use('/api/category', categoryRouteRoute);
 
 mongoose
     .connect(process.env.MONGO_URI)
