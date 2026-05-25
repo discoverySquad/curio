@@ -3,9 +3,10 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-import authRoutes from './routes/authRoutes.js';
-
 dotenv.config();
+
+import authRoutes from './routes/authRoutes.js';
+import aiRoutes from './routes/aiRoutes.js';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {
     res.send('Curio API Running');
 });
 
+app.use('/api/ai', aiRoutes);
 app.use('/api/auth', authRoutes);
 
 mongoose
