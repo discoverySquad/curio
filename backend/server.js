@@ -3,13 +3,19 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+<<<<<<< HEAD
 import authRoutes from './routes/authRoutes.js';
 import parentRoute from './routes/parentRoute.js';
 import childRoute from './routes/childRoute.js';
 import categoryRoute from './routes/categoryRoute.js';
 import userRoutes from './routes/userRoutes.js'; // test
 
+=======
+>>>>>>> origin/develop
 dotenv.config();
+
+import authRoutes from './routes/authRoutes.js';
+import aiRoutes from './routes/aiRoutes.js';
 
 const app = express();
 
@@ -20,8 +26,12 @@ app.get('/', (req, res) => {
     res.send('Curio API Running');
 });
 
+<<<<<<< HEAD
 app.use('/api/users', userRoutes); //test
 
+=======
+app.use('/api/ai', aiRoutes);
+>>>>>>> origin/develop
 app.use('/api/auth', authRoutes);
 app.use('/api/parent', parentRoute);
 app.use('/api/child', childRoute);
