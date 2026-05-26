@@ -14,11 +14,13 @@ const createChild = async(req, res) => {
       timeLimit,
       usageTime,
       lastLoginAt,
-      progress: {
+      progress: [
+        {
         categoryId: progress.categoryId,
         completedAt: progress.completedAt,
         badge: progress.badge,
       }
+    ]
     });
 
     res.status(201).json(child);
@@ -28,6 +30,5 @@ const createChild = async(req, res) => {
   }
 };
 
-
-router.post("/test-child", createChild);
+router.post("/child", createChild);
 export default router;

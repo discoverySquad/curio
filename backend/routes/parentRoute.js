@@ -23,5 +23,5 @@ const createParent = async(req, res) => {
   }
 };
 
-router.post("/test-parent", createParent);
+router.post("/parent", createParent);
 export default router;

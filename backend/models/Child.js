@@ -25,7 +25,8 @@ const childSchema = new mongoose.Schema(
         lastLoginAt: {
             type: Date,
         },
-        progress: {
+        progress: [
+        {
           categoryId: {
             type: String
           },
@@ -36,6 +37,7 @@ const childSchema = new mongoose.Schema(
             type: String,
           }
         }
+      ]
     },
     { timestamps: true },
 );

@@ -22,5 +22,5 @@ const createCategory = async(req, res) => {
   }
 }
 
-router.post("/test-category", createCategory);
+router.post("/category", createCategory);
 export default router;
