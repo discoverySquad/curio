@@ -27,7 +27,7 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/parent', parentRoute);
 app.use('/api/child', childRoute);
-app.use('/api/category', categoryRouteRoute);
+app.use('/api/category', categoryRoute);
 
 mongoose
     .connect(process.env.MONGO_URI)
