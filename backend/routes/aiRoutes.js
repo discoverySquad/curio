@@ -43,4 +43,67 @@ router.post('/facts', async (req, res) => {
     }
 });
 
+
+router.post('/scan', async (req, res) => {
+    try {
+        const { imageBase64 } = req.body;
+
+        if (!imageBase64) {
+            return res.status(400).json({
+                message: 'Image is required',
+            });
+        }
+
+        const openai = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY,
+        });
+
+        const response = await openai.chat.completions.create({
+            model: 'gpt-4o-mini',
+            max_tokens: 512,
+            messages: [
+                {
+                    role: 'user',
+                    content: [
+                        {
+                            type: 'image_url',
+                            image_url: {
+                                url: `data:image/jpeg;base64,${imageBase64}`,
+                            },
+                        },
+                        {
+                            type: 'text',
+                            text: `You are an expert object detector. Identify the single most prominent object in this image. Be specific (e.g. 'red apple' not just 'fruit') Respond with ONLY a JSON object in this format, no extra text:
+                            {
+                            "objectName": "object name in English"
+                            "confidence": 0.95
+                            }`,
+                        },
+                    ],
+                },
+            ],
+        });
+
+        const text = response.choices[0].message.content;
+        const cleaned = text.replace(/```json|```/g, '').trim();
+        const result = JSON.parse(cleaned);
+
+        res.json({
+            success: true,
+            ...result,
+        });
+    } catch (error) {
+        console.log('========== SCAN ERROR ==========');
+        console.log(error);
+        console.log('================================');
+
+        res.status(500).json({
+            success: false,
+            message: 'AI failed to scan image',
+            error: error.message,
+        });
+    }
+});
+
+
 export default router;
