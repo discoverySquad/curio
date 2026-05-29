@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 
 const parentSchema = new mongoose.Schema(
     {
-        parentId: {
-            type: String,
-            unique: true,
-        },
         name: {
             type: String,
             required: true,

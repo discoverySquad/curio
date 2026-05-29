@@ -17,7 +17,12 @@ const getChild = async(req, res) => {
 // create child information
 const createChild = async(req, res) => {
   try{
-    let { name, avatar, age, timeLimit, usageTime, lastLoginAt, progress, parentId } = req.body;
+    let { name, avatar, age, timeLimit, usageTime, lastLoginAt, progress, parentMongoId } = req.body;
+
+    const parent = await Parent.findById(parentMongoId);
+    if(!parent){
+      return res.status(404).json({message: "Parent not found"});
+    }
 
     const child = await Child.create({
       name,
@@ -30,8 +35,9 @@ const createChild = async(req, res) => {
     });
 
     await Parent.findByIdAndUpdate(
-      parentId,
-      { $push: { childId: child._id}}
+      parentMongoId,
+      { $push: { childId: child._id}},
+      {new:true}
     );
 
     res.status(201).json(child);
