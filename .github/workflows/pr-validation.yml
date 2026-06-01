@@ -1,0 +1,24 @@
+name: Jira Validation
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  validate-jira-key:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate branch name
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+
+          echo "Branch Name: $BRANCH_NAME"
+
+          if [[ "$BRANCH_NAME" =~ KEN-[0-9]+ ]]; then
+            echo "Valid Jira key found"
+          else
+            echo "Branch name must contain Jira ticket key."
+            echo "Example: KEN-35-backend-api"
+            exit 1
+          fi
