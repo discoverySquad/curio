@@ -11,6 +11,7 @@ import parentRoute from './routes/parentRoute.js';
 import childRoute from './routes/childRoute.js';
 import categoryRoute from './routes/categoryRoute.js';
 import userRoutes from './routes/userRoutes.js'; // test
+import gamificationRoute from './routes/gamificationRoute.js';
 
 const app = express();
 
@@ -33,10 +34,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/parent', parentRoute);
 app.use('/api/child', childRoute);
 app.use('/api/category', categoryRoute);
+app.use('/api/gamification', gamificationRoute);
 
 mongoose
     .connect(process.env.MONGO_URI)
-    .then(() => {
+    .then(async() => {
         console.log('MongoDB Connected');
 
         app.listen(process.env.PORT || 5000, () => {
