@@ -1,6 +1,7 @@
 import Child from "../models/Child.js";
 import childProgress from "../models/Progress.js";
 import { recordCompleteTask, recordScan, recordFactViewed } from "../services/ProgressService.js";
+import { evaluateRewards } from "../services/badgeService.js";
 
 const completeTask = async (req, res) => {
     try {
@@ -48,14 +49,14 @@ const getChildGamification = async (req, res) => {
             return res.status(404).json({ message: 'Child not found' });
         }
 
-        const progress = await childProgress.findOne({ childId: req.params.id }).select('stats lastActiveAt');
+        const progress = await childProgress.findOne({ childId: req.params.id }).select('status lastActiveAt');
 
         res.status(200).json({
             name: child.name,
             avatar: child.avatar,
             currentLevel: child.currentLevel,
             earnedBadges: child.earnedBadges,
-            stats: progress?.stats ?? null,
+            status: progress?.status ?? null,
             lastActiveAt: progress?.lastActiveAt ?? null,
         });
     } catch (error) {
