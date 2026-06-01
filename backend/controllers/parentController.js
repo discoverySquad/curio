@@ -1,3 +1,4 @@
+import Child from '../models/Child.js';
 import Parent from '../models/Parent.js';
 
 //get one parent information
@@ -37,6 +38,13 @@ const createParent = async(req, res) => {
 const editParent = async(req, res) => {
   try{
     const {name, email, password} = req.body;
+    const updateData = {name, email};
+
+    // need to apply bcryptjs for password hash
+    if(password){
+      updateData.password = await bcrypt.has(password, 10);
+    }
+
     const parent = await Parent.findByIdAndUpdate(
       req.params.id,
       {name, email, password},
@@ -59,6 +67,11 @@ const deleteParent = async(req, res) => {
     const parent = await Parent.findByIdAndDelete(req.params.id);
     if(!parent){
       return res.status(404).json({error: "Parent not found"});
+    }
+
+    // delete child account connected to parent account
+    if(parent.children.length > 0){
+      await Child.deleteMany({_id: {$in: parent.children}});
     }
 
     res.status(200).json({message: "account deleted"})

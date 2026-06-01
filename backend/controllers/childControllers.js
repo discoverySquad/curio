@@ -17,7 +17,7 @@ const getChild = async(req, res) => {
 // create child information
 const createChild = async(req, res) => {
   try{
-    let { name, avatar, age, timeLimit, usageTime, lastLoginAt, progress, parentId } = req.body;
+    let { name, avatar, age, timeLimit, usageTime, lastLoginAt, parentId } = req.body;
 
     const child = await Child.create({
       name,
@@ -26,12 +26,11 @@ const createChild = async(req, res) => {
       timeLimit,
       usageTime,
       lastLoginAt,
-      progress: progress || []
     });
 
     await Parent.findByIdAndUpdate(
       parentId,
-      { $push: { childId: child._id}}
+      { $push: { children: child._id}}
     );
 
     res.status(201).json(child);
@@ -70,6 +69,12 @@ const deleteChild = async(req, res) => {
   if(!child){
     return res.status(404).json({ message: "Child not found"});
   }    
+    // delete children id from parent collection
+    await Parent.updateMany(
+      {children: req.params.id},
+      {$pull: {children: req.params.id}}
+    );
+    
     res.status(200).json({message: "Account deleted"});
   }catch(error){
     res.status(500).json({ error: error.message});

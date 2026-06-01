@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 
 const childSchema = new mongoose.Schema(
     {
-        childId: {
-            type: String,
-            unique: true,
-        },
         name: {
             type: String,
             required: true,
@@ -25,19 +21,20 @@ const childSchema = new mongoose.Schema(
         lastLoginAt: {
             type: Date,
         },
-        progress: [
-        {
-          categoryId: {
-            type: String
-          },
-          completedAt: {
-            type: Date,
-          },
-          badge: {
-            type: String,
-          }
-        }
-      ]
+        currentLevel: {
+            type: Number,
+            default: 0,
+        },
+        earnedBadges: [
+            {
+                badgeId: { type: String,
+                           required: true
+                },
+                earnedAt: { type: Date,
+                            default: Date.now
+                },
+            }
+        ],
     },
     { timestamps: true },
 );
