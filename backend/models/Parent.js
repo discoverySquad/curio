@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 
 const parentSchema = new mongoose.Schema(
     {
-        parentId: {
-            type: String,
-            unique: true,
-        },
         name: {
             type: String,
             required: true,
@@ -22,7 +18,9 @@ const parentSchema = new mongoose.Schema(
             required: true,
         },
         childId: {
-            type: [String],
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "Child",
+            default: [],
         },
         notification: {
             type:Boolean,
