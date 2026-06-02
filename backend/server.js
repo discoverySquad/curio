@@ -12,6 +12,8 @@ import childRoute from './routes/childRoute.js';
 import categoryRoute from './routes/categoryRoute.js';
 import userRoutes from './routes/userRoutes.js'; // test
 import gamificationRoute from './routes/gamificationRoute.js';
+import uploadRoutes from './routes/uploadRoutes.js';
+import {s3, displayConnectionS3} from './database/s3.js'
 
 const app = express();
 
@@ -35,11 +37,13 @@ app.use('/api/parent', parentRoute);
 app.use('/api/child', childRoute);
 app.use('/api/category', categoryRoute);
 app.use('/api/gamification', gamificationRoute);
+app.use('/api/s3', uploadRoutes);
 
 mongoose
     .connect(process.env.MONGO_URI)
     .then(async() => {
         console.log('MongoDB Connected');
+        await displayConnectionS3();
 
         app.listen(process.env.PORT || 5000, () => {
             console.log(`Server running on port ${process.env.PORT || 5000}`);
