@@ -14,9 +14,11 @@ const childSchema = new mongoose.Schema(
         },
         timeLimit: {
             type: Number,
+            required: true,
         },
-        usageTime: {
+        usageTimeToday: {
             type: Number,
+            default: 0, 
         },
         lastLoginAt: {
             type: Date,
