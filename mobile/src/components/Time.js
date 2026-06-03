@@ -11,9 +11,8 @@ const saveUsageTime = async (childId, usedSeconds) => {
       body: JSON.stringify({ usageTimeToday: usedSeconds }),
     });
     const data = await response.json();
-    console.log("保存結果:", response.status, data); // test
   } catch (error) {
-    console.log("保存エラー:", error); // test
+    console.log("error", error); // test
   }
 };
 
@@ -22,19 +21,13 @@ const Time =({ childId, timeLimit, usageTimeToday }) => {
   const limitSeconds = timeLimit * 60;
   const initialSeconds = Math.max(limitSeconds - usageTimeToday, 0); 
 
-    // ↓test
-  // console.log("timeLimit:", timeLimit);
-  // console.log("usageTimeToday:", usageTimeToday);
-  // console.log("limitSeconds:", limitSeconds);
-  // console.log("initialSeconds:", initialSeconds);
-
   const [remainingSeconds, setRemainingSeconds] = useState(initialSeconds);
   const remainingSecondsRef = useRef(initialSeconds);
   const limitSecondsRef = useRef(limitSeconds);
 
   // sync when data is changed
   useEffect(() => {
-     console.log("初期値セット - usageTimeToday:", usageTimeToday, "initialSeconds:", initialSeconds); // test
+     
     remainingSecondsRef.current = initialSeconds;
     limitSecondsRef.current = limitSeconds;
   }, [initialSeconds]);
@@ -58,7 +51,6 @@ const Time =({ childId, timeLimit, usageTimeToday }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       const usedSeconds = limitSecondsRef.current - remainingSecondsRef.current;
-      console.log("save every 30 seconds: ", usedSeconds); //test
       saveUsageTime(childId, usedSeconds);
     }, 30000);
     return () => clearInterval(interval);
@@ -69,7 +61,6 @@ const Time =({ childId, timeLimit, usageTimeToday }) => {
     const handleAppStateChange = (state) => {
       if(state === "background" || state === "inactive"){
         const usedSeconds = limitSecondsRef.current - remainingSecondsRef.current;
-        console.log("background save - usedSeconds: ", usedSeconds); //test
         saveUsageTime(childId, usedSeconds);
       }
     };
