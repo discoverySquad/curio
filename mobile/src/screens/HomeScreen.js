@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
+
 import Time from '../components/Time.js';
 import CustomButton from '../components/CustomButton.js'
 
@@ -12,7 +13,6 @@ const HomeScreen = ({ navigation }) => {
   const [child, setChild] = useState(null);
 
 useEffect(() => {
-  console.log('useEffect fired'); // test
   const getChild = async() => {
     try{
       const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${CHILD_ID}`;
@@ -21,7 +21,6 @@ useEffect(() => {
       const response = await fetch(url);
 
       const data = await response.json();
-      console.log('child data:', data);  // test
       setChild(data);
     }catch(error){
       console.log(error)
@@ -46,8 +45,13 @@ useEffect(() => {
         onPress={() => navigation.navigate("Test")}
       />
 
+      <Button
+        title="Select Category"
+        onPress={() => navigation.navigate("SelectCategory")}
+      />
+
       {/* card1 */}
-      <View style={styles.card}>
+      <View style={styles.homeCard}>
         <View style={styles.titleSection}>
           <Text style={styles.title}>Hi {child?.name}!</Text>
         </View>
@@ -57,7 +61,7 @@ useEffect(() => {
       </View>
 
       {/* card2 */}
-      <View style={styles.card}>
+      <View style={styles.homeCard}>
         <View style={styles.goalHeader}>
           <Text style={styles.cardTitle}>Today's Goal</Text>
         </View>
@@ -67,7 +71,7 @@ useEffect(() => {
       </View>
 
       {/* card3 */}
-      <View style={styles.card}>
+      <View style={styles.homeCard}>
         <View style={styles.exploration}>
           {child ? (
           <Time
@@ -94,7 +98,7 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 16,
   },
-  card: {
+  homeCard: {
     backgroundColor: '#E8E8E8',
     borderRadius: 20,
     padding: 24,

@@ -8,6 +8,17 @@ const getChild = async(req, res) => {
     if(!child){
       return res.status(404).json({message: "Child not found"})
     }
+
+    // if lastLogin is before today, reset usageTimeToday
+    const today = new Date().toDateString();
+    const lastLogin = new Date(child.lastLoginAt).toDateString();
+
+    if(today !== lastLogin){
+      child.usageTimeToday = 0;
+      child.lastLoginAt = new Date();
+      await child.save();
+    }
+
     res.json(child);
   }catch(error){
     res.status(500).json({ error: error.message});
