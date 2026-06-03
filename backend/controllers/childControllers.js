@@ -66,14 +66,12 @@ const editChild = async(req, res) => {
 const saveUsageTime = async(req, res) => {
   try{
     const { usageTimeToday } = req.body;
-    console.log("受信した usageTimeToday:", usageTimeToday); // test
     const child = await Child.findByIdAndUpdate(
       req.params.id,
       {$set: {usageTimeToday} },
       { new: true }
     );
 
-    console.log("更新後のchild:", child.usageTimeToday); // test
     if(!child) {
       return res.status(404).json({message: "Child not found"});
     }
