@@ -4,19 +4,23 @@ import React from 'react'
 const TryAgain = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.h1}>Not quite what we’re looking for...</Text>
+        <Text style={styles.h1}>Not quite what we’re looking for...</Text>
 
-      <View style={styles.tipBox}>
-        <Text>Need a hand? Ask an adult to help you hind a matching pattern!</Text>
-      </View>
+        <View style={styles.imgContainer}>
+            <Text>Captured image comes here</Text>
+        </View>
 
-      <Pressable style={styles.tryAgainBtn} onPress={() => navigation?.navigate('')}>
-        <Text style={styles.tryAgainBtnText}>Try Again</Text>
-      </Pressable>
+        <View style={styles.tipBox}>
+            <Text>Need a hand? Ask an adult to help you hind a matching pattern!</Text>
+        </View>
 
-      <Pressable style={styles.changeActivityBtn} onPress={() => navigation?.navigate('')}>
-        <Text style={styles.changeActivityBtnText}>Change Activity</Text>
-      </Pressable>
+        <Pressable style={styles.tryAgainBtn} onPress={() => navigation?.navigate('')}>
+            <Text style={styles.tryAgainBtnText}>Try Again</Text>
+        </Pressable>
+
+        <Pressable style={styles.changeActivityBtn} onPress={() => navigation?.navigate('')}>
+            <Text style={styles.changeActivityBtnText}>Change Activity</Text>
+        </Pressable>
 
       
     </View>
@@ -34,6 +38,11 @@ const styles= StyleSheet.create({
     h1:{
       fontSize: 28,
       textAlign:"center"
+    },
+    imgContainer:{
+        height:200,
+        justifyContent:"center",
+        backgroundColor:"#a6a5a5"
     },
     tipBox:{
         marginVertical:20

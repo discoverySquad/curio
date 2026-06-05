@@ -49,6 +49,10 @@ useEffect(() => {
         title="Try Again Page"
         onPress={() => navigation.navigate("TryAgain")}
       />
+      <Button
+        title="Feedback Page"
+        onPress={() => navigation.navigate("Feedback")}
+      />
 
       {/* card1 */}
       <View style={styles.card}>
