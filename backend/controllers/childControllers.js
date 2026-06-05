@@ -28,12 +28,12 @@ const getChild = async(req, res) => {
 // create child information
 const createChild = async(req, res) => {
   try{
-    let { name, avatar, age, timeLimit, usageTimeToday, lastLoginAt, parentId } = req.body;
+    let { name, avatar, grade, timeLimit, usageTimeToday, lastLoginAt, parentId } = req.body;
 
     const child = await Child.create({
       name,
       avatar,
-      age,
+      grade,
       timeLimit,
       usageTimeToday,
       lastLoginAt,
@@ -55,10 +55,10 @@ const createChild = async(req, res) => {
 const editChild = async(req, res) => {
   try{
 
-    const {name, avatar, age, timeLimit } = req.body;
+    const {name, avatar, grade, timeLimit } = req.body;
     const child = await Child.findByIdAndUpdate(
       req.params.id,
-      {name, avatar, age, timeLimit },
+      {name, avatar, grade, timeLimit },
       {new: true}
     );
     

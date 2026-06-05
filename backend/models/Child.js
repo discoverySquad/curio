@@ -9,8 +9,10 @@ const childSchema = new mongoose.Schema(
         avatar: {
             type: String,
         },
-        age: {
-            type: Number,
+        grade: {
+            type: String,
+            enum: ["Kindergarten", "Grade1", "Grade2"],
+            required: true, 
         },
         timeLimit: {
             type: Number,
