@@ -44,6 +44,14 @@ useEffect(() => {
         title="Test Page"
         onPress={() => navigation.navigate("Test")}
       />
+      <Button
+        title="Try Again Page"
+        onPress={() => navigation.navigate("TryAgain")}
+      />
+      <Button
+        title="Feedback Page"
+        onPress={() => navigation.navigate("Feedback")}
+      />
 
       <Button
         title="Select Category"
