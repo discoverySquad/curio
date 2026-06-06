@@ -1,5 +1,7 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Pressable, Button } from 'react-native'
 import React from 'react'
+
+import CustomButton from '../components/CustomButton.js'
 
 const TryAgain = ({ navigation }) => {
   return (
@@ -14,11 +16,15 @@ const TryAgain = ({ navigation }) => {
             <Text>Need a hand? Ask an adult to help you hind a matching pattern!</Text>
         </View>
 
-        <Pressable style={styles.tryAgainBtn} onPress={() => navigation?.navigate('')}>
-            <Text style={styles.tryAgainBtnText}>Try Again</Text>
-        </Pressable>
+        <View style={styles.buttonSection}>
+          <CustomButton label="Try Again" onPress={TryAgain} />
+        </View>
 
-        <Pressable style={styles.changeActivityBtn} onPress={() => navigation?.navigate('')}>
+        {/* <Pressable style={styles.tryAgainBtn} onPress={() => navigation?.navigate('')}>
+            <Text style={styles.tryAgainBtnText}>Try Again</Text>
+        </Pressable> */}
+
+        <Pressable style={styles.changeActivityBtn} onPress={() => navigation?.navigate('SelectCategory')}>
             <Text style={styles.changeActivityBtnText}>Change Activity</Text>
         </Pressable>
 
@@ -47,20 +53,23 @@ const styles= StyleSheet.create({
     tipBox:{
         marginVertical:20
     },
-    tryAgainBtn: {
-        borderRadius: 32,
-      backgroundColor: '#111111',
-      paddingVertical: 14,
-      paddingHorizontal: 24,
-      width: 318,
-      alignItems: 'center',
-      marginBottom: 12,
+    buttonSection:{
+        width:318
     },
-    tryAgainBtnText: {
-      color: '#FFFFFF',
-      fontSize: 16,
-      fontWeight: '600',
-    },
+    // tryAgainBtn: {
+    //     borderRadius: 32,
+    //   backgroundColor: '#111111',
+    //   paddingVertical: 14,
+    //   paddingHorizontal: 24,
+    //   width: 318,
+    //   alignItems: 'center',
+    //   marginBottom: 12,
+    // },
+    // tryAgainBtnText: {
+    //   color: '#FFFFFF',
+    //   fontSize: 16,
+    //   fontWeight: '600',
+    // },
     changeActivityBtn: {
       
     },

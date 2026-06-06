@@ -1,5 +1,8 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Pressable, Button } from 'react-native'
 import React from 'react'
+
+import CustomButton from '../components/CustomButton.js'
+
 
 const Feedback = ({ navigation }) => {
   return (
@@ -16,13 +19,15 @@ const Feedback = ({ navigation }) => {
             <Text>Fun facts come here</Text>
         </View>
 
-        
+        <View style={styles.buttonSection}>
+          <CustomButton label="Try Again" onPress={Feedback} />
+        </View>
 
-        <Pressable style={styles.nextActivityBtn} onPress={() => navigation?.navigate('')}>
+        {/* <Pressable style={styles.nextActivityBtn} onPress={() => navigation?.navigate('')}>
             <Text style={styles.nextActivityBtnText}>Next Activity</Text>
-        </Pressable>
+        </Pressable> */}
       
-        <Pressable style={styles.changeCategoryBtn} onPress={() => navigation?.navigate('')}>
+        <Pressable style={styles.changeCategoryBtn} onPress={() => navigation?.navigate('SelectCategory')}>
             <Text style={styles.changeCategoryBtnText}>Change Category</Text>
         </Pressable>
     </View>
@@ -50,20 +55,23 @@ const styles= StyleSheet.create({
         backgroundColor:"#a6a5a5",
         margin:20
     },
-    nextActivityBtn:{
-        borderRadius: 32,
-      backgroundColor: '#111111',
-      paddingVertical: 14,
-      paddingHorizontal: 24,
-      width: 318,
-      alignItems: 'center',
-      marginBottom: 12,
+    buttonSection:{
+        width:318
     },
-    nextActivityBtnText: {
-      color: '#FFFFFF',
-      fontSize: 16,
-      fontWeight: '600',
-    }
+    // nextActivityBtn:{
+    //     borderRadius: 32,
+    //   backgroundColor: '#111111',
+    //   paddingVertical: 14,
+    //   paddingHorizontal: 24,
+    //   width: 318,
+    //   alignItems: 'center',
+    //   marginBottom: 12,
+    // },
+    // nextActivityBtnText: {
+    //   color: '#FFFFFF',
+    //   fontSize: 16,
+    //   fontWeight: '600',
+    // }
 })
 
 export default Feedback
