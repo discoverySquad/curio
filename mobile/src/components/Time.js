@@ -18,8 +18,12 @@ const saveUsageTime = async (childId, usedSeconds) => {
 
 // time component
 const Time =({ childId, timeLimit, usageTimeToday }) => {
-  const limitSeconds = timeLimit * 60;
-  const initialSeconds = Math.max(limitSeconds - usageTimeToday, 0); 
+  // Type conversion and validation
+  const timeLimitNum = Number(timeLimit) || 0;
+  const usageTimeTodayNum = Number(usageTimeToday) || 0;
+
+  const limitSeconds = timeLimitNum * 60;
+  const initialSeconds = Math.max(limitSeconds - usageTimeTodayNum, 0); 
 
   const [remainingSeconds, setRemainingSeconds] = useState(initialSeconds);
   const remainingSecondsRef = useRef(initialSeconds);
