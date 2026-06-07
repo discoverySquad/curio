@@ -19,11 +19,21 @@ useEffect(() => {
       console.log('url:', url);
 
       const response = await fetch(url);
+      console.log('Response status:', response.status);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('API Error:', response.status, errorData);
+        return;
+      }
 
       const data = await response.json();
+      console.log('API response:', data);
+      console.log('timeLimit:', data.timeLimit, 'type:', typeof data.timeLimit);
+      console.log('usageTimeToday:', data.usageTimeToday, 'type:', typeof data.usageTimeToday);
       setChild(data);
     }catch(error){
-      console.log(error)
+      console.log('Fetch error:', error)
     }
   };
   getChild();
