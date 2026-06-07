@@ -1,3 +1,4 @@
+import Badge from '../models/Badge.js';
 import Child from "../models/Child.js";
 import childProgress from "../models/Progress.js";
 import { recordCompleteTask, recordScan, recordFactViewed } from "../services/ProgressService.js";
@@ -51,11 +52,21 @@ const getChildGamification = async (req, res) => {
 
         const progress = await childProgress.findOne({ childId: req.params.id }).select('status lastActiveAt');
 
+        //get all badges
+        const earned = child.earnedBadges.map(b => b.badgeId);
+        const allBadges = await Badge.find().sort({ createdAt: 1 });
+        const badgesWithStatus = allBadges.map(badge => ({
+            ...badge.toObject(),
+            earned: earned.includes(badge.badgeId),
+            earnedAt: child.earnedBadges.find(b => b.badgeId === badge.badgeId)?.earnedAt ?? null,
+        }));
+
         res.status(200).json({
             name: child.name,
             avatar: child.avatar,
             currentLevel: child.currentLevel,
             earnedBadges: child.earnedBadges,
+            badges: badgesWithStatus,
             status: progress?.status ?? null,
             lastActiveAt: progress?.lastActiveAt ?? null,
         });
