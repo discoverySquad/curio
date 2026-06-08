@@ -34,7 +34,7 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeStack} />
+        <Tab.Screen name="Home" component={HomeStack} options={{ headerShown: false }}/>
         <Tab.Screen name="Journal" component={JournalScreen} />
       </Tab.Navigator>
     </NavigationContainer>

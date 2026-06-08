@@ -1,6 +1,8 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
+import colors from "../constants/colors";
+
 const CustomButton = ({ label, onPress }) => {
   return(
     <TouchableOpacity style={styles.button} onPress={onPress} activityOpacity={0.8}>
@@ -11,7 +13,7 @@ const CustomButton = ({ label, onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: colors.primary,
     borderRadius: 30,
     paddingVertical: 16,
     alignItems: 'center',
