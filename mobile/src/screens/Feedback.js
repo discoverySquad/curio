@@ -20,7 +20,7 @@ const Feedback = ({ navigation }) => {
         </View>
 
         <View style={styles.buttonSection}>
-          <CustomButton label="Try Again" onPress={Feedback} />
+          <CustomButton label="Try Again" onPress={() => navigation?.navigate('TryAgain')} />
         </View>
 
         {/* <Pressable style={styles.nextActivityBtn} onPress={() => navigation?.navigate('')}>

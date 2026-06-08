@@ -33,7 +33,16 @@ const JournalScreen = () => {
 
     if (loading) return <ActivityIndicator style={{ flex: 1 }} />;
 
-    const earnedCount = child.earnedBadges.length;
+    if (!child) {
+        return (
+            <View style={styles.emptyState}>
+                <Text style={styles.summaryCount}>Journal unavailable</Text>
+                <Text style={styles.summarySubtitle}>Please try again later.</Text>
+            </View>
+        );
+    }
+
+    const earnedCount = child.earnedBadges?.length ?? 0;
     const levelTitle = LEVEL_TITLES[child.currentLevel] ?? 'Tiny Explorer';
     const progress = badges.length > 0 ? earnedCount / badges.length : 0;
 
@@ -103,6 +112,7 @@ const JournalScreen = () => {
 const styles = StyleSheet.create({
     screen: { flex: 1, backgroundColor: '#fff' },
     content: { padding: 20, gap: 14, alignItems: 'center' },
+    emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 },
 
     profileSection: { alignItems: 'center', gap: 8 },
     avatar: {
