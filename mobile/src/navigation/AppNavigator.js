@@ -6,6 +6,7 @@ import HomeScreen from "../screens/HomeScreen.js";
 import JournalScreen from "../screens/Journal.js";
 import Test from "../screens/Test.js";
 import TryAgain from "../screens/TryAgain.js";
+import ScreenTime from "../screens/parent-setting/ScreenTime.js";
 
 
 //screen name
@@ -21,6 +22,7 @@ const HomeStack = () => {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Test" component={Test} />
       <Stack.Screen name="TryAgain" component={TryAgain} />
+      <Stack.Screen name="ScreenTime" component={ScreenTime} />
     </Stack.Navigator>
   );
 };
