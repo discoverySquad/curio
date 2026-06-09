@@ -17,7 +17,7 @@ const TryAgain = ({ navigation }) => {
         </View>
 
         <View style={styles.buttonSection}>
-          <CustomButton label="Try Again" onPress={TryAgain} />
+          <CustomButton label="Try Again" onPress={() => navigation?.navigate('Scan')} />
         </View>
 
         {/* <Pressable style={styles.tryAgainBtn} onPress={() => navigation?.navigate('')}>

@@ -5,7 +5,7 @@ import colors from "../constants/colors";
 
 const CustomButton = ({ label, onPress }) => {
   return(
-    <TouchableOpacity style={styles.button} onPress={onPress} activityOpacity={0.8}>
+    <TouchableOpacity style={styles.button} onPress={onPress} activeOpacity={0.8}>
       <Text style={styles.label}>{label}</Text>
     </TouchableOpacity>
   );
