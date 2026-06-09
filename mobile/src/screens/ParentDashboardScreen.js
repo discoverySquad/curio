@@ -1,5 +1,7 @@
 import { View, Text, Button, StyleSheet } from 'react-native';
 
+const DUMMY_CHILD_ID = '6a15ddc0752c37728664b230';
+
 export default function ParentDashboardScreen({ navigation, route }) {
     const user = route.params?.user;
 
@@ -16,7 +18,7 @@ export default function ParentDashboardScreen({ navigation, route }) {
                 title="Start Scanning"
                 onPress={() =>
                     navigation.navigate('Scan', {
-                        childId: '665f0c9a12ab34cd56ef7890',
+                        childId: DUMMY_CHILD_ID,
                     })
                 }
             />

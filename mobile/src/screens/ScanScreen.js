@@ -1,7 +1,9 @@
 import { useRef, useState } from 'react';
-import { View, Text, Button, Modal, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, Button, Modal, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { apiRequest } from '../services/api.js';
+
+const DUMMY_CHILD_ID = '6a15ddc0752c37728664b230';
 
 export default function ScanScreen({ navigation, route }) {
     const cameraRef = useRef(null);
@@ -9,7 +11,7 @@ export default function ScanScreen({ navigation, route }) {
     const [loading, setLoading] = useState(false);
     const [warning, setWarning] = useState(null);
 
-    const childId = route.params?.childId;
+    const childId = route.params?.childId || DUMMY_CHILD_ID;
 
     if (!permission) {
         return <View />;
@@ -28,9 +30,14 @@ export default function ScanScreen({ navigation, route }) {
         try {
             setLoading(true);
 
+            if (!cameraRef.current) {
+                Alert.alert('Camera Error', 'Camera is not ready yet.');
+                return;
+            }
+
             const photo = await cameraRef.current.takePictureAsync({
                 base64: true,
-                quality: 0.5,
+                quality: 0.4,
             });
 
             const data = await apiRequest('/api/ai/scan', 'POST', {
@@ -45,9 +52,10 @@ export default function ScanScreen({ navigation, route }) {
 
             navigation.navigate('Result', {
                 result: data,
+                childId,
             });
         } catch (error) {
-            alert('Scan failed. Please try again.');
+            Alert.alert('Scan failed', error.message || 'Please try again.');
         } finally {
             setLoading(false);
         }

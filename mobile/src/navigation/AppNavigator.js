@@ -10,6 +10,7 @@ import Test from '../screens/Test.js';
 import TryAgain from '../screens/TryAgain.js';
 import Feedback from '../screens/Feedback.js';
 import SelectCategory from '../screens/SelectCategory.js';
+import ScreenTime from '../screens/parent-setting/ScreenTime.js';
 
 // Auth Screens
 import LoginScreen from '../screens/LoginScreen.js';
