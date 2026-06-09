@@ -11,15 +11,23 @@ const getChild = async(req, res) => {
 
     // if lastLogin is before today, reset usageTimeToday
     const today = new Date().toDateString();
-    const lastLogin = new Date(child.lastLoginAt).toDateString();
+    const lastLogin = child.lastLoginAt ? new Date(child.lastLoginAt).toDateString() : null;
 
     if(today !== lastLogin){
-      child.usageTimeToday = 0;
-      child.lastLoginAt = new Date();
-      await child.save();
+      // Use findByIdAndUpdate to avoid validation errors
+      await Child.findByIdAndUpdate(
+        req.params.id,
+        {
+          usageTimeToday: 0,
+          lastLoginAt: new Date()
+        },
+        { new: true }
+      );
     }
 
-    res.json(child);
+    // Fetch the updated child
+    const updatedChild = await Child.findById(req.params.id);
+    res.json(updatedChild);
   }catch(error){
     res.status(500).json({ error: error.message});
   };

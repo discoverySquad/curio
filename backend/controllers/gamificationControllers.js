@@ -2,7 +2,7 @@ import Badge from '../models/Badge.js';
 import Child from "../models/Child.js";
 import childProgress from "../models/Progress.js";
 import { recordCompleteTask, recordScan, recordFactViewed } from "../services/ProgressService.js";
-import { evaluateRewards } from "../services/badgeService.js";
+import { evaluateRewards } from "../services/BadgeService.js";
 
 const completeTask = async (req, res) => {
     try {

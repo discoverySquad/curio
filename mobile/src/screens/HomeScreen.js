@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
-
+import { useFocusEffect } from "@react-navigation/native";
 import Time from '../components/Time.js';
 import CustomButton from '../components/CustomButton.js'
 
@@ -11,23 +11,49 @@ const HomeScreen = ({ navigation }) => {
   const CHILD_ID = "6a15ddc0752c37728664b230"; // for temporary test
 
   const [child, setChild] = useState(null);
+  const [timeLimit, setTimeLimit] = useState("");
 
-useEffect(() => {
-  const getChild = async() => {
-    try{
-      const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${CHILD_ID}`;
-      console.log('url:', url);
 
-      const response = await fetch(url);
+  useEffect(() => {
+    const getChild = async () => {
+      try {
+        const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${CHILD_ID}`;
+        console.log('url:', url);
 
-      const data = await response.json();
-      setChild(data);
-    }catch(error){
-      console.log(error)
-    }
-  };
-  getChild();
-}, []);
+        const response = await fetch(url);
+        console.log('Response status:', response.status);
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          console.error('API Error:', response.status, errorData);
+          return;
+        }
+
+        const data = await response.json();
+        console.log('API response:', data);
+        console.log('timeLimit:', data.timeLimit, 'type:', typeof data.timeLimit);
+        console.log('usageTimeToday:', data.usageTimeToday, 'type:', typeof data.usageTimeToday);
+        setChild(data);
+      } catch (error) {
+        console.log('Fetch error:', error)
+      }
+    };
+    getChild();
+  }, []);
+
+  useFocusEffect(
+  React.useCallback(() => {
+    const loadLimit = async () => {
+      const value = await AsyncStorage.getItem("screenTimeLimit");
+
+      if (value) {
+        setTimeLimit(Number(value));
+      }
+    };
+
+    loadLimit();
+  }, [])
+);
 
   const handleStartActivity = () => {
     console.log('Start Activity pressed'); // add function when ready
@@ -58,6 +84,9 @@ useEffect(() => {
         onPress={() => navigation.navigate("SelectCategory")}
       />
 
+      {/* temporally put here, should be on parent setting page */}
+      <Button title='Screen Time' onPress={() => navigation.navigate("ScreenTime")} />
+
       {/* card1 */}
       <View style={styles.homeCard}>
         <View style={styles.titleSection}>
@@ -65,7 +94,7 @@ useEffect(() => {
         </View>
         <View style={styles.buttonSection}>
           <CustomButton label="Start Activity" onPress={handleStartActivity} />
-        </View> 
+        </View>
       </View>
 
       {/* card2 */}
@@ -82,18 +111,18 @@ useEffect(() => {
       <View style={styles.homeCard}>
         <View style={styles.exploration}>
           {child ? (
-          <Time
-            childId={CHILD_ID}
-            timeLimit={child.timeLimit}
-            usageTimeToday={child.usageTimeToday}
-          />
+            <Time
+              childId={CHILD_ID}
+              timeLimit={child.timeLimit}
+              usageTimeToday={child.usageTimeToday}
+            />
           ) : (
-          <Text>Loading...</Text>
-        )}
+            <Text>Loading...</Text>
+          )}
         </View>
       </View>
 
-      
+
     </ScrollView>
   );
 };
@@ -102,7 +131,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-  content:{
+  content: {
     padding: 20,
     gap: 16,
   },
