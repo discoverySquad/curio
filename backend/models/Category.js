@@ -2,19 +2,27 @@ import mongoose from 'mongoose';
 
 const categorySchema = new mongoose.Schema(
     {
-        categoryId: {
-            type: String,
-            unique: true,
-        },
         categoryName: {
             type: String,
             required: true,
         },
-        categoryItem: {
-            type: [String],
-        },
+        categoryItem: [
+            {
+                task: {
+                    type: String,
+                    required: true,
+                },
+                img: {
+                    type: String,
+                    default: "",
+                },
+                description: {
+                    type: String,
+                },
+            }
+        ],
         activityInstruction: {
-            type:String,
+            type: String,
         }
     },
     { timestamps: true },
