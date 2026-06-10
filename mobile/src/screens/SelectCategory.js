@@ -1,11 +1,12 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-const SelectCategory = () => {
+const SelectCategory = ({navigation}) => {
 
-  const handlePress = async() => {
-    console.log("Start Activity!")
+  const handlePress = (categoryName) => {
+    navigation.navigate('ActivityDescription', { categoryName });
   }
+
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
 
@@ -14,7 +15,7 @@ const SelectCategory = () => {
 
       {/* selection 1 */}
       
-      <TouchableOpacity onPress={handlePress} activeOpacity={0.8}>
+      <TouchableOpacity onPress={() => handlePress('nature')} activeOpacity={0.8}>
         <View style={styles.card}>
           <Text style={styles.textContent}>Nature</Text>
           <Text style={styles.textContent}>Find bugs, and hidden treasures!</Text>
@@ -24,7 +25,7 @@ const SelectCategory = () => {
 
        {/* selection 2 */}     
        
-       <TouchableOpacity onPress={handlePress} activeOpacity={0.8}>
+       <TouchableOpacity onPress={() => handlePress('shapes')} activeOpacity={0.8}>
         <View style={styles.card}>
           <Text style={styles.textContent}>Shapes</Text>
           <Text style={styles.textContent}>Spot circles, squares, and stars all around you!</Text>
