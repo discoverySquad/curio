@@ -5,11 +5,11 @@ import CustomButton from '../components/CustomButton';
 import colors from "../constants/colors";
 
 
-const DUMMY_CHILD_ID = '6a15ddc0752c37728664b230';
+const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
 
 export default function ParentDashboardScreen({ navigation, route }) {
 
-    const parentId = "6a15e296dd882ca29e6355ae";
+    const parentId = "6a15ddc0752c37728664b230";
 
     const user = route.params?.user;
     const [password, setPassword] = useState('');

@@ -36,18 +36,36 @@ const createParent = async(req, res) => {
 
 // edit parent account
 const editParent = async(req, res) => {
+
+
   try{
-    const {name, email, password} = req.body;
-    const updateData = {name, email};
+    const {name, email, password, notification} = req.body;
+    const updateData = {name, email, notification};
+
+    if (name !== undefined) updateData.name = name;
+    if (email !== undefined) updateData.email = email;
+    if (notification !== undefined) updateData.notification = notification;
+
+    if (name !== undefined) {
+      updateData.name = name;
+    }
+
+    if (email !== undefined) {
+      updateData.email = email;
+    }
+
+    if (notification !== undefined) {
+      updateData.notification = notification;
+    }
 
     // need to apply bcryptjs for password hash
     if(password){
-      updateData.password = await bcrypt.has(password, 10);
+      updateData.password = await bcrypt.hash(password, 10);
     }
 
     const parent = await Parent.findByIdAndUpdate(
       req.params.id,
-      {name, email, password},
+      updateData,
       {new: true}
     );
 
@@ -70,8 +88,8 @@ const deleteParent = async(req, res) => {
     }
 
     // delete child account connected to parent account
-    if(parent.children.length > 0){
-      await Child.deleteMany({_id: {$in: parent.children}});
+    if(parent.childId.length > 0){
+      await Child.deleteMany({_id: {$in: parent.childId}});
     }
 
     res.status(200).json({message: "account deleted"})
