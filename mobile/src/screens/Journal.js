@@ -4,7 +4,7 @@ import {
     ActivityIndicator, Image,
 } from 'react-native';
 
-const CHILD_ID = "6a15ddc0752c37728664b230";
+const CHILD_ID = "6a28f66e68e34f4224b78383";
 const LEVEL_TITLES = ['Tiny Explorer', 'Curious Explorer', 'Junior Explore', 'Adventure Ranger', 'Master Explore'];
 
 const JournalScreen = () => {
