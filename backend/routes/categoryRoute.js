@@ -15,12 +15,28 @@ const createCategory = async(req, res) => {
       activityInstruction,
     })
   
-  res.status(201).json()
+  res.status(201).json(category)
 
   }catch(error){
     res.status(500).json({error: error.message});
   }
 }
 
+const getCategoryByName = async(req, res) => {
+  try{
+    const category = await Category.findOne({ 
+      categoryName: { $regex: new RegExp(`^${req.params.name}$`, 'i') }
+    });
+    if(!category){
+      return res.status(404).json({ message: 'Category not found' });
+    }
+    res.status(200).json(category);
+  }catch(error){
+    res.status(500).json({error: error.message});
+  }
+};
+
 router.post("/category", createCategory);
+router.get("/name/:name", getCategoryByName);
+
 export default router;

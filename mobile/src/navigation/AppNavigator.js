@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen.js';
 import JournalScreen from '../screens/Journal.js';
 import Test from '../screens/Test.js';
+import ActivityDescription from '../screens/ActivityDescription.js';
 import TryAgain from '../screens/TryAgain.js';
 import Feedback from '../screens/Feedback.js';
 import SelectCategory from '../screens/SelectCategory.js';
@@ -43,6 +44,7 @@ const HomeStack = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Test" component={Test} />
+            <Stack.Screen name="ActivityDescription" component={ActivityDescription} />
             <Stack.Screen name="TryAgain" component={TryAgain} />
             <Stack.Screen name="Feedback" component={Feedback} />
             <Stack.Screen name="SelectCategory" component={SelectCategory} />

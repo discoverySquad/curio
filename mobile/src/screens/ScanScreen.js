@@ -3,7 +3,7 @@ import { View, Text, Button, Modal, StyleSheet, ActivityIndicator, Alert } from 
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { apiRequest } from '../services/api.js';
 
-const DUMMY_CHILD_ID = '6a15ddc0752c37728664b230';
+const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
 
 export default function ScanScreen({ navigation, route }) {
     const cameraRef = useRef(null);

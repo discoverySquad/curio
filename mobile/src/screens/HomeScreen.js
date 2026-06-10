@@ -71,6 +71,10 @@ const HomeScreen = ({ navigation }) => {
         onPress={() => navigation.navigate("Test")}
       />
       <Button
+        title="Activity Description"
+        onPress={() => navigation.navigate("ActivityDescription")}
+      />
+      <Button
         title="Try Again Page"
         onPress={() => navigation.navigate("TryAgain")}
       />
