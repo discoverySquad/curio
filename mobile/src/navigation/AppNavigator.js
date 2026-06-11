@@ -26,7 +26,6 @@ import EditParentAccount from '../screens/parent-setting/EditParentAccount.js';
 
 // Scan Screens
 import ScanScreen from '../screens/ScanScreen.js';
-import ResultScreen from '../screens/ResultScreen.js';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -57,7 +56,7 @@ const ScanStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name="ScanCamera" component={ScanScreen} options={{ title: 'Scan' }} />
-            <Stack.Screen name="Result" component={ResultScreen} />
+            <Stack.Screen name="Feedback" component={Feedback} options={{ title: 'Result' }} />
         </Stack.Navigator>
     );
 };
@@ -68,7 +67,6 @@ const ParentStack = () => {
             <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} options={{ title: 'Parent Dashboard' }} />
             <Stack.Screen name="CreateChild" component={CreateChildScreen} options={{ title: 'Create Child Profile' }} />
             <Stack.Screen name="SelectChild" component={SelectChildScreen} options={{ title: 'Select Child' }} />
-          <Stack.Screen name="Feedback" component={Feedback} />
       <Stack.Screen name="ScreenTime" component={ScreenTime} />
       <Stack.Screen name="SelectCategory" component={SelectCategory} />
       <Stack.Screen name='EditParentAccount' component={EditParentAccount} />
