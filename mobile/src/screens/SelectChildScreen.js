@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Switch, StyleSheet, ScrollView, Image, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, Switch, StyleSheet, ScrollView, Image, Alert, ActivityIndicator, Modal } from 'react-native';
 import CustomButton from '../components/CustomButton';
 
 const PARENT_ID = '6a15e296dd882ca29e6355ae';
@@ -10,6 +10,7 @@ export default function SelectChildScreen({ navigation }) {
     const [loading, setLoading] = useState(true);
     const [notificationOn, setNotificationOn] = useState(null);
     const [timeLimit, setTimeLimit] = useState(null);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
     useEffect(() => {
         loadChildren();
@@ -74,6 +75,10 @@ export default function SelectChildScreen({ navigation }) {
 
     const handleLogout = () => {
         console.log("logout");
+    }
+
+    const handleDelete = () => {
+        console.log("Delete Account")
     }
 
     if(loading){
@@ -146,9 +151,27 @@ export default function SelectChildScreen({ navigation }) {
 
             <CustomButton label="Log Out" onPress={handleLogout} />
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setDeleteModalVisible(true)}>
                 <Text style={styles.deleteLink}>Delete Account</Text>
             </TouchableOpacity>
+
+            <Modal
+                visible={deleteModalVisible}
+                transparent={true}
+                animationType='fade'
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalBox}>
+                        <Text style={styles.modalTitle}>Are you sure?</Text>
+                        <Text style={styles.modalText}>This will remove the child profile and its saved progress. You cannot recover achievements, badges, or points after this action.</Text>
+                        <CustomButton label="Delete Account" onPress={handleDelete}></CustomButton>
+                    <TouchableOpacity onPress={() => setDeleteModalVisible(false)}>
+                        <Text style={styles.cancelText}>Cancel</Text>
+                    </TouchableOpacity>
+                    </View>
+                    
+                </View>
+            </Modal>
 
         </ScrollView>
     );
@@ -250,5 +273,33 @@ editRow: {
     color: '#888', 
     marginTop: 10, 
     textDecorationLine: 'underline' 
+},
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "#888",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalBox: {
+     width: "80%",
+     backgroundColor: "#fff",
+     borderRadius: 24,
+     padding: 24,
+     alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 12,
+  },
+deleteButtonText: {
+  color: '#fff',
+  fontSize: 14,
+  fontWeight: '700',
+},
+
+cancelText: {
+  fontSize: 12,
+  color: '#555',
 },
 });

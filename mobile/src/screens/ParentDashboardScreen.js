@@ -26,6 +26,7 @@ export default function ParentDashboardScreen({ navigation, route }) {
             <Button title="Create Child Profile" onPress={() => navigation.navigate('CreateChild')} />
 
             <Button title="Select Child Profile" onPress={() => navigation.navigate('SelectChild')} />
+            <Button title="Edit Parent Account" onPress={() => navigation.navigate('EditParentAccount')} />
 
             <Button
                 title="Start Scanning"
