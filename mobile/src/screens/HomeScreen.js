@@ -8,7 +8,7 @@ import CustomButton from '../components/CustomButton.js'
 
 const HomeScreen = ({ navigation }) => {
 
-  const CHILD_ID = '6a28f66e68e34f4224b78383'; // for temporary test
+  const CHILD_ID = "6a28f66e68e34f4224b78383"; // for temporary test
 
   const [child, setChild] = useState(null);
   const [timeLimit, setTimeLimit] = useState("");
@@ -69,6 +69,10 @@ const HomeScreen = ({ navigation }) => {
       <Button
         title="Test Page"
         onPress={() => navigation.navigate("Test")}
+      />
+      <Button
+        title="Activity Description"
+        onPress={() => navigation.navigate("ActivityDescription")}
       />
       <Button
         title="Try Again Page"
