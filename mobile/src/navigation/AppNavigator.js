@@ -21,6 +21,8 @@ import RegisterScreen from '../screens/RegisterScreen.js';
 import ParentDashboardScreen from '../screens/ParentDashboardScreen.js';
 import CreateChildScreen from '../screens/CreateChildScreen.js';
 import SelectChildScreen from '../screens/SelectChildScreen.js';
+import EditParentAccount from '../screens/parent-setting/EditParentAccount.js';
+
 
 // Scan Screens
 import ScanScreen from '../screens/ScanScreen.js';
@@ -67,6 +69,7 @@ const ParentStack = () => {
             <Stack.Screen name="SelectChild" component={SelectChildScreen} options={{ title: 'Select Child' }} />
       <Stack.Screen name="ScreenTime" component={ScreenTime} />
       <Stack.Screen name="SelectCategory" component={SelectCategory} />
+      <Stack.Screen name='EditParentAccount' component={EditParentAccount} />
     </Stack.Navigator>
     );
 };
