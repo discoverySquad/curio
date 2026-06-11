@@ -4,7 +4,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { apiRequest } from '../services/api.js';
 
-const TEST_CHILD_ID = '6a15ddc0752c37728664b230';
+const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
 
 export default function ScanScreen({ navigation, route }) {
     const cameraRef = useRef(null);
@@ -12,7 +12,7 @@ export default function ScanScreen({ navigation, route }) {
     const [loading, setLoading] = useState(false);
     const [warning, setWarning] = useState(null);
 
-    const childId = route.params?.childId || TEST_CHILD_ID;
+    const childId = route.params?.childId || DUMMY_CHILD_ID;
 
     if (!permission) return <View />;
 

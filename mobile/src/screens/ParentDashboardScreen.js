@@ -1,6 +1,6 @@
 import { View, Text, Button, StyleSheet } from 'react-native';
 
-const DUMMY_CHILD_ID = '6a15ddc0752c37728664b230';
+const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
 
 export default function ParentDashboardScreen({ navigation, route }) {
     const user = route.params?.user;
