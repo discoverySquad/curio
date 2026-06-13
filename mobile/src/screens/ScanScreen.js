@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { View, Text, Button, Modal, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { apiRequest } from '../services/api.js';
 
 const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
@@ -13,9 +14,7 @@ export default function ScanScreen({ navigation, route }) {
 
     const childId = route.params?.childId || DUMMY_CHILD_ID;
 
-    if (!permission) {
-        return <View />;
-    }
+    if (!permission) return <View />;
 
     if (!permission.granted) {
         return (
@@ -30,28 +29,36 @@ export default function ScanScreen({ navigation, route }) {
         try {
             setLoading(true);
 
-            if (!cameraRef.current) {
-                Alert.alert('Camera Error', 'Camera is not ready yet.');
-                return;
-            }
-
             const photo = await cameraRef.current.takePictureAsync({
-                base64: true,
                 quality: 0.4,
             });
 
-            const data = await apiRequest('/api/ai/scan', 'POST', {
-                imageBase64: photo.base64,
+            const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [{ resize: { width: 640 } }], {
+                compress: 0.5,
+                format: ImageManipulator.SaveFormat.JPEG,
+                base64: true,
+            });
+
+            const scanData = await apiRequest('/api/ai/scan', 'POST', {
+                imageBase64: resizedPhoto.base64,
                 childId,
             });
 
-            if (data.safe === false) {
-                setWarning(data);
+            if (scanData.safe === false) {
+                setWarning(scanData);
                 return;
             }
 
-            navigation.navigate('Result', {
-                result: data,
+            const factsData = await apiRequest('/api/ai/facts', 'POST', {
+                objectName: scanData.objectName,
+            });
+
+            navigation.navigate('Feedback', {
+                result: {
+                    ...scanData,
+                    facts: factsData.facts || [],
+                    message: factsData.message,
+                },
                 childId,
             });
         } catch (error) {
@@ -63,7 +70,21 @@ export default function ScanScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <CameraView ref={cameraRef} style={styles.camera} facing="back" />
+            <View style={styles.cameraFrame}>
+                <CameraView ref={cameraRef} style={styles.camera} facing="back" />
+
+                <View pointerEvents="none" style={styles.focusOverlay}>
+                    <View style={styles.dimTop} />
+
+                    <View style={styles.focusMiddle}>
+                        <View style={styles.dimSide} />
+                        <View style={styles.focusSquare} />
+                        <View style={styles.dimSide} />
+                    </View>
+
+                    <View style={styles.dimBottom} />
+                </View>
+            </View>
 
             <View style={styles.controls}>{loading ? <ActivityIndicator size="large" /> : <Button title="Scan Object" onPress={handleScan} />}</View>
 
@@ -71,9 +92,7 @@ export default function ScanScreen({ navigation, route }) {
                 <View style={styles.modalOverlay}>
                     <View style={[styles.modalBox, warning?.severity === 'high' && styles.highWarning]}>
                         <Text style={styles.warningTitle}>{warning?.severity === 'high' ? 'Safety Alert' : 'Try Something Else'}</Text>
-
                         <Text style={styles.warningText}>{warning?.message}</Text>
-
                         <Button title="OK" onPress={() => setWarning(null)} />
                     </View>
                 </View>
@@ -83,10 +102,60 @@ export default function ScanScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1 },
-    camera: { flex: 1 },
-    controls: { padding: 20 },
-    center: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    cameraFrame: {
+        width: '86%',
+        aspectRatio: 3 / 4,
+        alignSelf: 'center',
+        marginTop: 40,
+        borderRadius: 24,
+        overflow: 'hidden',
+        borderWidth: 3,
+        borderColor: '#111',
+        backgroundColor: '#000',
+        position: 'relative',
+    },
+    camera: {
+        flex: 1,
+    },
+    focusOverlay: {
+        ...StyleSheet.absoluteFillObject,
+    },
+    dimTop: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.28)',
+    },
+    focusMiddle: {
+        flexDirection: 'row',
+    },
+    dimSide: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.28)',
+    },
+    dimBottom: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.28)',
+    },
+    focusSquare: {
+        width: 220,
+        height: 220,
+        borderWidth: 3,
+        borderColor: '#fff',
+        borderRadius: 18,
+        backgroundColor: 'transparent',
+    },
+    controls: {
+        padding: 20,
+    },
+    center: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 24,
+    },
     modalOverlay: {
         flex: 1,
         backgroundColor: 'rgba(0,0,0,0.45)',

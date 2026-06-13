@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
+    width: "100%",
   },
   label: {
     color: '#FFFFFF',
