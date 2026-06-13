@@ -43,6 +43,7 @@ mongoose
     .connect(process.env.MONGO_URI)
     .then(async () => {
         console.log('MongoDB Connected');
+        console.log("MONGO_URI:", process.env.MONGO_URI);
         await displayConnectionS3();
 
         app.listen(process.env.PORT || 5000, '0.0.0.0', () => {
