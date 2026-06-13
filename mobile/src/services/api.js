@@ -1,7 +1,9 @@
 export const API_URL = process.env.EXPO_PUBLIC_API_URL;
+console.log("API:", API_URL);
 
 export const apiRequest = async (endpoint, method = 'GET', body = null, token = null) => {
     const url = `${API_URL}${endpoint}`;
+    console.log("URL:", url);
 
     const response = await fetch(url, {
         method,
@@ -13,6 +15,8 @@ export const apiRequest = async (endpoint, method = 'GET', body = null, token = 
     });
 
     const text = await response.text();
+    console.log("STATUS:", response.status);
+    console.log("TEXT:", text);
 
     let data;
     try {

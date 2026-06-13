@@ -12,11 +12,12 @@ const childSchema = new mongoose.Schema(
         grade: {
             type: String,
             enum: ["Kindergarten", "Grade1", "Grade2"],
-            required: true, 
+            default: "Kindergarten", 
         },
         timeLimit: {
             type: Number,
-            required: true,
+            required: false,
+            default: 60
         },
         usageTimeToday: {
             type: Number,

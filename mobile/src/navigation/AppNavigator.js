@@ -18,9 +18,9 @@ import LoginScreen from '../screens/LoginScreen.js';
 import RegisterScreen from '../screens/RegisterScreen.js';
 
 // Parent Screens
-import ParentDashboardScreen from '../screens/ParentDashboardScreen.js';
-import CreateChildScreen from '../screens/CreateChildScreen.js';
-import SelectChildScreen from '../screens/SelectChildScreen.js';
+import ParentDashboardScreen from '../screens/parent-setting/ParentDashboardScreen.js';
+import CreateChildScreen from '../screens/parent-setting/CreateChildScreen.js';
+import SelectChildScreen from '../screens/parent-setting/SelectChildScreen.js';
 
 // Scan Screens
 import ScanScreen from '../screens/ScanScreen.js';
