@@ -49,18 +49,34 @@ export default function ScanScreen({ navigation, route }) {
                 return;
             }
 
-            const factsData = await apiRequest('/api/ai/facts', 'POST', {
-                objectName: scanData.objectName,
-            });
+                const factsData = await apiRequest('/api/ai/facts', 'POST', {
+                    objectName: scanData.objectName,
+                });
 
-            navigation.navigate('Feedback', {
-                result: {
-                    ...scanData,
+                await apiRequest('/api/journal', 'POST', {
+                    childId,
+                    category: route.params?.category || 'Nature',
+                    activityTitle: route.params?.activityTitle || 'Scan Activity',
+                    objectName: scanData.objectName,
                     facts: factsData.facts || [],
-                    message: factsData.message,
-                },
-                childId,
-            });
+                    correct: true,
+                });
+
+                await apiRequest('/api/gamification/task', 'POST', {
+                    childId,
+                    correct: true,
+                    wasRetry: false,
+                    categoryKey: route.params?.category || 'nature',
+                });
+
+                navigation.navigate('Feedback', {
+                    result: {
+                        ...scanData,
+                        facts: factsData.facts || [],
+                        message: factsData.message,
+                    },
+                    childId,
+                });
         } catch (error) {
             Alert.alert('Scan failed', error.message || 'Please try again.');
         } finally {
