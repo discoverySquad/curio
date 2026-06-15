@@ -74,10 +74,6 @@ const HomeScreen = ({ navigation, route }) => {
       </Text>
 
       <Button
-        title="Test Page"
-        onPress={() => navigation.navigate("Test")}
-      />
-      <Button
         title="Activity Description"
         onPress={() => navigation.navigate("ActivityDescription")}
       />

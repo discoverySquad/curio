@@ -2,53 +2,50 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-import User from '../models/User.js';
+import Parent from '../models/Parent.js';
 
 const router = express.Router();
 
+const createToken = (parentId) => {
+    return jwt.sign({ parentId }, process.env.JWT_SECRET, { expiresIn: '7d' });
+};
+
 router.post('/register', async (req, res) => {
     try {
-        const { fullName, email, password } = req.body;
+        const { fullName, name, email, password } = req.body;
+        const parentName = fullName || name;
 
-        if (!fullName || !email || !password) {
-            return res.status(400).json({
-                message: 'Please fill all fields',
-            });
+        if (!parentName || !email || !password) {
+            return res.status(400).json({ message: 'Please fill all fields' });
         }
 
-        const existingUser = await User.findOne({ email });
+        const existingParent = await Parent.findOne({ email });
 
-        if (existingUser) {
-            return res.status(400).json({
-                message: 'Email already exists',
-            });
+        if (existingParent) {
+            return res.status(400).json({ message: 'Email already exists' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = await User.create({
-            fullName,
+        const parent = await Parent.create({
+            name: parentName,
             email,
             password: hashedPassword,
         });
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-            expiresIn: '7d',
-        });
-
         res.status(201).json({
             message: 'Account created successfully',
-            token,
+            token: createToken(parent._id),
             user: {
-                id: user._id,
-                fullName: user.fullName,
-                email: user.email,
+                id: parent._id,
+                name: parent.name,
+                fullName: parent.name,
+                email: parent.email,
+                childId: parent.childId,
             },
         });
     } catch (error) {
-        res.status(500).json({
-            message: 'Server error',
-        });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
@@ -57,44 +54,34 @@ router.post('/login', async (req, res) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return res.status(400).json({
-                message: 'Please provide email and password',
-            });
+            return res.status(400).json({ message: 'Please provide email and password' });
         }
 
-        const user = await User.findOne({ email });
+        const parent = await Parent.findOne({ email });
 
-        if (!user) {
-            return res.status(400).json({
-                message: 'Invalid email or password',
-            });
+        if (!parent) {
+            return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        const passwordMatches = await bcrypt.compare(password, parent.password);
 
-        if (!isPasswordCorrect) {
-            return res.status(400).json({
-                message: 'Invalid email or password',
-            });
+        if (!passwordMatches) {
+            return res.status(400).json({ message: 'Invalid email or password' });
         }
-
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-            expiresIn: '7d',
-        });
 
         res.status(200).json({
             message: 'Login successful',
-            token,
+            token: createToken(parent._id),
             user: {
-                id: user._id,
-                fullName: user.fullName,
-                email: user.email,
+                id: parent._id,
+                name: parent.name,
+                fullName: parent.name,
+                email: parent.email,
+                childId: parent.childId,
             },
         });
     } catch (error) {
-        res.status(500).json({
-            message: 'Server error',
-        });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
