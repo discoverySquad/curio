@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { apiRequest } from '../services/api.js';
 
-export default function RegisterScreen({ navigation }) {
+export default function RegisterScreen({ navigation, setUser }) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -16,7 +16,7 @@ export default function RegisterScreen({ navigation }) {
 
         if (data.token) {
             Alert.alert('Success', 'Account created successfully');
-            navigation.replace('ParentDashboard', { user: data.user });
+            setUser(data.user);
         } else {
             Alert.alert('Error', data.message || 'Registration failed');
         }

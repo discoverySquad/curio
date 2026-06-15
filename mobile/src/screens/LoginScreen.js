@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { apiRequest } from '../services/api.js';
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation, setUser }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -21,7 +21,8 @@ export default function LoginScreen({ navigation }) {
                 await SecureStore.setItemAsync('user', JSON.stringify(data.user));
             }
 
-            navigation.replace('ParentDashboard', { user: data.user });
+            // navigation.replace('ParentDashboard', { user: data.user });
+            setUser(data.user);
         } else {
             Alert.alert('Error', data.message || 'Login failed');
         }
