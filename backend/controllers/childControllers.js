@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Child from '../models/Child.js';
 import Parent from '../models/Parent.js';
 
@@ -53,7 +54,8 @@ const createChild = async (req, res) => {
     } else {
       await Parent.findByIdAndUpdate(
         parentId,
-        { $push: { childId: child._id } }
+        // avoid duplicate
+        { $addToSet: { childId: child._id } }
       );
     }
 
@@ -116,7 +118,7 @@ const deleteChild = async (req, res) => {
     // delete children id from parent collection
     await Parent.updateMany(
       { childId: req.params.id },
-      { $pull: { childId: req.params.id } }
+      { $pull: { childId: new mongoose.Types.ObjectId(req.params.id) } }
     );
 
     res.status(200).json({ message: "Account deleted" });

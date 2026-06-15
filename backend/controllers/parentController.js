@@ -4,7 +4,10 @@ import Parent from '../models/Parent.js';
 //get one parent information
 const getParent = async(req, res) => {
   try{
-    const parent = await Parent.findById(req.params.id);
+    const parent = await Parent.findById(req.params.id).populate('childId');
+
+    console.log("GET PARENT POPULATED =", parent.childId);
+    
     if(!parent){
       return res.status(404).json({message: "Parent not found"});
     }

@@ -1,8 +1,8 @@
 import { View, Text, Button, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { useState } from 'react';
 
-import CustomButton from '../components/CustomButton';
-import colors from "../constants/colors";
+import CustomButton from '../../components/CustomButton.js'
+import colors from '../../constants/colors.js'
 
 
 const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
@@ -24,7 +24,7 @@ export default function ParentDashboardScreen({ navigation, route }) {
             <Text style={styles.subtitle}>Welcome {user?.fullName || user?.name || 'Parent'}</Text>
 
             <Button title="Create Child Profile" onPress={() => navigation.navigate('CreateChild')} />
-
+            <Button title='Settings - Parent Account' onPress={()=> navigation.navigate('SettingParent')} />
             <Button title="Select Child Profile" onPress={() => navigation.navigate('SelectChild')} />
             <Button title="Edit Parent Account" onPress={() => navigation.navigate('EditParentAccount')} />
 

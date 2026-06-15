@@ -51,8 +51,9 @@ export default function CreateChildScreen({ navigation }) {
                 grade: selected,
                 avatar: selectedAvatar,
                 parentId,
-                timeLimit: 0
+                // timeLimit: 0
                 // timeLimit: Number(timeLimit) || undefined,
+                //backend uses model default
             }, token);
 
             console.log("API_URL check start");
