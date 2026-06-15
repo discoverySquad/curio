@@ -5,25 +5,35 @@ const childSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
+            trim: true,
         },
-        avatar: {
-            type: String,
-        },
-        grade: {
-            type: String,
-            enum: ["Kindergarten", "Grade1", "Grade2"],
-            required: true, 
-        },
-        timeLimit: {
+        age: {
             type: Number,
             required: true,
         },
+        avatar: {
+            type: String,
+            default: '',
+        },
+        readingLevel: {
+            type: String,
+            default: 'beginner',
+        },
+        grade: {
+            type: String,
+            enum: ['Kindergarten', 'Grade1', 'Grade2'],
+        },
+        timeLimit: {
+            type: Number,
+            default: 60,
+        },
         usageTimeToday: {
             type: Number,
-            default: 0, 
+            default: 0,
         },
         lastLoginAt: {
             type: Date,
+            default: Date.now,
         },
         currentLevel: {
             type: Number,
@@ -31,13 +41,15 @@ const childSchema = new mongoose.Schema(
         },
         earnedBadges: [
             {
-                badgeId: { type: String,
-                           required: true
+                badgeId: {
+                    type: String,
+                    required: true,
                 },
-                earnedAt: { type: Date,
-                            default: Date.now
+                earnedAt: {
+                    type: Date,
+                    default: Date.now,
                 },
-            }
+            },
         ],
     },
     { timestamps: true },

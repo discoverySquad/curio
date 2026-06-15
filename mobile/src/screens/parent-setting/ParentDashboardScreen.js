@@ -19,11 +19,18 @@ export default function ParentDashboardScreen({ navigation, route }) {
   }
 
     return (
-        <ScrollView style={styles.screen}  contentContainerStyle={styles.content}>
+        <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
             <Text style={styles.title}>Parent Dashboard</Text>
             <Text style={styles.subtitle}>Welcome {user?.fullName || user?.name || 'Parent'}</Text>
 
-            <Button title="Create Child Profile" onPress={() => navigation.navigate('CreateChild')} />
+            <Button
+                title="Create Child Profile"
+                onPress={() =>
+                    navigation.navigate('CreateChild', {
+                        parentId: user?.id,
+                    })
+                }
+            />
 
             <Button title="Select Child Profile" onPress={() => navigation.navigate('SelectChild')} />
             <Button title="Edit Parent Account" onPress={() => navigation.navigate('EditParentAccount')} />
@@ -45,9 +52,7 @@ export default function ParentDashboardScreen({ navigation, route }) {
                 <Text style={styles.forgetPassword}>Forget password?</Text>
 
                 <CustomButton label="Unlock Settings" onPress={handlePress} />
-
             </View>
-            
         </ScrollView>
     );
 }
