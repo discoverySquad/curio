@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Switch, StyleSheet, ScrollView, Image, Alert, ActivityIndicator, Modal } from 'react-native';
-import CustomButton from '../components/CustomButton';
+import CustomButton from '../../components/CustomButton.js'
 
 const PARENT_ID = '6a15e296dd882ca29e6355ae';
 const CHILD_ID  = '6a28f66e68e34f4224b78383';
 
-export default function SelectChildScreen({ navigation }) {
+export default function SettingParentScreen({ navigation }) {
     const [children, setChildren] = useState([]);
     const [loading, setLoading] = useState(true);
     const [notificationOn, setNotificationOn] = useState(null);
@@ -95,7 +95,7 @@ export default function SelectChildScreen({ navigation }) {
 
                 {/* implement navigation when edit page is ready */}
                 <TouchableOpacity onPress={handleTempClick}>
-                    <Image source={require('../assets/pencil.png')} style={styles.pencilSmall} />
+                    <Image source={require('../../assets/pencil.png')} style={styles.pencilSmall} />
                 </TouchableOpacity>
             </View>
             
@@ -133,7 +133,7 @@ export default function SelectChildScreen({ navigation }) {
             <View style={styles.card}>
                 <View style={styles.editRow}>
                     <Text style={styles.label}>Edit parent account</Text>
-                    <Image source={require('../assets/pencil.png')} style={styles.pencilSmall} />
+                    <Image source={require('../../assets/pencil.png')} style={styles.pencilSmall} />
                 </View>
             </View>
 

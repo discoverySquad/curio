@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Child from '../models/Child.js';
 import Parent from '../models/Parent.js';
 
@@ -12,6 +13,30 @@ const getChild = async (req, res) => {
         const today = new Date().toDateString();
         const lastLogin = child.lastLoginAt ? new Date(child.lastLoginAt).toDateString() : null;
 
+// create child information
+const createChild = async (req, res) => {
+  try {
+    let { name, avatar, grade, timeLimit, usageTimeToday, lastLoginAt, parentId } = req.body;
+    console.log("REQ BODY:", req.body);
+    console.log("PARENT ID:", parentId);
+    const child = await Child.create({
+      name,
+      avatar,
+      grade,
+      timeLimit,
+      usageTimeToday,
+      lastLoginAt,
+    });
+
+    if (!parentId) {
+      console.log("NO parentId, skipping parent update");
+    } else {
+      await Parent.findByIdAndUpdate(
+        parentId,
+        // avoid duplicate
+        { $addToSet: { childId: child._id } }
+      );
+    }
         if (today !== lastLogin) {
             await Child.findByIdAndUpdate(req.params.id, {
                 usageTimeToday: 0,
@@ -120,6 +145,19 @@ const deleteChild = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+    // delete children id from parent collection
+    await Parent.updateMany(
+      { childId: req.params.id },
+      { $pull: { childId: new mongoose.Types.ObjectId(req.params.id) } }
+    );
+
+    res.status(200).json({ message: "Account deleted" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export { createChild, getChild, editChild, deleteChild, saveUsageTime };
 };
 
 export { createChild, getChild, editChild, deleteChild, saveUsageTime };

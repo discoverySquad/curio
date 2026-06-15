@@ -6,18 +6,25 @@ import CustomButton from '../components/CustomButton.js'
 
 
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, route }) => {
 
-  const CHILD_ID = "6a28f66e68e34f4224b78383"; // for temporary test
+  const childId = route?.params?.childId;
+  // const CHILD_ID = "6a28f66e68e34f4224b78383"; // for temporary test
 
   const [child, setChild] = useState(null);
-  const [timeLimit, setTimeLimit] = useState("");
+  // const [timeLimit, setTimeLimit] = useState("");
 
 
   useEffect(() => {
+    console.log("route params =", route?.params);
+    console.log("childId =", childId);
+
+    if (!childId) return;
+
     const getChild = async () => {
       try {
-        const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${CHILD_ID}`;
+        const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${childId}`;
+        // const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${CHILD_ID}`;
         console.log('url:', url);
 
         const response = await fetch(url);
@@ -39,21 +46,21 @@ const HomeScreen = ({ navigation }) => {
       }
     };
     getChild();
-  }, []);
+  }, [childId]);
 
   useFocusEffect(
-  React.useCallback(() => {
-    const loadLimit = async () => {
-      const value = await AsyncStorage.getItem("screenTimeLimit");
+    React.useCallback(() => {
+      const loadLimit = async () => {
+        const value = await AsyncStorage.getItem("screenTimeLimit");
 
-      if (value) {
-        setTimeLimit(Number(value));
-      }
-    };
+        if (value) {
+          setTimeLimit(Number(value));
+        }
+      };
 
-    loadLimit();
-  }, [])
-);
+      loadLimit();
+    }, [childId])
+  );
 
   const handleStartActivity = () => {
     console.log('Start Activity pressed'); // add function when ready
@@ -112,7 +119,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.exploration}>
           {child ? (
             <Time
-              childId={CHILD_ID}
+              childId={child._id}
               timeLimit={child.timeLimit}
               usageTimeToday={child.usageTimeToday}
             />

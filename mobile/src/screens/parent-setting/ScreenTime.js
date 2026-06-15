@@ -2,16 +2,17 @@ import { useState } from "react";
 import {
     ScrollView, View, Text, TouchableOpacity, Alert, TextInput, StyleSheet } from "react-native";
 
-const ScreenTime = ({ navigation }) => {
+const ScreenTime = ({ navigation, route }) => {
     const [customMinutes, setCustomMinutes] = useState("");
     const [selectedTime, setSelectedTime] = useState(null);
 
-    const CHILD_ID = "6a15ddc0752c37728664b230";
+    const childId = route?.params?.childId; 
+    // const CHILD_ID = "6a15ddc0752c37728664b230";
 
     const saveTime = async (minutes) => {
         try {
             await fetch(
-                `${process.env.EXPO_PUBLIC_API_URL}/api/child/${CHILD_ID}`,
+                `${process.env.EXPO_PUBLIC_API_URL}/api/child/${childId}`,
                 {
                     method: "PATCH",
                     headers: {

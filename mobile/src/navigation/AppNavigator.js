@@ -20,7 +20,9 @@ import RegisterScreen from '../screens/RegisterScreen.js';
 // Parent Screens
 import ParentDashboardScreen from '../screens/parent-setting/ParentDashboardScreen.js';
 import CreateChildScreen from '../screens/parent-setting/CreateChildScreen.js';
-import SelectChildScreen from '../screens/parent-setting/SelectChildScreen.js';
+import SettingParentScreen from '../screens/parent-setting/SettingParentScreen.js';
+import EditParentAccount from '../screens/parent-setting/EditParentAccount.js';
+import SelectChild from '../screens/parent-setting/SelectChild.js';
 
 // Scan Screens
 import ScanScreen from '../screens/ScanScreen.js';
@@ -64,11 +66,12 @@ const ParentStack = () => {
         <Stack.Navigator>
             <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} options={{ title: 'Parent Dashboard' }} />
             <Stack.Screen name="CreateChild" component={CreateChildScreen} options={{ title: 'Create Child Profile' }} />
-            <Stack.Screen name="SelectChild" component={SelectChildScreen} options={{ title: 'Select Child' }} />
-      <Stack.Screen name="ScreenTime" component={ScreenTime} />
-      <Stack.Screen name="SelectCategory" component={SelectCategory} />
-      <Stack.Screen name='EditParentAccount' component={EditParentAccount} />
-    </Stack.Navigator>
+            <Stack.Screen name="SelectChild" component={SelectChild} options={{title: 'Select Child'}} />
+            <Stack.Screen name="SettingParent" component={SettingParentScreen} options={{ title: 'Explore the World!' }} />
+            <Stack.Screen name="ScreenTime" component={ScreenTime} />
+            <Stack.Screen name="SelectCategory" component={SelectCategory} />
+            <Stack.Screen name='EditParentAccount' component={EditParentAccount} />
+        </Stack.Navigator>
     );
 };
 

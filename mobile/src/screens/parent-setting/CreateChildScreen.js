@@ -33,6 +33,13 @@ export default function CreateChildScreen({ navigation, route }) {
 
             const child = await apiRequest('/api/child', 'POST', {
                 parentId,
+                // timeLimit: 0
+                // timeLimit: Number(timeLimit) || undefined,
+                //backend uses model default
+            }, token);
+
+            console.log("API_URL check start");
+            console.log("payload:", {
                 name: name.trim(),
                 age: Number(age),
                 avatar: avatar.trim(),
