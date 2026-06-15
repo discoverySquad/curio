@@ -114,6 +114,6 @@ const styles = StyleSheet.create({
         borderRadius: 32,
         padding: 8,
         marginVertical: 4,
-        marginHorizontal: 0,
+        marginHorizontal: 8,
     },
 })
