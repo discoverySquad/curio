@@ -7,21 +7,14 @@ const childSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
-        age: {
-            type: Number,
-            required: true,
-        },
         avatar: {
             type: String,
             default: '',
         },
-        readingLevel: {
-            type: String,
-            default: 'beginner',
-        },
         grade: {
             type: String,
             enum: ['Kindergarten', 'Grade1', 'Grade2'],
+            required: true,
         },
         timeLimit: {
             type: Number,

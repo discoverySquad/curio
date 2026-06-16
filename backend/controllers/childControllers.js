@@ -192,13 +192,11 @@ const getChild = async (req, res) => {
 
 const createChild = async (req, res) => {
     try {
-        const { name, avatar, grade, timeLimit, usageTimeToday, lastLoginAt, readingLevel, age, parentId } = req.body;
-        console.log("REQ BODY:", req.body);
-        console.log("PARENT ID:", parentId);
+        const { parentId, name, avatar, grade, timeLimit } = req.body;
 
-        if (!parentId || !name || !age) {
+        if (!parentId || !name || !grade) {
             return res.status(400).json({
-                message: 'Parent ID, child name, and age are required',
+                message: 'Parent ID, child name, and grade are required',
             });
         }
 
@@ -235,13 +233,11 @@ const createChild = async (req, res) => {
 
 const editChild = async (req, res) => {
     try {
-        const { name, age, avatar, readingLevel, grade, timeLimit } = req.body;
+        const { name, avatar, grade, timeLimit } = req.body;
 
         const updateData = {};
         if (name) updateData.name = name;
-        if (age !== undefined) updateData.age = age;
         if (avatar !== undefined) updateData.avatar = avatar;
-        if (readingLevel !== undefined) updateData.readingLevel = readingLevel;
         if (grade !== undefined) updateData.grade = grade;
         if (timeLimit !== undefined) updateData.timeLimit = timeLimit;
 
