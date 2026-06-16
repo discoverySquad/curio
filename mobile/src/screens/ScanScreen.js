@@ -69,14 +69,15 @@ export default function ScanScreen({ navigation, route }) {
                     categoryKey: route.params?.category || 'nature',
                 });
 
-                navigation.navigate('Feedback', {
-                    result: {
-                        ...scanData,
-                        facts: factsData.facts || [],
-                        message: factsData.message,
-                    },
-                    childId,
-                });
+        navigation.navigate('Feedback', {
+            result: {
+                ...scanData,
+                facts: factsData.facts || [],
+                message: factsData.message,
+            },
+            childId,
+            categoryName: route.params?.categoryName,
+        });
         } catch (error) {
             Alert.alert('Scan failed', error.message || 'Please try again.');
         } finally {
