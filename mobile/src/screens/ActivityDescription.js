@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image, ActivityIndicator, ScrollView } from 'react-native';
 import * as Speech from 'expo-speech';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -105,7 +105,7 @@ const ActivityDescription = ({ navigation, route }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={styles.content}>
             <Text style={styles.h1}>{task?.task}</Text>
 
             {task?.img ? <Image source={{ uri: task.img }} style={styles.taskImage} /> : null}
@@ -136,17 +136,20 @@ const ActivityDescription = ({ navigation, route }) => {
             >
                 <Text style={styles.changeActivityBtnText}>Change Activity</Text>
             </Pressable>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#FFFFFF',
+    },
+    content: {
         alignItems: 'center',
         paddingHorizontal: 32,
         paddingTop: 40,
-        backgroundColor: '#FFFFFF',
+        paddingBottom: 40,
     },
     centerContainer: {
         flex: 1,
