@@ -14,17 +14,16 @@ export default function ParentDashboardScreen({ navigation, route }) {
     const user = route.params?.user;
     const [password, setPassword] = useState('');
 
-    const handlePress = async() => {
-    console.log("Start Activity!")
-  }
+    const handlePress = async () => {
+        console.log("Start Activity!")
+    }
 
     return (
         <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
             <Text style={styles.title}>Parent Dashboard</Text>
             <Text style={styles.subtitle}>Welcome {user?.fullName || user?.name || 'Parent'}</Text>
 
-            <Button title="Create Child Profile" onPress={() => navigation.navigate('CreateChild')} />
-            <Button title='Settings - Parent Account' onPress={()=> navigation.navigate('SettingParent')} />
+            <Button title='Settings - Parent Account' onPress={() => navigation.navigate('SettingParent')} />
             <Button
                 title="Create Child Profile"
                 onPress={() =>
@@ -63,18 +62,18 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
     },
-    content: { 
-        padding: 24, 
-        alignItems: 'center' 
+    content: {
+        padding: 24,
+        alignItems: 'center'
     },
-    title: { 
-        fontSize: 28, 
-        fontWeight: 'bold', 
-        marginBottom: 10 
+    title: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        marginBottom: 10
     },
-    subtitle: { 
-        fontSize: 18, 
-        marginBottom: 24 
+    subtitle: {
+        fontSize: 18,
+        marginBottom: 24
     },
     mainTable: {
         padding: 24,
@@ -84,13 +83,13 @@ const styles = StyleSheet.create({
         backgroundColor: colors.neutralMist,
     },
     mainText: {
-        fontSize: 28, 
-        fontWeight: 'bold', 
+        fontSize: 28,
+        fontWeight: 'bold',
         marginBottom: 10,
         textAlign: 'center',
     },
     subText: {
-        fontSize: 18, 
+        fontSize: 18,
         marginBottom: 10,
         textAlign: 'center',
     },

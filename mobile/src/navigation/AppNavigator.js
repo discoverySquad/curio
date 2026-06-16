@@ -30,12 +30,11 @@ import ScanScreen from '../screens/ScanScreen.js';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const AuthStack = ({ setUser }) => {
+const AuthStack = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login">{(props) => <LoginScreen {...props} setUser={setUser} />}</Stack.Screen>
-
-            <Stack.Screen name="Register">{(props) => <RegisterScreen {...props} setUser={setUser} />}</Stack.Screen>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
         </Stack.Navigator>
     );
 };
@@ -62,35 +61,12 @@ const ScanStack = () => {
     );
 };
 
-const ParentStack = ({ user }) => {
-    const hasChildren = user?.childId?.length > 0;
-
+const ParentStack = () => {
     return (
-        <Stack.Navigator initialRouteName={hasChildren ? 'SelectChild' : 'CreateChild'}>
-            <Stack.Screen name="ParentDashboard" options={{ title: 'Parent Dashboard' }}>
-                {(props) => (
-                    <ParentDashboardScreen
-                        {...props}
-                        route={{
-                            ...props.route,
-                            params: {
-                                ...(props.route.params || {}),
-                                user,
-                            },
-                        }}
-                    />
-                )}
-            </Stack.Screen>
-
-            <Stack.Screen
-                name="CreateChild"
-                component={CreateChildScreen}
-                initialParams={{ parentId: user?.id }}
-                options={{ title: 'Create Child Profile' }}
-            />
-
-            <Stack.Screen name="SelectChild" component={SelectChild} initialParams={{ parentId: user?.id }} options={{ title: 'Select Child' }} />
-
+        <Stack.Navigator>
+            <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} options={{ title: 'Parent Dashboard' }} />
+            <Stack.Screen name="CreateChild" component={CreateChildScreen} options={{ title: 'Create Child Profile' }} />
+            <Stack.Screen name="SelectChild" component={SelectChild} options={{ title: 'Select Child' }} />
             <Stack.Screen name="SettingParent" component={SettingParentScreen} options={{ title: 'Explore the World!' }} />
             <Stack.Screen name="ScreenTime" component={ScreenTime} />
             <Stack.Screen name="SelectCategory" component={SelectCategory} />
@@ -99,21 +75,24 @@ const ParentStack = ({ user }) => {
     );
 };
 
-const MainTabs = ({ user }) => {
+const MainTabs = () => {
     return (
         <Tab.Navigator>
             <Tab.Screen name="Home" component={HomeStack} />
             <Tab.Screen name="Scan" component={ScanStack} />
             <Tab.Screen name="Journal" component={JournalScreen} />
-            <Tab.Screen name="Parent">{() => <ParentStack user={user} />}</Tab.Screen>
+            <Tab.Screen name="Parent" component={ParentStack} />
         </Tab.Navigator>
     );
 };
 
 const AppNavigator = () => {
-    const [user, setUser] = useState(null);
+    // Temporary:
+    // false = show Login/Register
+    // true = skip auth and show main app
+    const [isLoggedIn] = useState(true);
 
-    return <NavigationContainer>{user ? <MainTabs user={user} /> : <AuthStack setUser={setUser} />}</NavigationContainer>;
+    return <NavigationContainer>{isLoggedIn ? <MainTabs /> : <AuthStack />}</NavigationContainer>;
 };
 
 export default AppNavigator;
