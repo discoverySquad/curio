@@ -23,9 +23,12 @@ export default function ScanScreen({ navigation, route }) {
     const [permission, requestPermission] = useCameraPermissions();
     const [loading, setLoading] = useState(false);
     const [warning, setWarning] = useState(null);
+    const [photoUri, setPhotoUri] = useState(null);
 
     const childId = route.params?.childId || DUMMY_CHILD_ID;
+    const taskName = route.params?.taskName || route.params?.activityTitle;
     const categoryName = route.params?.categoryName || route.params?.category || 'Nature';
+    console.log('route.params:', JSON.stringify(route.params));
     const activityTitle = route.params?.activityTitle || 'Scan Activity';
 
     useEffect(() => {
@@ -78,6 +81,7 @@ export default function ScanScreen({ navigation, route }) {
             const photo = await cameraRef.current.takePictureAsync({
                 quality: 0.4,
             });
+            setPhotoUri(photo.uri);
 
             const resizedPhoto = await ImageManipulator.manipulateAsync(
                 photo.uri,
@@ -101,14 +105,37 @@ export default function ScanScreen({ navigation, route }) {
                 return;
             }
 
-            const factsData = await apiRequest('/api/ai/facts', 'POST', {
-                objectName: scanData.objectName,
-            });
+            //Calling /api/activity/verify (Amy)
+
+            if (taskName && categoryName) {
+                const verifyData = await apiRequest('/api/activity/verify', 'POST', {
+                    imageBase64: resizedPhoto.base64,
+                    taskName,
+                    categoryName,
+                    childId,
+                });
+
+                console.log('verifyData:', verifyData); 
+
+                if (!verifyData.isMatch) {
+                    navigation.navigate('TryAgain', {
+                        childId,
+                        categoryName,
+                        taskName,
+                    });
+                    return;
+                }
+            }
+            //end here
+
+                const factsData = await apiRequest('/api/ai/facts', 'POST', {
+                    objectName: scanData.objectName,
+                });
 
             await apiRequest('/api/journal', 'POST', {
                 childId,
                 category: categoryName,
-                activityTitle,
+                activityTitle: activityTitle || taskName || '',
                 objectName: scanData.objectName,
                 facts: factsData.facts || [],
                 correct: scanData.correct !== false,
@@ -131,7 +158,7 @@ export default function ScanScreen({ navigation, route }) {
                 imageUri: resizedPhoto.uri,
                 childId,
                 categoryName,
-                activityTitle,
+                activityTitle: activityTitle || taskName || '',
             });
         } catch (error) {
             Alert.alert('Scan failed', error.message || 'Please try again.');

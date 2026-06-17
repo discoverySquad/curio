@@ -14,8 +14,10 @@ import gamificationRoute from './routes/gamificationRoute.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import journalRoute from './routes/journalRoute.js';
 import { displayConnectionS3 } from './database/s3.js';
+import activityRoutes from './routes/activityRoutes.js';
 
 const app = express();
+console.log("🔥 CHILD CONTROLLER PATH:", import.meta.url);
 
 app.use(cors());
 app.use(express.json({ limit: '25mb' }));
@@ -31,6 +33,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/ai', aiRoutes);
+app.use('/api/activity', activityRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/parent', parentRoute);
 app.use('/api/child', childRoute);

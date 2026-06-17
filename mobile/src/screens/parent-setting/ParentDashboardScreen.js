@@ -9,7 +9,8 @@ const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
 
 export default function ParentDashboardScreen({ navigation, route }) {
 
-    const parentId = "6a15ddc0752c37728664b230";
+    // const parentId = "6a15ddc0752c37728664b230";
+    const parentId = route?.params?.parentId;
 
     const user = route.params?.user;
     const [password, setPassword] = useState('');
@@ -28,7 +29,8 @@ export default function ParentDashboardScreen({ navigation, route }) {
                 title="Create Child Profile"
                 onPress={() =>
                     navigation.navigate('CreateChild', {
-                        parentId: user?.id,
+                        // parentId: user?.id,
+                        parentId: "6a15ddc0752c37728664b230", //temp
                     })
                 }
             />
