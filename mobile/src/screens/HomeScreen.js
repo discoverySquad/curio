@@ -73,21 +73,21 @@ const HomeScreen = ({ navigation, route }) => {
         Home Screen
       </Text>
 
-      <Button
+      {/* <Button
         title="Activity Description"
         onPress={() => navigation.navigate("ActivityDescription")}
-      />
-      <Button
+      /> */}
+      {/* <Button
         title="Try Again Page"
         onPress={() => navigation.navigate("TryAgain")}
-      />
-      <Button
+      /> */}
+      {/* <Button
         title="Feedback Page"
         onPress={() => navigation.navigate("Feedback")}
-      />
+      /> */}
 
       {/* temporally put here, should be on parent setting page */}
-      <Button title='Screen Time' onPress={() => navigation.navigate("ScreenTime")} />
+      {/* <Button title='Screen Time' onPress={() => navigation.navigate("ScreenTime")} /> */}
 
       {/* card1 */}
       <View style={styles.homeCard}>

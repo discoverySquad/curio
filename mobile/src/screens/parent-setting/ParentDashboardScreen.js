@@ -24,8 +24,8 @@ export default function ParentDashboardScreen({ navigation, route }) {
             <Text style={styles.title}>Parent Dashboard</Text>
             <Text style={styles.subtitle}>Welcome {user?.fullName || user?.name || 'Parent'}</Text>
 
-            <Button title='Settings - Parent Account' onPress={() => navigation.navigate('SettingParent')} />
-            <Button
+            <Button title='Settings - Parent Account' onPress={() => navigation.navigate('SettingParentScreen')} />
+            {/* <Button
                 title="Create Child Profile"
                 onPress={() =>
                     navigation.navigate('CreateChild', {
@@ -33,19 +33,19 @@ export default function ParentDashboardScreen({ navigation, route }) {
                         parentId: "6a15ddc0752c37728664b230", //temp
                     })
                 }
-            />
+            /> */}
 
-            <Button title="Select Child Profile" onPress={() => navigation.navigate('SelectChild')} />
-            <Button title="Edit Parent Account" onPress={() => navigation.navigate('EditParentAccount')} />
+            {/* <Button title="Select Child Profile" onPress={() => navigation.navigate('SelectChild')} /> */}
+            {/* <Button title="Edit Parent Account" onPress={() => navigation.navigate('EditParentAccount')} /> */}
 
-            <Button
+            {/* <Button
                 title="Start Scanning"
                 onPress={() =>
                     navigation.navigate('Scan', {
                         childId: DUMMY_CHILD_ID,
                     })
                 }
-            />
+            /> */}
 
             <View style={styles.mainTable}>
                 <Text style={styles.mainText}>Parent Account</Text>

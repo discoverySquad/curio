@@ -71,12 +71,12 @@ const createChild = async (req, res) => {
   }
 };
 
-const editChild = async (req, res) => {
+const updateChild = async (req, res) => {
   try {
     const { name, avatar, grade, timeLimit } = req.body;
 
     const updateData = {};
-    if (name) updateData.name = name;
+    if (name !== undefined) updateData.name = name;
     if (avatar !== undefined) updateData.avatar = avatar;
     if (grade !== undefined) updateData.grade = grade;
     if (timeLimit !== undefined) updateData.timeLimit = timeLimit;
@@ -135,4 +135,4 @@ const deleteChild = async (req, res) => {
   }
 };
 
-export { createChild, getChild, editChild, deleteChild, saveUsageTime };
+export { createChild, getChild, updateChild, deleteChild, saveUsageTime };

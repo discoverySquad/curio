@@ -1,5 +1,5 @@
 import express from 'express';
-import {createChild, getChild, editChild, deleteChild, saveUsageTime} from "../controllers/childControllers.js"
+import {createChild, getChild, updateChild, deleteChild, saveUsageTime} from "../controllers/childControllers.js"
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -12,7 +12,7 @@ console.log("🔥 ROUTE FILE LOADED:", __filename);
 
 router.get("/:id", getChild);
 router.post("/", createChild);
-router.patch("/:id", editChild);
+router.patch("/:id", updateChild);
 router.patch('/:id/usage', saveUsageTime); 
 router.delete("/:id", deleteChild);
 
