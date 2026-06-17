@@ -22,6 +22,8 @@ import ParentDashboardScreen from '../screens/parent-setting/ParentDashboardScre
 import CreateChildScreen from '../screens/parent-setting/CreateChildScreen.js';
 import SelectChild from '../screens/parent-setting/SelectChild.js';
 import EditParentAccount from '../screens/parent-setting/EditParentAccount.js';
+import SettingParentScreen from '../screens/parent-setting/SettingParentScreen.js';
+import EditChildScreen from '../screens/parent-setting/EditChildScreen.js';
 
 // Scan Screens
 import ScanScreen from '../screens/ScanScreen.js';
@@ -67,9 +69,13 @@ const ParentStack = () => {
             <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} options={{ title: 'Parent Dashboard' }} />
             <Stack.Screen name="CreateChild" component={CreateChildScreen} options={{ title: 'Create Child Profile' }} />
             <Stack.Screen name="SelectChild" component={SelectChild} options={{ title: 'Select Child' }} />
+            <Stack.Screen name="UpdateChild" component={EditChildScreen} options={{ title: 'Edit Child Profile' }} />
+            <Stack.Screen name="EditChild" component={EditChildScreen} options={{ title: 'Edit Child Profile' }} />
       <Stack.Screen name="ScreenTime" component={ScreenTime} />
       <Stack.Screen name="SelectCategory" component={SelectCategory} />
       <Stack.Screen name='EditParentAccount' component={EditParentAccount} />
+      <Stack.Screen name='SettingParentScreen' component={SettingParentScreen} />
+
     </Stack.Navigator>
     );
 };

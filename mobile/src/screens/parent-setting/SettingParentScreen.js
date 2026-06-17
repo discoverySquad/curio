@@ -11,6 +11,7 @@ export default function SettingParentScreen({ navigation }) {
     const [notificationOn, setNotificationOn] = useState(null);
     const [timeLimit, setTimeLimit] = useState(null);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
         loadChildren();
@@ -20,23 +21,32 @@ export default function SettingParentScreen({ navigation }) {
         try{
             const parentRes = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${PARENT_ID}`);
             const parentData= await parentRes.json();
-            const childIds = parentData.childId;
+
             setNotificationOn(parentData.notification); 
 
-            const childrenData = [];
-            for(const id of childIds){
-                const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/child/${id}`);
-                const data = await res.json();
-                childrenData.push(data);
+        const childList = parentData.childId || [];
+
+        if (childList.length > 0 && typeof childList[0] === 'string') {
+          const detailedChildren = [];
+
+          for (const childId of childList) {
+            const childRes = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/child/${childId}`);
+            if (childRes.ok) {
+              detailedChildren.push(await childRes.json());
             }
-            setChildren(childrenData);
-            
-            const currentChild = childrenData.find((child) => child._id === CHILD_ID); //temporary ID
+          }
+
+          setChildren(detailedChildren);
+        } else {
+          setChildren(childList);
+        }
+
+        const currentChild = childList.find((child) => child._id === CHILD_ID);
             if(currentChild){
                 setTimeLimit(currentChild.timeLimit);
             }
             }catch(error){
-            console.error("Failed loading children: ". error);
+            console.error("Failed loading children:", error);
            }finally{
             setLoading(false);
            }
@@ -94,46 +104,89 @@ export default function SettingParentScreen({ navigation }) {
                 <Text style={styles.sectionTitle}>Switch Profile</Text>
 
                 {/* implement navigation when edit page is ready */}
-                <TouchableOpacity onPress={handleTempClick}>
+                {/* <TouchableOpacity onPress={handleTempClick}>
                     <Image source={require('../../assets/pencil.png')} style={styles.pencilSmall} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             
             <View style={styles.profilesGrid}>
-            {children.map((child) => (
+            {children.map((child, index) => (
+              <View key={child._id ?? index} style={styles.profileItem}>
                 <TouchableOpacity
-                key={child._id}
-                style={styles.profileItem}
-                onPress={() => navigation.navigate('Home', {
-                    screen: 'Home',
-                    params: { childId: child._id }
-                })}
+                  style={styles.profilePressArea}
+                  onPress={() => {
+                    if(editMode) return;
+
+                    navigation.navigate("MainTabs", {
+                        screen: "HomeTab",
+                        params: {
+                            screen: "Home",
+                            params: {
+                                childId: child._id,
+                            },
+                        },
+                    });
+                  }}
+                  activeOpacity={0.8}
                 >
-                <View style={styles.profileAvatar} />
-                <Text style={styles.profileName}>{child.name}</Text>
+                  <View style={styles.avatarWrapper}>
+                    <View style={[
+                      styles.profileAvatar,
+                      editMode && styles.profileAvatarEditMode
+                    ]} />
+                    {editMode && (
+                  <TouchableOpacity
+                    style={styles.editChildIcon}
+                    onPress={() => navigation.navigate("UpdateChild", { childId: child._id })}
+                    hitSlop={8}
+                  >
+                    <Image
+                      source={require("../../assets/pencil.png")}
+                      style={styles.editChildPencil}
+                    />
+                  </TouchableOpacity>
+                )}
+                  </View>
+                  <Text style={styles.profileName}>{child.name}</Text>
                 </TouchableOpacity>
+                
+              </View>
             ))}
-                <TouchableOpacity style={styles.profileItem}>
+                <TouchableOpacity style={styles.profileItem} onPress={() => navigation.navigate("CreateChild")}>
                     <View style={[styles.profileAvatar, styles.addBtn]}>
                     <Text style={styles.addBtnText}>+</Text>
                     </View>
-                    <Text style={styles.profileName}>Add{'\n'}Profile</Text>
+                    <Text style={styles.profileName}>Add Profile</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={styles.editProfile}
+                    onPress={() => setEditMode(!editMode)}>
+                    <Text>{editMode ? "Cancel" : "Edit Profile"}</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.card}>
-                <Text style={styles.label}>Screen Time</Text>
-                <Text style={styles.sub}>
-                    {loading
-                    ? "Loading..."
-                    : `Daily limit: ${timeLimit ?? "--"} minutes`}
-                </Text>
+                <View style={styles.editRow}>
+                    <View>
+                        <Text style={styles.label}>Screen Time</Text>
+                        <Text style={styles.sub}>
+                            {loading
+                            ? "Loading..."
+                            : `Daily limit: ${timeLimit} minutes`}
+                        </Text>
+                    </View>
+                    <TouchableOpacity onPress={() => navigation.navigate("ScreenTime")}>
+                      <Image source={require('../../assets/pencil.png')} style={styles.pencilSmall} />
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <View style={styles.card}>
                 <View style={styles.editRow}>
                     <Text style={styles.label}>Edit parent account</Text>
-                    <Image source={require('../../assets/pencil.png')} style={styles.pencilSmall} />
+                    <TouchableOpacity onPress={() => navigation.navigate("EditParentAccount")}>
+                      <Image source={require('../../assets/pencil.png')} style={styles.pencilSmall} />
+                    </TouchableOpacity>
                 </View>
             </View>
 
@@ -209,6 +262,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4 
 },
+  profilePressArea: {
+    alignItems: 'center',
+    gap: 4,
+  },
   profileAvatar: {
     width: 60, 
     height: 60, 
@@ -301,5 +358,36 @@ deleteButtonText: {
 cancelText: {
   fontSize: 12,
   color: '#555',
+},
+avatarWrapper: {
+  position: 'relative',
+  width: 60,
+  height: 60,
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+profileAvatarEditMode: {
+  opacity: 0.4,
+},
+editChildIcon: {
+  position: 'absolute',
+  width: "100%",
+  height: "100%",
+  borderRadius: 30,
+  backgroundColor: "#777",
+  justifyContent: "center",
+  alignItems: "center",
+  opacity: 1,
+  zIndex: 3,
+},
+editChildPencil: {
+  width: 16,
+  height: 16,
+  tintColor: '#333',
+},
+editProfile: {
+  width: '100%',
+  alignItems: 'center',
+  marginTop: 4,
 },
 });
