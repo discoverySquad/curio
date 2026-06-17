@@ -1,44 +1,59 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Image, ScrollView } from 'react-native';
 import * as Speech from 'expo-speech';
 import { Ionicons } from '@expo/vector-icons';
 
 import CustomButton from '../components/CustomButton.js';
 
-const TEST_CHILD_ID = '6a15ddc0752c37728664b230';
+const TEST_CHILD_ID = '6a28f66e68e34f4224b78383';
 
 const Feedback = ({ navigation, route }) => {
     const result = route.params?.result || {};
     const childId = route.params?.childId || TEST_CHILD_ID;
     const categoryName = route.params?.categoryName || route.params?.category || 'Nature';
 
+    const [isSpeaking, setIsSpeaking] = useState(false);
+
     const objectName = result?.objectName || 'Unknown object';
     const facts = Array.isArray(result?.facts) ? result.facts.slice(0, 3) : [];
     const imageUri = route.params?.imageUri || result?.imageUri || result?.photoUri;
+
+    useEffect(() => {
+        return () => {
+            Speech.stop();
+            setIsSpeaking(false);
+        };
+    }, []);
 
     const getSpeechMessage = () => {
         const factsText = facts.length > 0 ? facts.join(' ') : 'Keep exploring to learn more fun facts.';
         return `Mission complete! You scanned ${objectName}. ${factsText}`;
     };
 
-    const speakResult = () => {
+    const toggleSpeech = () => {
+        if (isSpeaking) {
+            Speech.stop();
+            setIsSpeaking(false);
+            return;
+        }
+
         Speech.stop();
+        setIsSpeaking(true);
+
         Speech.speak(getSpeechMessage(), {
             language: 'en-US',
             rate: 0.85,
             pitch: 1.05,
+            onDone: () => setIsSpeaking(false),
+            onStopped: () => setIsSpeaking(false),
+            onError: () => setIsSpeaking(false),
         });
     };
 
-    useEffect(() => {
-        speakResult();
-
-        return () => {
-            Speech.stop();
-        };
-    }, [objectName, facts.join('|')]);
-
     const goToNextActivity = () => {
+        Speech.stop();
+        setIsSpeaking(false);
+
         navigation.navigate('Home', {
             screen: 'ActivityDescription',
             params: {
@@ -49,6 +64,9 @@ const Feedback = ({ navigation, route }) => {
     };
 
     const goToChangeCategory = () => {
+        Speech.stop();
+        setIsSpeaking(false);
+
         navigation.navigate('Home', {
             screen: 'SelectCategory',
             params: {
@@ -72,8 +90,8 @@ const Feedback = ({ navigation, route }) => {
             </View>
 
             <View style={styles.soundRow}>
-                <Pressable style={styles.speakerButton} onPress={speakResult}>
-                    <Ionicons name="volume-high" size={22} color="#FFFFFF" />
+                <Pressable style={styles.speakerButton} onPress={toggleSpeech}>
+                    <Ionicons name={isSpeaking ? 'volume-mute' : 'volume-high'} size={22} color="#FFFFFF" />
                 </Pressable>
             </View>
 
