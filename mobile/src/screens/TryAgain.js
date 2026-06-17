@@ -9,7 +9,7 @@ const TryAgain = ({ navigation }) => {
         <Text style={styles.h1}>Not quite what we’re looking for...</Text>
 
         <View style={styles.imgContainer}>
-            <Text>Captured image comes here</Text>
+            <Text>Mascot character image comes here</Text>
         </View>
 
         <View style={styles.tipBox}>

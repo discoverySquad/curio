@@ -11,6 +11,7 @@ export default function ScanScreen({ navigation, route }) {
     const [permission, requestPermission] = useCameraPermissions();
     const [loading, setLoading] = useState(false);
     const [warning, setWarning] = useState(null);
+    const [photoUri, setPhotoUri] = useState(null);
 
     const childId = route.params?.childId || DUMMY_CHILD_ID;
     const taskName = route.params?.taskName;  
@@ -35,6 +36,7 @@ export default function ScanScreen({ navigation, route }) {
             const photo = await cameraRef.current.takePictureAsync({
                 quality: 0.4,
             });
+            setPhotoUri(photo.uri);
 
             const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [{ resize: { width: 640 } }], {
                 compress: 0.5,
@@ -103,6 +105,7 @@ export default function ScanScreen({ navigation, route }) {
             },
             childId,
             categoryName: route.params?.categoryName,
+            imageUri: photo.uri,
         });
         } catch (error) {
             Alert.alert('Scan failed', error.message || 'Please try again.');
