@@ -62,6 +62,19 @@ const SelectChild = ({ navigation }) => {
         }
     };
 
+    const handleSelectChild = (child) => {
+      navigation.navigate("MainTabs", {
+        screen: "Home",
+        params: {
+        screen: "Home",
+        params: {
+            childId: child._id,
+            childName: child.name,
+        },
+        },
+    });
+};
+
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.title}>Who is exploring today?</Text>
