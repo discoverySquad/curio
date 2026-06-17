@@ -63,7 +63,7 @@ const HomeScreen = ({ navigation, route }) => {
   );
 
   const handleStartActivity = () => {
-    console.log('Start Activity pressed'); // add function when ready
+    navigation.navigate("SelectCategory");
   };
 
 
@@ -84,11 +84,6 @@ const HomeScreen = ({ navigation, route }) => {
       <Button
         title="Feedback Page"
         onPress={() => navigation.navigate("Feedback")}
-      />
-
-      <Button
-        title="Select Category"
-        onPress={() => navigation.navigate("SelectCategory")}
       />
 
       {/* temporally put here, should be on parent setting page */}

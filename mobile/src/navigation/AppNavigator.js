@@ -20,9 +20,8 @@ import RegisterScreen from '../screens/RegisterScreen.js';
 // Parent Screens
 import ParentDashboardScreen from '../screens/parent-setting/ParentDashboardScreen.js';
 import CreateChildScreen from '../screens/parent-setting/CreateChildScreen.js';
-import SettingParentScreen from '../screens/parent-setting/SettingParentScreen.js';
-import EditParentAccount from '../screens/parent-setting/EditParentAccount.js';
 import SelectChild from '../screens/parent-setting/SelectChild.js';
+import EditParentAccount from '../screens/parent-setting/EditParentAccount.js';
 
 // Scan Screens
 import ScanScreen from '../screens/ScanScreen.js';
@@ -68,23 +67,40 @@ const ParentStack = () => {
             <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} options={{ title: 'Parent Dashboard' }} />
             <Stack.Screen name="CreateChild" component={CreateChildScreen} options={{ title: 'Create Child Profile' }} />
             <Stack.Screen name="SelectChild" component={SelectChild} options={{ title: 'Select Child' }} />
-            <Stack.Screen name="SettingParent" component={SettingParentScreen} options={{ title: 'Explore the World!' }} />
-            <Stack.Screen name="ScreenTime" component={ScreenTime} />
-            <Stack.Screen name="SelectCategory" component={SelectCategory} />
-            <Stack.Screen name="EditParentAccount" component={EditParentAccount} />
-        </Stack.Navigator>
+      <Stack.Screen name="ScreenTime" component={ScreenTime} />
+      <Stack.Screen name="SelectCategory" component={SelectCategory} />
+      <Stack.Screen name='EditParentAccount' component={EditParentAccount} />
+    </Stack.Navigator>
     );
 };
 
 const MainTabs = () => {
     return (
-        <Tab.Navigator>
-            <Tab.Screen name="Home" component={HomeStack} />
+        <Tab.Navigator >
+            <Tab.Screen name="HomeTab" component={HomeStack} />
             <Tab.Screen name="Scan" component={ScanStack} />
             <Tab.Screen name="Journal" component={JournalScreen} />
             <Tab.Screen name="Parent" component={ParentStack} />
         </Tab.Navigator>
     );
+};
+
+const RootStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="SelectChildStart"
+        component={SelectChild}
+        options={{ title: "Select Child" }}
+      />
+
+      <Stack.Screen
+        name="MainTabs"
+        component={MainTabs}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
 };
 
 const AppNavigator = () => {
@@ -93,7 +109,7 @@ const AppNavigator = () => {
     // true = skip auth and show main app
     const [isLoggedIn] = useState(true);
 
-    return <NavigationContainer>{isLoggedIn ? <MainTabs /> : <AuthStack />}</NavigationContainer>;
+    return <NavigationContainer>{isLoggedIn ? <RootStack /> : <AuthStack />}</NavigationContainer>;
 };
 
 export default AppNavigator;
