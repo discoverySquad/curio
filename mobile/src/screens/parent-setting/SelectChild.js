@@ -64,7 +64,7 @@ const SelectChild = ({ navigation }) => {
 
     const handleSelectChild = (child) => {
       navigation.navigate("MainTabs", {
-        screen: "Home",
+        screen: "HomeTab",
         params: {
         screen: "Home",
         params: {
@@ -104,15 +104,7 @@ const SelectChild = ({ navigation }) => {
                     return (
                         <TouchableOpacity
                             key={id} style={styles.profileItem}
-                            onPress={() =>
-                                navigation.navigate('Home', {
-                                    screen: "Home",
-                                    params: {
-                                    childId: child._id,
-                                    childName: child.name
-                                    }
-                                })
-                            }
+                            onPress={() => handleSelectChild(child)}
                         >
                             <Image source={avatarSource} style={styles.avatar} />
                             <Text style={styles.name}>{name}</Text>

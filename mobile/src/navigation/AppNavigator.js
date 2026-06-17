@@ -77,7 +77,7 @@ const ParentStack = () => {
 const MainTabs = () => {
     return (
         <Tab.Navigator >
-            <Tab.Screen name="Home" component={HomeStack} />
+            <Tab.Screen name="HomeTab" component={HomeStack} />
             <Tab.Screen name="Scan" component={ScanStack} />
             <Tab.Screen name="Journal" component={JournalScreen} />
             <Tab.Screen name="Parent" component={ParentStack} />
