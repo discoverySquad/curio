@@ -13,6 +13,9 @@ export default function ScanScreen({ navigation, route }) {
     const [warning, setWarning] = useState(null);
 
     const childId = route.params?.childId || DUMMY_CHILD_ID;
+    const taskName = route.params?.taskName;  
+    const categoryName = route.params?.categoryName; 
+    console.log('route.params:', JSON.stringify(route.params));
 
     if (!permission) return <View />;
 
@@ -48,6 +51,29 @@ export default function ScanScreen({ navigation, route }) {
                 setWarning(scanData);
                 return;
             }
+
+            //Calling /api/activity/verify (Amy)
+
+            if (taskName && categoryName) {
+                const verifyData = await apiRequest('/api/activity/verify', 'POST', {
+                    imageBase64: resizedPhoto.base64,
+                    taskName,
+                    categoryName,
+                    childId,
+                });
+
+                console.log('verifyData:', verifyData); 
+
+                if (!verifyData.isMatch) {
+                    navigation.navigate('TryAgain', {
+                        childId,
+                        categoryName,
+                        taskName,
+                    });
+                    return;
+                }
+            }
+            //end here
 
                 const factsData = await apiRequest('/api/ai/facts', 'POST', {
                     objectName: scanData.objectName,

@@ -80,6 +80,7 @@ const ActivityDescription = ({ navigation, route }) => {
                 activityTitle: task?.task,
                 activityDescription: task?.description,
                 expectedObject: task?.expectedObject,
+                taskName: task?.task,
             },
         });
     };
