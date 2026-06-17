@@ -12,24 +12,37 @@ const ActivityDescription = ({ navigation, route }) => {
     const [task, setTask] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [isSpeaking, setIsSpeaking] = useState(false);
 
     useEffect(() => {
         fetchRandomTask();
 
         return () => {
             Speech.stop();
+            setIsSpeaking(false);
         };
     }, [categoryName]);
 
-    const speakActivity = () => {
+    const toggleSpeech = () => {
+        if (isSpeaking) {
+            Speech.stop();
+            setIsSpeaking(false);
+            return;
+        }
+
         const taskText = task?.task || 'your activity';
         const descriptionText = task?.description || '';
 
         Speech.stop();
+        setIsSpeaking(true);
+
         Speech.speak(`${taskText}. ${descriptionText}`, {
             language: 'en-US',
             rate: 0.85,
             pitch: 1.05,
+            onDone: () => setIsSpeaking(false),
+            onStopped: () => setIsSpeaking(false),
+            onError: () => setIsSpeaking(false),
         });
     };
 
@@ -37,6 +50,8 @@ const ActivityDescription = ({ navigation, route }) => {
         try {
             setLoading(true);
             setError('');
+            Speech.stop();
+            setIsSpeaking(false);
 
             if (!categoryName) {
                 setError('No category selected.');
@@ -71,6 +86,9 @@ const ActivityDescription = ({ navigation, route }) => {
     };
 
     const startActivity = () => {
+        Speech.stop();
+        setIsSpeaking(false);
+
         navigation.navigate('Scan', {
             screen: 'ScanCamera',
             params: {
@@ -113,8 +131,8 @@ const ActivityDescription = ({ navigation, route }) => {
             <Text style={styles.description}>{task?.description}</Text>
 
             <View style={styles.soundRow}>
-                <Pressable style={styles.speakerButton} onPress={speakActivity}>
-                    <Ionicons name="volume-high" size={22} color="#FFFFFF" />
+                <Pressable style={styles.speakerButton} onPress={toggleSpeech}>
+                    <Ionicons name={isSpeaking ? 'volume-mute' : 'volume-high'} size={22} color="#FFFFFF" />
                 </Pressable>
             </View>
 
