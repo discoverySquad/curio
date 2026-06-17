@@ -21,24 +21,24 @@ const getParent = async (req, res) => {
 };
 
 // create parent account
-const createParent = async (req, res) => {
-  try {
+// const createParent = async (req, res) => {
+//   try {
 
-    let { name, email, password, notification } = req.body;
+//     let { name, email, password, notification } = req.body;
 
-    const parent = await Parent.create({
-      name,
-      email,
-      password,
-      notification
-    });
+//     const parent = await Parent.create({
+//       name,
+//       email,
+//       password,
+//       notification
+//     });
 
-    res.status(201).json(parent);
+//     res.status(201).json(parent);
 
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 const getParentChildren = async (req, res) => {
   try {

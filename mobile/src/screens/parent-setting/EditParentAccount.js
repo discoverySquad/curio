@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native'
+import { ScrollView, StyleSheet, Text, View, TextInput, Button, Alert, Modal, TouchableOpacity } from 'react-native'
 import React from 'react'
 import CustomButton from '../../components/CustomButton'
 import colors from '../../constants/colors';
@@ -10,6 +10,7 @@ const EditParentAccount = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
       loadChildren();
@@ -41,6 +42,7 @@ const EditParentAccount = () => {
       });
       const data = res.json();
       console.log("updated parent: ", data);
+      setShowModal(true)
 
       if(!res.ok){
         throw new Error("Fail updating parent profile");
@@ -80,6 +82,20 @@ const EditParentAccount = () => {
          <CustomButton style={styles.changePassword} label="Change Password" onPress={handleParentPasswordChange} />
       </View>
       <CustomButton label="Confirm Changes" onPress={handleParentProfileChange} />
+
+      <Modal
+        visible={showModal}
+        animationType="fade"
+        transparent={true}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalBox}>
+            <Text style={styles.modalText}>
+              Your changes have been saved!
+            </Text>
+            <CustomButton label="OK" onPress={() => {}} />
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -116,4 +132,21 @@ const styles = StyleSheet.create({
         marginVertical: 4,
         marginHorizontal: 8,
     },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: "rgba(0,0,0,0.35)",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    modalBox: {
+      width: "80%",
+      backgroundColor: "#fff",
+      borderRadius:24,
+      padding: 24,
+     alignItems: "center",
+    },
+    modalText: {
+      fontSize: 12,
+      color: '#555',
+},
 })
