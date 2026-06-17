@@ -5,7 +5,9 @@ import { SelectList } from 'react-native-dropdown-select-list'
 import * as SecureStore from 'expo-secure-store';
 import { apiRequest } from '../../services/api.js';
 
-export default function CreateChildScreen({ navigation }) {
+export default function CreateChildScreen({ navigation, route }) {
+    const parentId = route?.params?.parentId;
+
     const [name, setName] = useState('');
     const [selected, setSelected] = useState("");
     // const [timeLimit, setTimeLimit] = useState('');
@@ -27,7 +29,12 @@ export default function CreateChildScreen({ navigation }) {
         require('../../assets/avatar6.jpg')
     ]
     const handleCreateChild = async () => {
-        console.log("response:", data);
+    if (!parentId) {
+        Alert.alert("Error", "parentId is missing");
+        return;
+    }
+
+    console.log("response:", data);
         if (!name.trim()) {
             Alert.alert('Missing name', 'Please enter a child name.');
             return;

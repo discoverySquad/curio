@@ -17,6 +17,7 @@ import { displayConnectionS3 } from './database/s3.js';
 import activityRoutes from './routes/activityRoutes.js';
 
 const app = express();
+console.log("🔥 CHILD CONTROLLER PATH:", import.meta.url);
 
 app.use(cors());
 app.use(express.json({ limit: '25mb' }));
