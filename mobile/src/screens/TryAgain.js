@@ -1,15 +1,15 @@
-import { View, Text, StyleSheet, Pressable, Button } from 'react-native'
+import { View, Text, StyleSheet, Pressable, Button, ScrollView } from 'react-native'
 import React from 'react'
 
 import CustomButton from '../components/CustomButton.js'
 
 const TryAgain = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
         <Text style={styles.h1}>Not quite what we’re looking for...</Text>
 
         <View style={styles.imgContainer}>
-            <Text>Captured image comes here</Text>
+            <Text>Mascot character image comes here</Text>
         </View>
 
         <View style={styles.tipBox}>
@@ -29,7 +29,7 @@ const TryAgain = ({ navigation }) => {
         </Pressable>
 
       
-    </View>
+    </ScrollView>
   )
 };
 
@@ -37,6 +37,8 @@ const styles= StyleSheet.create({
     container: {
         flex: 1,
         // justifyContent: "center",
+    },
+    content:{
         alignItems: "center",
         marginHorizontal: 42
     },

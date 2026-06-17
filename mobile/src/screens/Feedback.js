@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image, ScrollView } from 'react-native';
 import * as Speech from 'expo-speech';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -76,7 +76,7 @@ const Feedback = ({ navigation, route }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={styles.content}>
             <Text style={styles.h1}>Mission Complete!</Text>
 
             <View style={styles.imgContainer}>
@@ -121,17 +121,19 @@ const Feedback = ({ navigation, route }) => {
             <Pressable style={styles.changeCategoryBtn} onPress={goToChangeCategory}>
                 <Text style={styles.changeCategoryBtnText}>Change Category</Text>
             </Pressable>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#FFFFFF',
+    },
+    content: {
         alignItems: 'center',
         paddingHorizontal: 32,
         paddingTop: 40,
-        backgroundColor: '#FFFFFF',
     },
     h1: {
         width: '100%',
