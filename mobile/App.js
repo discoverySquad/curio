@@ -1,10 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import AppNavigator from './src/navigation/AppNavigator';
+import { SelectedChildProvider } from './src/context/SelectedChildContext';
 
 export default function App() {
   return (
-    <AppNavigator />
+    <SelectedChildProvider>
+      <AppNavigator />
+    </SelectedChildProvider>
   );
 }
 

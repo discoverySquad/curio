@@ -12,9 +12,11 @@ import {
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImageManipulator from 'expo-image-manipulator';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiRequest } from '../services/api.js';
+import { useSelectedChild } from '../context/SelectedChildContext';
 
-const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
+// const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
 
 export default function ScanScreen({ navigation, route }) {
     const cameraRef = useRef(null);
@@ -25,7 +27,9 @@ export default function ScanScreen({ navigation, route }) {
     const [warning, setWarning] = useState(null);
     const [photoUri, setPhotoUri] = useState(null);
 
-    const childId = route.params?.childId || DUMMY_CHILD_ID;
+    const { selectedChild, setSelectedChild } = useSelectedChild();
+    const childId = selectedChild?._id;
+    // const childId = route.params?.childId || selectedChild?._id || DUMMY_CHILD_ID;
     const taskName = route.params?.taskName || route.params?.activityTitle;
     const categoryName = route.params?.categoryName || route.params?.category || 'Nature';
     console.log('route.params:', JSON.stringify(route.params));
@@ -141,12 +145,33 @@ export default function ScanScreen({ navigation, route }) {
                 correct: scanData.correct !== false,
             });
 
-            await apiRequest('/api/gamification/task', 'POST', {
+            // Record a scan count on the backend
+            try {
+                const scanResp = await apiRequest('/api/gamification/scan', 'POST', { childId });
+                console.log('completeScan response:', scanResp);
+            } catch (e) {
+                console.log('completeScan failed:', e.message || e);
+            }
+
+            const gamificationResp = await apiRequest('/api/gamification/task', 'POST', {
                 childId,
                 correct: scanData.correct !== false,
                 wasRetry: false,
                 categoryKey: categoryName.toLowerCase(),
             });
+
+            // If backend returned updated child info, update context and AsyncStorage
+            try {
+                console.log('gamification response:', gamificationResp);
+                if (gamificationResp?.child) {
+                    const updatedChild = gamificationResp.child;
+                    console.log('Updating selectedChild with:', updatedChild);
+                    if (setSelectedChild) setSelectedChild(updatedChild);
+                    await AsyncStorage.setItem('selectedChild', JSON.stringify(updatedChild));
+                }
+            } catch (e) {
+                console.log('Failed to update selectedChild from gamification response', e);
+            }
 
             navigation.navigate('Feedback', {
                 result: {

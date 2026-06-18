@@ -1,35 +1,70 @@
 import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelectedChild } from '../context/SelectedChildContext';
 import {
     View, Text, StyleSheet, ScrollView,
     ActivityIndicator, Image,
 } from 'react-native';
 
-const CHILD_ID = "6a28f66e68e34f4224b78383";
+// const CHILD_ID = "6a28f66e68e34f4224b78383";
 const LEVEL_TITLES = ['Tiny Explorer', 'Curious Explorer', 'Junior Explore', 'Adventure Ranger', 'Master Explore'];
 
-const JournalScreen = () => {
+const JournalScreen = ({ route }) => {
     const [child, setChild] = useState(null);
     const [badges, setBadges] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const { selectedChild } = useSelectedChild();
 
-    const fetchData = async () => {
-        try {
-            const response = await fetch(
-                `${process.env.EXPO_PUBLIC_API_URL}/api/gamification/${CHILD_ID}`
-            );
-            const data = await response.json();
-            setChild(data);
-            setBadges(data.badges);
-        } catch (error) {
-            console.log('failed to catch data:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // useEffect(() => {
+    //     if(childId)
+    //     fetchData();
+    // }, [childId]);
+ useEffect(() => {
+        const load = async () => {
+            try {
+                const id = selectedChild?._id;
+
+                if (!id) {
+                    setLoading(false);
+                    return;
+                }
+
+                // まず即UI反映（ズレ防止）
+                setChild(selectedChild);
+
+                const res = await fetch(
+                    `${process.env.EXPO_PUBLIC_API_URL}/api/gamification/${id}`
+                );
+
+                const data = await res.json();
+
+                setChild(data);
+                setBadges(data.badges || []);
+            } catch (e) {
+                console.log(e);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        load();
+    }, [selectedChild]);
+
+    // const fetchData = async (id) => {
+    //     try {
+    //         const response = await fetch(
+    //             `${process.env.EXPO_PUBLIC_API_URL}/api/gamification/${id}`
+    //         );
+    //         const data = await response.json();
+    //         setChild(data);
+    //         setBadges(data.badges || []);
+    //     } catch (error) {
+    //         console.log('failed to catch data:', error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     if (loading) return <ActivityIndicator style={{ flex: 1 }} />;
 
@@ -52,10 +87,28 @@ const JournalScreen = () => {
             {/* avatar, name */}
             <View style={styles.profileSection}>
                 <View style={styles.avatar}>
-                    {child.avatar
-                        ? <Image source={{ uri: child.avatar }} style={styles.avatarImage} />
-                        : <Text style={styles.avatarEmoji}>🧒</Text>
-                    }
+                    {(() => {
+                        const avatar = child.avatar;
+                        const avatars = [
+                            require('../assets/avatar1.jpg'),
+                            require('../assets/avatar2.jpg'),
+                            require('../assets/avatar3.jpg'),
+                            require('../assets/avatar4.jpg'),
+                            require('../assets/avatar5.jpg'),
+                            require('../assets/avatar6.jpg'),
+                        ];
+
+                        if (typeof avatar === 'string' && avatar.startsWith('http')) {
+                            return <Image source={{ uri: avatar }} style={styles.avatarImage} />;
+                        }
+
+                        const idx = parseInt(avatar, 10);
+                        if (!isNaN(idx) && avatars[idx]) {
+                            return <Image source={avatars[idx]} style={styles.avatarImage} />;
+                        }
+
+                        return <Text style={styles.avatarEmoji}>🧒</Text>;
+                    })()}
                 </View>
                 <Text style={styles.name}>{child.name}</Text>
             </View>
@@ -95,7 +148,7 @@ const JournalScreen = () => {
                             <Text style={styles.keepGoing}>Keep exploring!</Text>
                         )}
                     </View>
-                    
+
                     <View style={styles.badgeRight}>
                         {badge.earned
                             ? <View style={styles.tag}><Text style={styles.tagText}>Unlocked</Text></View>

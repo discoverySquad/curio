@@ -3,13 +3,17 @@ import { View, Text, StyleSheet, Pressable, Image, ScrollView } from 'react-nati
 import * as Speech from 'expo-speech';
 import { Ionicons } from '@expo/vector-icons';
 
+import { useSelectedChild } from '../context/SelectedChildContext';
+
 import CustomButton from '../components/CustomButton.js';
 
-const TEST_CHILD_ID = '6a28f66e68e34f4224b78383';
+// const TEST_CHILD_ID = '6a28f66e68e34f4224b78383';
 
 const Feedback = ({ navigation, route }) => {
     const result = route.params?.result || {};
-    const childId = route.params?.childId || TEST_CHILD_ID;
+    // const childId = route.params?.childId || TEST_CHILD_ID;
+    const { selectedChild } = useSelectedChild();
+    const childId = selectedChild?._id;
     const categoryName = route.params?.categoryName || route.params?.category || 'Nature';
 
     const [isSpeaking, setIsSpeaking] = useState(false);
@@ -54,9 +58,12 @@ const Feedback = ({ navigation, route }) => {
         Speech.stop();
         setIsSpeaking(false);
 
-        navigation.navigate('ActivityDescription', {
-            childId,
-            categoryName,
+        navigation.navigate('HomeTab', {
+            screen: 'ActivityDescription',
+            params: {
+                childId,
+                categoryName,
+            },
         });
     };
 
@@ -64,8 +71,11 @@ const Feedback = ({ navigation, route }) => {
         Speech.stop();
         setIsSpeaking(false);
 
-        navigation.navigate('SelectCategory', {
-            childId,
+        navigation.navigate('HomeTab', {
+            screen: 'SelectCategory',
+            params: {
+                childId,
+            },
         });
     };
 

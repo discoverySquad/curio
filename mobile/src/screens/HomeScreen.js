@@ -3,50 +3,101 @@ import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
 import { useFocusEffect } from "@react-navigation/native";
 import Time from '../components/Time.js';
 import CustomButton from '../components/CustomButton.js'
+import { useSelectedChild } from '../context/SelectedChildContext';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 const HomeScreen = ({ navigation, route }) => {
 
-  const childId = route?.params?.childId;
+  // const childId = route?.params?.childId;
   // const CHILD_ID = "6a28f66e68e34f4224b78383"; // for temporary test
 
   const [child, setChild] = useState(null);
+  const [timeLimit, setTimeLimit] = useState(null);
+  const childIdFromRoute = route?.params?.childId;
+  const { selectedChild, setSelectedChild } = useSelectedChild();
   // const [timeLimit, setTimeLimit] = useState("");
 
 
-  useEffect(() => {
-    console.log("route params =", route?.params);
-    console.log("childId =", childId);
+  // useEffect(() => {
+  //   console.log("route params =", route?.params);
+  //   console.log("childId =", childId);
 
-    if (!childId) return;
+  //   if (!childId) return;
 
-    const getChild = async () => {
+  //   const getChild = async () => {
+  //     try {
+  //       const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${childId}`;
+  //       // const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${CHILD_ID}`;
+  //       console.log('url:', url);
+
+  //       const response = await fetch(url);
+  //       console.log('Response status:', response.status);
+
+  //       if (!response.ok) {
+  //         const errorData = await response.json().catch(() => ({}));
+  //         console.error('API Error:', response.status, errorData);
+  //         return;
+  //       }
+
+  //       const data = await response.json();
+  //       console.log('API response:', data);
+  //       console.log('timeLimit:', data.timeLimit, 'type:', typeof data.timeLimit);
+  //       console.log('usageTimeToday:', data.usageTimeToday, 'type:', typeof data.usageTimeToday);
+  //       setChild(data);
+  //     } catch (error) {
+  //       console.log('Fetch error:', error)
+  //     }
+  //   };
+  //   getChild();
+  // }, [childId]);
+
+    useEffect(() => {
+    const loadChild = async () => {
       try {
-        const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${childId}`;
-        // const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${CHILD_ID}`;
-        console.log('url:', url);
+          let id = route?.params?.childId || selectedChild?._id;
 
-        const response = await fetch(url);
-        console.log('Response status:', response.status);
+          // immediately reflect selectedChild in UI to avoid mismatch
+          if (selectedChild) {
+            setChild(selectedChild);
+          }
 
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          console.error('API Error:', response.status, errorData);
-          return;
-        }
+          if (!id) {
+            const saved = await AsyncStorage.getItem('selectedChild');
+            if (saved) {
+              id = JSON.parse(saved)._id;
+            }
+          }
 
-        const data = await response.json();
-        console.log('API response:', data);
-        console.log('timeLimit:', data.timeLimit, 'type:', typeof data.timeLimit);
-        console.log('usageTimeToday:', data.usageTimeToday, 'type:', typeof data.usageTimeToday);
-        setChild(data);
+          if (!id) return;
+
+          const response = await fetch(
+            `${process.env.EXPO_PUBLIC_API_URL}/api/child/${id}`
+          );
+
+          if (!response.ok) return;
+
+          const data = await response.json();
+          setChild(data);
+
+          try {
+            if (setSelectedChild && selectedChild?._id !== data._id) {
+              setSelectedChild(data);
+            }
+            await AsyncStorage.setItem('selectedChild', JSON.stringify(data));
+          } catch (e) {
+            console.log('Failed to update selectedChild in HomeScreen', e);
+          }
+
       } catch (error) {
-        console.log('Fetch error:', error)
+        console.log('Home load error:', error);
       }
     };
-    getChild();
-  }, [childId]);
+
+    loadChild();
+  }, [childIdFromRoute, selectedChild]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -59,7 +110,7 @@ const HomeScreen = ({ navigation, route }) => {
       };
 
       loadLimit();
-    }, [childId])
+    }, [childIdFromRoute])
   );
 
   const handleStartActivity = () => {

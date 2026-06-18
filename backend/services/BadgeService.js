@@ -31,6 +31,9 @@ const checkAndAwardBadges = async (childId) => {
 
     if (!child || !progress) throw new Error('Child or progress not found');
 
+    console.log('BadgeService: checking badges for child', childId);
+    console.log('Progress status:', progress.status);
+
     const earnedSet = new Set(child.earnedBadges.map((b) => b.badgeId));
     const newlyEarned = [];
 
@@ -40,6 +43,8 @@ const checkAndAwardBadges = async (childId) => {
             newlyEarned.push(badge.badgeId);
         }
     }
+
+    console.log('Newly earned badges candidates:', newlyEarned);
 
     if (newlyEarned.length > 0) {
         const now = new Date();
