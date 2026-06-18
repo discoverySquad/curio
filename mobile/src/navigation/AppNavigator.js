@@ -56,6 +56,8 @@ const HomeStack = () => {
 const ScanStack = () => {
     return (
         <Stack.Navigator>
+            <Stack.Screen name="ActivityDescription" component={ActivityDescription} />
+            <Stack.Screen name="SelectCategory" component={SelectCategory} />
             <Stack.Screen name="ScanCamera" component={ScanScreen} options={{ title: 'Scan' }} />
             <Stack.Screen name="Feedback" component={Feedback} options={{ title: 'Result' }} />
             <Stack.Screen name="TryAgain" component={TryAgain} options={{ title: 'Try Again' }} />

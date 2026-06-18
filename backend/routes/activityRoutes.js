@@ -86,6 +86,7 @@ router.post('/verify', async (req, res) => {
         // If true then save
         if (isMatch) {
             await ScanRecord.create({
+                childId,
                 taskName,
                 categoryName,
                 detectedLabel: scanResult.objectName,
