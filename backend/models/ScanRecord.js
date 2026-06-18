@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 
 const scanRecordSchema = new mongoose.Schema(
     {
+        childId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Child',
+            required: true,
+        },
         taskName: {
             type: String,
             required: true,
