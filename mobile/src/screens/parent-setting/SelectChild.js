@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, Button, ScrollView } from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelectedChild } from '../../context/SelectedChildContext';
 
 const PARENT_ID = '6a15e296dd882ca29e6355ae'; // temp
 
@@ -62,18 +64,28 @@ const SelectChild = ({ navigation }) => {
         }
     };
 
-    const handleSelectChild = (child) => {
-      navigation.navigate("MainTabs", {
-        screen: "HomeTab",
-        params: {
-        screen: "Home",
-        params: {
-            childId: child._id,
-            childName: child.name,
-        },
-        },
-    });
-};
+    const { setSelectedChild } = useSelectedChild();
+
+    const handleSelectChild = async (child) => {
+        try {
+            await AsyncStorage.setItem('selectedChild', JSON.stringify(child));
+            console.log('saved child =', child);
+            if (setSelectedChild) setSelectedChild(child);
+
+            navigation.reset({
+                index: 0,
+                routes: [
+                    {
+                        name: 'MainTabs',
+                        params: { screen: 'HomeTab', params: { childId: child._id } }
+                    }
+                ]
+            });
+        } catch (error) {
+            console.error('Failed saving child or navigating:', error);
+            Alert.alert('Error', 'Could not select child. Please try again.');
+        }
+    };
 
     return (
         <ScrollView style={styles.container}>

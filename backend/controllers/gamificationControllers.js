@@ -10,8 +10,11 @@ const completeTask = async (req, res) => {
 
         await recordCompleteTask(childId, { correct, wasRetry, categoryKey });
         const { newBadges, newLevel } = await evaluateRewards(childId);
+        const updatedChild = await Child.findById(childId);
+        const progress = await childProgress.findOne({ childId }).select('status');
+        console.log('completeTask - progress status for', childId, ':', progress?.status);
 
-        res.status(200).json({ newBadges, newLevel });
+        res.status(200).json({ child: updatedChild, newBadges, newLevel, progress: progress?.status });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -24,7 +27,10 @@ const completeScan = async (req, res) => {
         await recordScan(childId);
         const { newBadges, newLevel } = await evaluateRewards(childId);
 
-        res.status(200).json({ newBadges, newLevel });
+        const progress = await childProgress.findOne({ childId }).select('status');
+        console.log('completeScan - progress status for', childId, ':', progress?.status);
+
+        res.status(200).json({ newBadges, newLevel, progress: progress?.status });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -37,7 +43,10 @@ const viewFact = async (req, res) => {
         await recordFactViewed(childId);
         const { newBadges, newLevel } = await evaluateRewards(childId);
 
-        res.status(200).json({ newBadges, newLevel });
+        const progress = await childProgress.findOne({ childId }).select('status');
+        console.log('viewFact - progress status for', childId, ':', progress?.status);
+
+        res.status(200).json({ newBadges, newLevel, progress: progress?.status });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

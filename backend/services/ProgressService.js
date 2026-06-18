@@ -47,15 +47,12 @@ const recordCompleteTask = async (childId, { correct = false, wasRetry = false, 
 const recordScan = async (childId) => {
     await childProgress.findOneAndUpdate(
         { childId },
-        {
-            $inc: { 'status.totalScans': 1 },
-            $set: { lastActiveAt: new Date() },
-        },
+        { $inc: { 'status.totalScans': 1 }, $set: { lastActiveAt: new Date() } },
         { upsert: true, new: true }
     );
 
     await recordActive(childId);
-}
+};
 
 const recordFactViewed = async (childId) => {
     await childProgress.findOneAndUpdate(
