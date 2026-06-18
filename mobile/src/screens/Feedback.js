@@ -119,11 +119,21 @@ const Feedback = ({ navigation, route }) => {
             </View>
 
             <View style={styles.buttonSection}>
-                <CustomButton label="Next Activity" onPress={goToNextActivity} />
+                <CustomButton
+                    label="Next Activity"
+                    onPress={goToNextActivity}
+                />
             </View>
 
-            <Pressable style={styles.changeCategoryBtn} onPress={goToChangeCategory}>
+            {/* <Pressable style={styles.changeCategoryBtn} onPress={SelectCategory}>
                 <Text style={styles.changeCategoryBtnText}>Change Category</Text>
+            </Pressable> */}
+
+            <Pressable
+                style={styles.changeActivityBtn}
+                onPress={goToChangeCategory}
+            >
+                <Text style={styles.changeActivityBtnText}>Change Activity</Text>
             </Pressable>
         </ScrollView>
     );
