@@ -92,7 +92,7 @@ const EditParentAccount = () => {
             <Text style={styles.modalText}>
               Your changes have been saved!
             </Text>
-            <CustomButton label="OK" onPress={() => {}} />
+            <CustomButton label="OK" onPress={() => setShowModal(false)} />
           </View>
         </View>
       </Modal>
@@ -107,6 +107,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
     padding: 16
+    },
+    formContainer: {
+      marginTop: 24,
+      marginBottom: 24.
     },
     changeButton: {
     borderColor: colors.tertiary,
