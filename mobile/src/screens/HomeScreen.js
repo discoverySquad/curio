@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Button, ScrollView, Image } from 'react-native';
 import { useFocusEffect } from "@react-navigation/native";
 import Time from '../components/Time.js';
 import CustomButton from '../components/CustomButton.js'
@@ -69,9 +69,9 @@ const HomeScreen = ({ navigation, route }) => {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.text}>
+      {/* <Text style={styles.text}>
         Home Screen
-      </Text>
+      </Text> */}
 
       {/* <Button
         title="Activity Description"
@@ -92,7 +92,11 @@ const HomeScreen = ({ navigation, route }) => {
       {/* card1 */}
       <View style={styles.homeCard}>
         <View style={styles.titleSection}>
-          <Text style={styles.title}>Hi {child?.name}!</Text>
+          <Text style={styles.title}>Hi {child?.name}!{"\n"}
+            Ready for {"\n"}
+            Today's adventure?
+          </Text>
+          <Text style={styles.text}>Look around you... what will you find today?</Text>
         </View>
         <View style={styles.buttonSection}>
           <CustomButton label="Start Activity" onPress={handleStartActivity} />
@@ -105,25 +109,46 @@ const HomeScreen = ({ navigation, route }) => {
           <Text style={styles.cardTitle}>Today's Goal</Text>
         </View>
         <View style={styles.progressBar}>
-          <Text> 2/5 mission done</Text>
+          <Text style={styles.text}> 2/5 mission done</Text>
         </View>
+        <Text style={styles.text}>Keep going, {child?.name}! You are doing great explorer work!</Text>
       </View>
 
       {/* card3 */}
       <View style={styles.homeCard}>
-        <View style={styles.exploration}>
-          {child ? (
-            <Time
-              childId={child._id}
-              timeLimit={child.timeLimit}
-              usageTimeToday={child.usageTimeToday}
-            />
-          ) : (
-            <Text>Loading...</Text>
-          )}
+        <View style={styles.explorationTime}>
+          <View style={styles.circle}>
+            <Image style={styles.timeCircle} source={require('../assets/circle.png')} />
+          </View>
+          <View style={styles.timeLeftBox}>
+            <View>
+              <Text style={styles.cardTitle}>Exploration Time</Text>
+            </View>
+            <View style={styles.exploration}>
+              {child ? (
+                <Time
+                  childId={child._id}
+                  timeLimit={child.timeLimit}
+                  usageTimeToday={child.usageTimeToday}
+                />
+              ) : (
+                <Text>Loading...</Text>
+              )}
+            </View>
+            <View>
+              <Text>Great for breaks!</Text>
+            </View>
+          </View>
         </View>
       </View>
-
+  
+    <Button 
+    title='Parent Settings' 
+    onPress={() => navigation.navigate("MainTabs", 
+      {screen: "Parent", 
+       params: {screen: "ParentDashboard", }
+    })} 
+    />
 
     </ScrollView>
   );
@@ -142,9 +167,21 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 24,
   },
-  text: {
+  title: {
     fontSize: 24,
+    fontWeight: 700,
+    marginBottom: 24,
+  },
+  text: {
+    fontSize: 16,
     marginBottom: 20,
+  },
+  explorationTime: {
+    flexDirection: 'row',
+    gap: 28
+  },
+  timeLeftBox: {
+    justifyContent: 'center',
   }
 });
 
