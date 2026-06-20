@@ -6,7 +6,8 @@ import * as SecureStore from 'expo-secure-store';
 import { apiRequest } from '../../services/api.js';
 
 export default function CreateChildScreen({ navigation, route }) {
-    const parentId = route?.params?.parentId;
+    // const parentId = route?.params?.parentId;
+    const parentId = '6a15e296dd882ca29e6355ae'; // temp
 
     const [name, setName] = useState('');
     const [selected, setSelected] = useState("");

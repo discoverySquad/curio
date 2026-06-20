@@ -127,7 +127,13 @@ const SelectChild = ({ navigation }) => {
                     <View style={[styles.avatar, styles.addBtn]}>
                         <Button
                             title="+"
-                            onPress={() => navigation.navigate('CreateChild')}
+                            onPress={() => navigation.navigate('MainTabs', {
+                                screen: 'Parent',
+                                params: {
+                                    screen: 'CreateChild',
+                                },
+                            }
+                            )}
                             style={styles.addBtnText}
                         >
                         </Button>
@@ -136,7 +142,14 @@ const SelectChild = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
-            <Button title='Parent Settings' onPress={() => navigation.navigate('SettingParent')} />
+            <Button title='Parent Settings' onPress={() => navigation.navigate('MainTabs', {
+                screen: 'Parent',
+                params: {
+                    screen: 'SettingParentScreen',
+                },
+            })
+            }
+            />
 
         </ScrollView>
     )
