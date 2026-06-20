@@ -3,7 +3,25 @@ import React from 'react'
 
 import CustomButton from '../components/CustomButton.js'
 
-const TryAgain = ({ navigation }) => {
+const TryAgain = ({ navigation, route }) => {
+
+    const childId = route?.params?.childId;
+    const categoryName = route?.params?.categoryName;
+    const taskName = route?.params?.taskName;
+    const activityId = route?.params?.activityId;
+    const activityDescription = route?.params?.activityDescription;
+
+    const tryAgain = () => {
+        navigation.navigate('ScanCamera', {
+            childId,
+            categoryName,
+            taskName,
+            activityId,
+            activityTitle: taskName,
+            activityDescription,
+        });
+    };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
         <Text style={styles.h1}>Not quite what we’re looking for...</Text>
@@ -17,7 +35,7 @@ const TryAgain = ({ navigation }) => {
         </View>
 
         <View style={styles.buttonSection}>
-          <CustomButton label="Try Again" onPress={() => navigation?.navigate('Scan')} />
+          <CustomButton label="Try Again" onPress={tryAgain} />
         </View>
 
         {/* <Pressable style={styles.tryAgainBtn} onPress={() => navigation?.navigate('')}>
