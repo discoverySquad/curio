@@ -9,9 +9,10 @@ export default function SettingParentScreen({ navigation }) {
     const [children, setChildren] = useState([]);
     const [loading, setLoading] = useState(true);
     const [notificationOn, setNotificationOn] = useState(null);
-    const [timeLimit, setTimeLimit] = useState(null);
+    const [timeLimit, setTimeLimit] = useState(null);   
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [editMode, setEditMode] = useState(false);
+    const [selectedChildId, setSelectedChildId] = useState(null);
 
     useEffect(() => {
         loadChildren();
@@ -88,7 +89,11 @@ export default function SettingParentScreen({ navigation }) {
     }
 
     const handleDelete = () => {
-        console.log("Delete Account")
+        try{
+
+        }catch(error){
+            
+        }
     }
 
     if(loading){
