@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Switch, StyleSheet, ScrollView, Image, Alert, ActivityIndicator, Modal } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import CustomButton from '../../components/CustomButton.js'
+import { useSelectedChild } from '../../context/SelectedChildContext';
 
 const PARENT_ID = '6a15e296dd882ca29e6355ae';
 const CHILD_ID  = '6a28f66e68e34f4224b78383';
@@ -9,13 +12,24 @@ export default function SettingParentScreen({ navigation }) {
     const [children, setChildren] = useState([]);
     const [loading, setLoading] = useState(true);
     const [notificationOn, setNotificationOn] = useState(null);
-    const [timeLimit, setTimeLimit] = useState(null);
+    const [timeLimit, setTimeLimit] = useState(null);   
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [editMode, setEditMode] = useState(false);
+    
+    const { selectedChild } = useSelectedChild();
+    const currentChildId = selectedChild?._id;
 
     useEffect(() => {
         loadChildren();
     }, []);
+
+    const loadSelectedChild = async() => {
+        const saveChild = await AsyncStorage.getItem("selectedChild");
+        if(saveChild){
+            const child = JSON.parse(savedChild);
+            setCurrentChildId(child._id);
+        }
+    };
 
     const loadChildren = async () => {
         try{
@@ -87,9 +101,31 @@ export default function SettingParentScreen({ navigation }) {
         console.log("logout");
     }
 
-    const handleDelete = () => {
-        console.log("Delete Account")
-    }
+    const handleDelete = async() => {
+        if(!currentChildId){
+            Alert.alert("Error", "No child selected")
+            return;
+        }
+
+        try{
+            const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/child/${currentChildId}`, {
+                method: "DELETE",
+            });
+            if(!res.ok){
+                Alert.alert("Error", "Failed to delete child");
+                return;
+            }
+            setChildren(children.filter((child) => child._id !== currentChildId));
+            await AsyncStorage.removeItem("selectedChild");
+
+            setDeleteModalVisible(false);
+            Alert.alert("Deleted", "Child profile deleted");
+            navigation.navigate("SelectChildStart");
+        }catch(error){
+            console.log(error);
+            Alert.alert("Error", "Something went wrong");
+        }
+    };
 
     if(loading){
         return (
