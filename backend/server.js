@@ -15,6 +15,7 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import journalRoute from './routes/journalRoute.js';
 import { displayConnectionS3 } from './database/s3.js';
 import activityRoutes from './routes/activityRoutes.js';
+import scanRecordRoutes from "./routes/scanRecordRoute.js";
 
 const app = express();
 console.log("🔥 CHILD CONTROLLER PATH:", import.meta.url);
@@ -41,6 +42,7 @@ app.use('/api/category', categoryRoute);
 app.use('/api/gamification', gamificationRoute);
 app.use('/api/journal', journalRoute);
 app.use('/api/s3', uploadRoutes);
+app.use("/api/scan-records", scanRecordRoutes);
 
 mongoose
     .connect(process.env.MONGO_URI)
