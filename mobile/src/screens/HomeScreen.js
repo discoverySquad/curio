@@ -18,6 +18,8 @@ const HomeScreen = ({ navigation, route }) => {
   const [timeLimit, setTimeLimit] = useState(null);
   const childIdFromRoute = route?.params?.childId;
   const { selectedChild, setSelectedChild } = useSelectedChild();
+  const [todayMissionCount, setTodayMissionCount] = useState(0);
+  const goalTotal = 5;
   // const [timeLimit, setTimeLimit] = useState("");
 
 
@@ -82,6 +84,15 @@ const HomeScreen = ({ navigation, route }) => {
           const data = await response.json();
           setChild(data);
 
+          const missionRes = await fetch(
+            `${process.env.EXPO_PUBLIC_API_URL}/api/scan-records/today/${data._id}`
+          );
+
+          if (missionRes.ok) {
+            const missionData = await missionRes.json();
+             setTodayMissionCount(missionData.count);
+          }
+
           try {
             if (setSelectedChild && selectedChild?._id !== data._id) {
               setSelectedChild(data);
@@ -116,6 +127,11 @@ const HomeScreen = ({ navigation, route }) => {
   const handleStartActivity = () => {
     navigation.navigate("SelectCategory");
   };
+
+  const displayCount =
+  todayMissionCount > goalTotal ? goalTotal : todayMissionCount;
+
+  const percentage = Math.round((displayCount / goalTotal) * 100);
 
 
   return (
@@ -156,13 +172,28 @@ const HomeScreen = ({ navigation, route }) => {
 
       {/* card2 */}
       <View style={styles.homeCard}>
-        <View style={styles.goalHeader}>
-          <Text style={styles.cardTitle}>Today's Goal</Text>
+         <View style={styles.goalHeader}>
+            <Text style={styles.cardTitle}>Today's Goal</Text>
         </View>
-        <View style={styles.progressBar}>
-          <Text style={styles.text}> 2/5 mission done</Text>
+         <View style={styles.goalRow}>
+            <Text style={styles.text}>
+              {displayCount}/{goalTotal} missions done
+            </Text>
+            <Text style={styles.text}>{percentage}%</Text>
+         </View>
+
+         <View style={styles.progressBarBackground}>
+          <View
+            style={[
+              styles.progressBarFill,
+              { width: `${percentage}%` },
+            ]}
+          />
         </View>
-        <Text style={styles.text}>Keep going, {child?.name}! You are doing great explorer work!</Text>
+
+        <Text style={styles.text}>
+          Keep going, {child?.name}! You are doing great explorer work!
+        </Text>
       </View>
 
       {/* card3 */}
@@ -233,7 +264,25 @@ const styles = StyleSheet.create({
   },
   timeLeftBox: {
     justifyContent: 'center',
-  }
+  },
+  goalRow: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+},
+progressBarBackground: {
+  width: "100%",
+  height: 16,
+  backgroundColor: "#EAEAEA",
+  borderRadius: 20,
+  marginTop: 12,
+  marginBottom: 24,
+},
+progressBarFill: {
+  height: "100%",
+  backgroundColor: "#000",
+  borderRadius: 20,
+},
 });
 
 
