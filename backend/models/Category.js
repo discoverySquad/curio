@@ -6,6 +6,10 @@ const categorySchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        categoryImg: {
+            type: String,
+            default: "",
+        },
         categoryItem: [
             {
                 task: {
