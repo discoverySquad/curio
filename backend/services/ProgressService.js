@@ -54,11 +54,11 @@ const recordScan = async (childId) => {
     await recordActive(childId);
 };
 
-const recordFactViewed = async (childId) => {
+const recordFactViewed = async (childId, count = 1) => {
     await childProgress.findOneAndUpdate(
         { childId },
         {
-            $inc: { 'status.factsViewed': 1 },
+            $inc: { 'status.factsViewed': count },
             $set: { lastActiveAt: new Date() },
         },
         { upsert: true, new: true }
