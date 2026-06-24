@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import SafetyEvent from '../models/SafetyEvent.js';
 import Notification from '../models/Notification.js';
 import Parent from '../models/Parent.js';
+import Child from '../models/Child.js';
 
 dotenv.config();
 
@@ -137,9 +138,34 @@ const handleModerateUnsafeScan = async ({ childId, objectName, confidence, reaso
     };
 };
 
+const getGradePromptConfig = (grade) => {
+    switch (grade) {
+        case 'Kindergarten':
+            return {
+                level: 'Kindergarten (age 5, Canadian curriculum)',
+                instructions: 'Use very short sentences (5-7 words). Use only the simplest everyday words. Avoid any technical terms. Make it sound fun and playful, like you are talking to a 5-year-old. Connect to things children in Canada would recognize, like seasons, animals, or nature.',
+                example: 'Dogs have four legs. They love to play outside. Dogs can be great friends!'
+            };
+        case 'Grade1':
+            return {
+                level: 'Grade 1 (age 6-7, Canadian curriculum)',
+                instructions: 'Use short sentences (8-10 words). Use simple words but introduce one new word per fact with a simple explanation. Connect ideas to everyday life in Canada such as weather, plants, animals, or community. Keep it fun and encouraging.',
+                example: 'Butterflies start as tiny eggs on a leaf. They grow inside a cocoon, which is like a cozy sleeping bag. Then they come out with beautiful wings and fly!'
+            };
+        case 'Grade2':
+            return {
+                level: 'Grade 2 (age 7-8, Canadian curriculum)',
+                instructions: 'Use clear sentences (10-14 words). You can use some science words but always explain them simply. Reference concepts from Canadian science curriculum like living things, habitats, materials, and forces. Add interesting details that make kids curious and want to explore more.',
+                example: 'Sharks have lived in the ocean for over 400 million years, long before dinosaurs. They have special organs called ampullae of Lorenzini that sense tiny electrical signals from nearby animals. Sharks are important to keeping ocean ecosystems healthy and balanced.'
+            };
+        default:
+            return getGradePromptConfig('Grade1');
+    }
+};
+
 router.post('/facts', async (req, res) => {
     try {
-        const { objectName } = req.body;
+        const { objectName, childId } = req.body;
 
         if (!objectName) {
             return res.status(400).json({
@@ -147,6 +173,15 @@ router.post('/facts', async (req, res) => {
                 message: 'Object name is required',
             });
         }
+
+        //Get grade (default is grade 1)
+        let grade = 'Grade1';
+        if (childId) {
+            const child = await Child.findById(childId).select('grade');
+            if (child?.grade) grade = child.grade;
+        }
+
+        const gradeConfig = getGradePromptConfig(grade);
 
         const keywordSeverity = getKeywordSeverity(objectName);
 
@@ -167,9 +202,15 @@ router.post('/facts', async (req, res) => {
         const response = await openai.responses.create({
             model: 'gpt-4o-mini',
             input: `
-You are Curio, a child-friendly educational assistant for children ages 5 to 10.
+You are Curio, a child-friendly educational assistant.
 
 Object scanned: "${objectName}"
+Reading level: ${gradeConfig.level}
+
+Writing instructions: ${gradeConfig.instructions}
+
+Example of the correct reading level:
+"${gradeConfig.example}"
 
 First decide if this object is safe for children ages 5 to 10.
 
