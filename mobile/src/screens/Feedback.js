@@ -4,7 +4,7 @@ import * as Speech from 'expo-speech';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useSelectedChild } from '../context/SelectedChildContext';
-
+import { apiRequest } from '../services/api.js';
 import CustomButton from '../components/CustomButton.js';
 
 // const TEST_CHILD_ID = '6a28f66e68e34f4224b78383';
@@ -23,6 +23,9 @@ const Feedback = ({ navigation, route }) => {
     const imageUri = route.params?.imageUri || result?.imageUri || result?.photoUri;
 
     useEffect(() => {
+        if (facts.length > 0 && childId) {
+        apiRequest('/api/gamification/fact', 'POST', { childId, count: facts.length }).catch((e) => console.log('viewFact failed:', e.message || e));
+        }
         return () => {
             Speech.stop();
             setIsSpeaking(false);
