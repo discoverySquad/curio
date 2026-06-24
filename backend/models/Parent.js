@@ -25,7 +25,16 @@ const parentSchema = new mongoose.Schema(
         notification: {
             type:Boolean,
             default: true
-        }
+        },
+        //for archive
+        isArchived: {
+            type: Boolean,
+            default: false,
+        },
+        archivedAt: {
+            type: Date,
+            default: null,
+        },
     },
     { timestamps: true },
 );

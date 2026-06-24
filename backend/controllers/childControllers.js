@@ -135,4 +135,22 @@ const deleteChild = async (req, res) => {
   }
 };
 
-export { createChild, getChild, updateChild, deleteChild, saveUsageTime };
+const archiveChild = async (req, res) => {
+    try {
+        const child = await Child.findByIdAndUpdate(
+            req.params.id,
+            { isArchived: true, archivedAt: new Date() },
+            { new: true }
+        );
+
+        if (!child) {
+            return res.status(404).json({ message: "Child not found" });
+        }
+
+        res.status(200).json(child);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export { createChild, getChild, updateChild, deleteChild, saveUsageTime, archiveChild };

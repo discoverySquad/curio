@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import colors from '../constants/colors.js';
 
 // Existing Screens
 import HomeScreen from '../screens/HomeScreen.js';
@@ -67,16 +68,21 @@ const ScanStack = () => {
 
 const ParentStack = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{ 
+            headerBackButtonDisplayMode: 'minimal',
+            headerStyle: { backgroundColor: colors.primary },  
+            headerTintColor:  colors.surface,
+            headerButtonStyle: { backgroundColor: 'transparent' }
+        }}>
             <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} options={{ title: 'Parent Dashboard' }} />
             <Stack.Screen name="CreateChild" component={CreateChildScreen} options={{ title: 'Create Child Profile' }} />
             <Stack.Screen name="SelectChild" component={SelectChild} options={{ title: 'Select Child' }} />
-            {/* <Stack.Screen name="UpdateChild" component={EditChildScreen} options={{ title: 'Edit Child Profile' }} /> */}
-            <Stack.Screen name="EditChild" component={EditChildScreen} options={{ title: 'Edit Child Profile' }} />
+            {/* <Stack.Screen name="UpdateChild" component={EditChildScreen} options={{ title: 'Edit Profile' }} /> */}
+            <Stack.Screen name="EditChild" component={EditChildScreen} options={{ title: 'Edit Profile' }} />
       <Stack.Screen name="ScreenTime" component={ScreenTime} />
       <Stack.Screen name="SelectCategory" component={SelectCategory} />
       <Stack.Screen name='EditParentAccount' component={EditParentAccount} />
-      <Stack.Screen name='SettingParentScreen' component={SettingParentScreen} />
+      <Stack.Screen name='SettingParentScreen' component={SettingParentScreen} options={{ title: 'Settings'}}  />
 
     </Stack.Navigator>
     );

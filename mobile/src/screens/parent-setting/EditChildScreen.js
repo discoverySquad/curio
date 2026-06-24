@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
+import { useEffect, useState, useLayoutEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, Modal } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import * as SecureStore from 'expo-secure-store';
 import { apiRequest } from '../../services/api.js';
 import CustomButton from '../../components/CustomButton.js';
+import colors from '../../constants/colors.js';
 
 export default function EditChildScreen({ navigation, route }){
   const { childId } = route.params;
@@ -12,6 +13,7 @@ export default function EditChildScreen({ navigation, route }){
   const [selected, setSelected] = useState("");
   const [selectedAvatar, setSelectedAvatar] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [archiveModalVisible, setArchiveModalVisible] = useState(false); 
 
   const grade = [
     { key: '1', value: 'Kindergarten' },
@@ -47,6 +49,21 @@ export default function EditChildScreen({ navigation, route }){
       loadChild();
     }, [childId]);
 
+    useLayoutEffect(() => {
+    navigation.setOptions({
+      // headerRightContainerStyle: { backgroundColor: colors.primary },
+        headerRight: () => (
+            <TouchableOpacity onPress={() => setArchiveModalVisible(true)}>
+                <Image 
+                    source={require('../../assets/Delete-Profile-Icon.png')}
+                    style={{ width: 32, height: 26, }}
+                />
+            </TouchableOpacity>
+        ),
+    });
+}, [navigation]);
+
+
     const handleSaveChanges = async() => {
       if(!name.trim()){
         Alert.alert("Missing name", "Please enter a child name");
@@ -78,9 +95,35 @@ export default function EditChildScreen({ navigation, route }){
       }
     };
 
+    const handleArchive = async() => {
+    try{
+        const token = await SecureStore.getItemAsync("token");
+        await apiRequest(
+            `/api/child/${childId}/archive`,
+            "PATCH",
+            null,
+            token
+        );
+        setArchiveModalVisible(false); 
+        Alert.alert("Archived", "Child profile archived");
+        navigation.navigate("SelectChildStart");
+      }catch(error){
+        Alert.alert("Error", "Could not archive child profile");
+      } 
+    };
+
     return(
       <View style={styles.container}>
-        <Text style={styles.title}>Edit Profile</Text>
+        {/* <View style={styles.titleRow}>
+          <Text style={styles.title}>Edit Profile</Text>
+          <TouchableOpacity onPress={() => setArchiveModalVisible(true)}>
+            <Image 
+              source={require('../../assets/Archive.png')}
+              style={{ width: 20, height: 20, tintColor: '#888' }}
+            />
+            </TouchableOpacity>
+        </View> */}
+
         <View style={styles.box}>
           <Text style={styles.label}>First name or nickname</Text>
           <TextInput
@@ -122,6 +165,23 @@ export default function EditChildScreen({ navigation, route }){
           label="Save Changes"
           onPress={handleSaveChanges}
         />
+
+        <Modal
+          visible={archiveModalVisible}
+          transparent={true}
+          animationType='fade'
+        >
+          <View style={styles.modalOverlay}>
+              <View style={styles.modalBox}>
+                  <Text style={styles.modalTitle}>Are you sure?</Text>
+                  <Text style={styles.modalText}>This will archive the child profile. Achievements, badges, and points will be saved.</Text>
+                  <CustomButton label="Archive Profile" onPress={handleArchive} />
+                  <TouchableOpacity onPress={() => setArchiveModalVisible(false)}>
+                      <Text style={styles.cancelText}>Cancel</Text>
+                  </TouchableOpacity>
+              </View>
+          </View>
+        </Modal>
       </View>
     );
 }
@@ -133,10 +193,17 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: '#fff',
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginBottom: 30,
+  },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 30,
+    // marginBottom: 30,
   },
   box: {
     backgroundColor: 'white',
@@ -193,5 +260,41 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
+  },
+archiveLink: {
+    textAlign: 'center',
+    fontSize: 12,
+    color: '#888',
+    marginTop: 10,
+    textDecorationLine: 'underline',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "#88888888",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalBox: {
+    width: "80%",
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    padding: 24,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 12,
+  },
+  modalText: {
+    fontSize: 13,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  cancelText: {
+    fontSize: 12,
+    color: '#555',
+    marginTop: 8,
   },
 });

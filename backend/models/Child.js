@@ -44,6 +44,15 @@ const childSchema = new mongoose.Schema(
                 },
             },
         ],
+        //added for archive
+        isArchived: {
+            type: Boolean,
+            default: false,
+        },
+        archivedAt: {
+            type: Date,
+            default: null,
+        },
     },
     { timestamps: true },
 );

@@ -6,7 +6,12 @@ import Parent from '../models/Parent.js';
 //get one parent information
 const getParent = async (req, res) => {
   try {
-    const parent = await Parent.findById(req.params.id).select('-password').populate('childId');
+    const parent = await Parent.findById(req.params.id)
+      .select('-password')
+      .populate({
+        path: 'childId',
+        match: { isArchived: { $ne: true } }, 
+    });
 
     if (!parent) {
       return res.status(404).json({ message: 'Parent not found' });
@@ -42,7 +47,11 @@ const getParent = async (req, res) => {
 
 const getParentChildren = async (req, res) => {
   try {
-    const parent = await Parent.findById(req.params.id).populate('childId');
+    const parent = await Parent.findById(req.params.id)
+      .populate({
+        path: 'childId',
+        match: { isArchived: { $ne: true } },  
+    });
 
     if (!parent) {
       return res.status(404).json({ message: 'Parent not found' });
@@ -131,4 +140,22 @@ const deleteParent = async (req, res) => {
   }
 };
 
-export { getParent, getParentChildren, createParent, editParent, deleteParent };
+const archiveParent = async (req, res) => {
+    try {
+        const parent = await Parent.findByIdAndUpdate(
+            req.params.id,
+            { isArchived: true, archivedAt: new Date() },
+            { new: true }
+        );
+
+        if (!parent) {
+            return res.status(404).json({ message: "Parent not found" });
+        }
+
+        res.status(200).json(parent);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export { getParent, getParentChildren, createParent, editParent, deleteParent, archiveParent };
