@@ -18,7 +18,7 @@ const childSchema = new mongoose.Schema(
         },
         timeLimit: {
             type: Number,
-            default: 60,
+            default: 15,
         },
         usageTimeToday: {
             type: Number,

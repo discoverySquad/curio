@@ -77,7 +77,7 @@ const ParentStack = () => {
             <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} options={{ title: 'Parent Dashboard' }} />
             <Stack.Screen name="CreateChild" component={CreateChildScreen} options={{ title: 'Create Child Profile' }} />
             <Stack.Screen name="SelectChild" component={SelectChild} options={{ title: 'Select Child' }} />
-            <Stack.Screen name="UpdateChild" component={EditChildScreen} options={{ title: 'Edit Profile' }} />
+            {/* <Stack.Screen name="UpdateChild" component={EditChildScreen} options={{ title: 'Edit Profile' }} /> */}
             <Stack.Screen name="EditChild" component={EditChildScreen} options={{ title: 'Edit Profile' }} />
       <Stack.Screen name="ScreenTime" component={ScreenTime} />
       <Stack.Screen name="SelectCategory" component={SelectCategory} />
