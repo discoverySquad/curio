@@ -134,6 +134,7 @@ export default function ScanScreen({ navigation, route }) {
 
                 const factsData = await apiRequest('/api/ai/facts', 'POST', {
                     objectName: scanData.objectName,
+                    childId,
                 });
 
             await apiRequest('/api/journal', 'POST', {
