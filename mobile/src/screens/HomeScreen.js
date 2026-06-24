@@ -7,7 +7,7 @@ import { useSelectedChild } from '../context/SelectedChildContext';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
+import colors from "../constants/colors.js";
 
 const HomeScreen = ({ navigation, route }) => {
 
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   homeCard: {
-    backgroundColor: '#E8E8E8',
+    backgroundColor:colors.tertiary,
     borderRadius: 20,
     padding: 24,
   },
@@ -261,9 +261,11 @@ const styles = StyleSheet.create({
   explorationTime: {
     flexDirection: 'row',
     gap: 28
+    
   },
   timeLeftBox: {
     justifyContent: 'center',
+    
   },
   goalRow: {
   flexDirection: "row",
@@ -277,10 +279,14 @@ progressBarBackground: {
   borderRadius: 20,
   marginTop: 12,
   marginBottom: 24,
+  borderWidth: 1,
+  borderColor: colors.neutralClay,
 },
 progressBarFill: {
   height: "100%",
-  backgroundColor: "#000",
+  borderColor: colors.neutralClay,
+  borderWidth: 1,
+  backgroundColor: colors.secondary,
   borderRadius: 20,
 },
 });

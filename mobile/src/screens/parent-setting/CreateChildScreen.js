@@ -22,12 +22,12 @@ export default function CreateChildScreen({ navigation, route }) {
     ]
 
     const avatars = [
-        require('../../assets/avatar1.jpg'),
-        require('../../assets/avatar2.jpg'),
-        require('../../assets/avatar3.jpg'),
-        require('../../assets/avatar4.jpg'),
-        require('../../assets/avatar5.jpg'),
-        require('../../assets/avatar6.jpg')
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Fox.png",
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Eagle.png",
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Beaver.png",
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Moose.png",
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Wolf.png",
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Bear.png"
     ]
     const handleCreateChild = async () => {
     if (!parentId) {
@@ -135,7 +135,7 @@ export default function CreateChildScreen({ navigation, route }) {
                             ]}
                         >
                             <Image
-                                source={avatar}
+                                source={{ uri: avatar}}
                                 style={styles.avatar}
                             />
                         </TouchableOpacity>

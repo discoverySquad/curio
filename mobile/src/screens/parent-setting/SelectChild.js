@@ -97,19 +97,19 @@ const SelectChild = ({ navigation }) => {
                     const name = typeof child === 'string' ? child : child.name;
                     const avatar = typeof child === 'string' ? null : child.avatar;
                     const avatars = [
-                        require('../../assets/avatar1.jpg'),
-                        require('../../assets/avatar2.jpg'),
-                        require('../../assets/avatar3.jpg'),
-                        require('../../assets/avatar4.jpg'),
-                        require('../../assets/avatar5.jpg'),
-                        require('../../assets/avatar6.jpg')
+                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Fox.png",
+                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Eagle.png",
+                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Beaver.png",
+                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Moose.png",
+                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Wolf.png",
+                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Bear.png"
                     ];
 
                     let avatarSource = require('../../assets/avatar1.jpg');
                     const index = parseInt(avatar, 10);
 
                     if (!isNaN(index) && avatars[index]) {
-                        avatarSource = avatars[index];
+                        avatarSource = { uri: avatars[index]};
                     } else if (typeof avatar === 'string' && avatar.startsWith('http')) {
                         avatarSource = { uri: avatar };
                     }
