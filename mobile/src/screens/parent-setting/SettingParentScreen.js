@@ -173,7 +173,7 @@ export default function SettingParentScreen({ navigation }) {
                     {editMode && (
                   <TouchableOpacity
                     style={styles.editChildIcon}
-                    onPress={() => navigation.navigate("UpdateChild", { childId: child._id })}
+                    onPress={() => navigation.navigate("EditChild", { childId: child._id })}
                     hitSlop={8}
                   >
                     <Image
@@ -226,7 +226,7 @@ export default function SettingParentScreen({ navigation }) {
                 </View>
             </View>
 
-            <View style={styles.card}>
+            {/* <View style={styles.card}>
                 <View style={styles.row}>
                         <Text style={styles.label}>Notification</Text>
                         <Switch
@@ -236,7 +236,7 @@ export default function SettingParentScreen({ navigation }) {
                         thumbColor="#fff"
                         />
                 </View>
-            </View>
+            </View> */}
 
             <CustomButton label="Log Out" onPress={handleLogout} />
 
