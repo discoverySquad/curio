@@ -21,12 +21,12 @@ export default function EditChildScreen({ navigation, route }){
     { key: '3', value: 'Grade2' },
   ];
   const avatars = [
-        require('../../assets/avatar1.jpg'),
-        require('../../assets/avatar2.jpg'),
-        require('../../assets/avatar3.jpg'),
-        require('../../assets/avatar4.jpg'),
-        require('../../assets/avatar5.jpg'),
-        require('../../assets/avatar6.jpg')
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Fox.png",
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Eagle.png",
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Beaver.png",
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Moose.png",
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Wolf.png",
+        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Bear.png"
     ];
     useEffect(() => {
       const loadChild = async() => {
@@ -156,7 +156,7 @@ export default function EditChildScreen({ navigation, route }){
                     styles.avatarWrapper,
                     selectedAvatar === index && styles.selectedAvatar,
                   ]}>
-                <Image source={avatar} style={styles.avatar}/>
+                <Image source={{ uri: avatar }} style={styles.avatar}/>
                 </TouchableOpacity>
               ))}
             </View>
@@ -210,8 +210,8 @@ const styles = StyleSheet.create({
     width: 340,
     padding: 20,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#ECEEEB',
+    marginBottom: 40,
+    backgroundColor: colors.tertiary,
   },
   label: {
     fontSize: 12,
@@ -243,8 +243,8 @@ const styles = StyleSheet.create({
     rowGap: 12,
   },
   avatarWrapper: {
-    borderWidth: 2,
-    borderColor: '#777',
+    // borderWidth: 2,
+    // borderColor: '#777',
     borderRadius: 40,
     padding: 2,
   },
@@ -252,8 +252,8 @@ const styles = StyleSheet.create({
     borderColor: '#000',
   },
   avatar: {
-    width: 65,
-    height: 65,
+    width: 92,
+    height: 92,
     borderRadius: 35,
   },
   btnText: {

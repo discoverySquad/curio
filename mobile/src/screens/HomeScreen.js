@@ -261,9 +261,11 @@ const styles = StyleSheet.create({
   explorationTime: {
     flexDirection: 'row',
     gap: 28
+    
   },
   timeLeftBox: {
     justifyContent: 'center',
+    
   },
   goalRow: {
   flexDirection: "row",
@@ -277,10 +279,14 @@ progressBarBackground: {
   borderRadius: 20,
   marginTop: 12,
   marginBottom: 24,
+  borderWidth: 1,
+  borderColor: colors.neutralClay,
 },
 progressBarFill: {
   height: "100%",
-  backgroundColor: "#000",
+  borderColor: colors.neutralClay,
+  borderWidth: 1,
+  backgroundColor: colors.secondary,
   borderRadius: 20,
 },
 });
