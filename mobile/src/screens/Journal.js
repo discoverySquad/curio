@@ -78,7 +78,7 @@ const JournalScreen = ({ route }) => {
     }
 
     const earnedCount = child.earnedBadges?.length ?? 0;
-    const levelTitle = LEVEL_TITLES[child.currentLevel] ?? 'Tiny Explorer';
+    const levelTitle = LEVEL_TITLES[child.currentLevel -1] ?? 'Tiny Explorer';
     const progress = badges.length > 0 ? earnedCount / badges.length : 0;
 
     return (

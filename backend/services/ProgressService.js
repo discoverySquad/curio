@@ -58,7 +58,7 @@ const recordFactViewed = async (childId) => {
     await childProgress.findOneAndUpdate(
         { childId },
         {
-            $inc: { 'status.factsViewed': 1 },
+            $inc: { 'status.factsViewed': count },
             $set: { lastActiveAt: new Date() },
         },
         { upsert: true, new: true }

@@ -38,9 +38,9 @@ const completeScan = async (req, res) => {
 
 const viewFact = async (req, res) => {
     try {
-        const { childId } = req.body;
+        const { childId, count } = req.body;
 
-        await recordFactViewed(childId);
+        await recordFactViewed(childId, count || 1);
         const { newBadges, newLevel } = await evaluateRewards(childId);
 
         const progress = await childProgress.findOne({ childId }).select('status');
@@ -63,7 +63,7 @@ const getChildGamification = async (req, res) => {
 
         //get all badges
         const earned = child.earnedBadges.map(b => b.badgeId);
-        const allBadges = await Badge.find().sort({ createdAt: 1 });
+        const allBadges = await Badge.find().sort({ order: 1 });
         const badgesWithStatus = allBadges.map(badge => ({
             ...badge.toObject(),
             earned: earned.includes(badge.badgeId),
