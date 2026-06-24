@@ -33,6 +33,7 @@ const badgeSchema = new mongoose.Schema(
         description: { type: String },
         icon: { type: String },
         criteria: { type: badgeCriteriaSchema, required: true },
+        order: { type: Number, default: 0 },
     },
     { timestamps: true }
 );
