@@ -54,7 +54,7 @@ const recordScan = async (childId) => {
     await recordActive(childId);
 };
 
-const recordFactViewed = async (childId) => {
+const recordFactViewed = async (childId, count = 1) => {
     await childProgress.findOneAndUpdate(
         { childId },
         {
