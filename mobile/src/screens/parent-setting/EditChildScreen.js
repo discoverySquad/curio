@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useLayoutEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, Modal } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import * as SecureStore from 'expo-secure-store';
 import { apiRequest } from '../../services/api.js';
 import CustomButton from '../../components/CustomButton.js';
+import colors from '../../constants/colors.js';
 
 export default function EditChildScreen({ navigation, route }){
   const { childId } = route.params;
@@ -47,6 +48,21 @@ export default function EditChildScreen({ navigation, route }){
       };
       loadChild();
     }, [childId]);
+
+    useLayoutEffect(() => {
+    navigation.setOptions({
+      // headerRightContainerStyle: { backgroundColor: colors.primary },
+        headerRight: () => (
+            <TouchableOpacity onPress={() => setArchiveModalVisible(true)}>
+                <Image 
+                    source={require('../../assets/Delete-Profile-Icon.png')}
+                    style={{ width: 32, height: 26, }}
+                />
+            </TouchableOpacity>
+        ),
+    });
+}, [navigation]);
+
 
     const handleSaveChanges = async() => {
       if(!name.trim()){
@@ -98,7 +114,7 @@ export default function EditChildScreen({ navigation, route }){
 
     return(
       <View style={styles.container}>
-        <View style={styles.titleRow}>
+        {/* <View style={styles.titleRow}>
           <Text style={styles.title}>Edit Profile</Text>
           <TouchableOpacity onPress={() => setArchiveModalVisible(true)}>
             <Image 
@@ -106,7 +122,7 @@ export default function EditChildScreen({ navigation, route }){
               style={{ width: 20, height: 20, tintColor: '#888' }}
             />
             </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View style={styles.box}>
           <Text style={styles.label}>First name or nickname</Text>
