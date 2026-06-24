@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import {Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -88,13 +89,61 @@ const ParentStack = () => {
     );
 };
 
+const HomeIcon = require('../assets/home_icon.png');
+const JournalIcon = require('../assets/journal_icon.png');
+
 const MainTabs = () => {
     return (
-        <Tab.Navigator >
-            <Tab.Screen name="HomeTab" component={HomeStack} />
-            <Tab.Screen name="Scan" component={ScanStack} />
-            <Tab.Screen name="Journal" component={JournalScreen} />
-            <Tab.Screen name="Parent" component={ParentStack} />
+        <Tab.Navigator screenOptions={{
+            tabBarActiveTintColor: colors.surface,
+            tabBarInactiveTintColor: colors.surface,
+            tabBarStyle:{
+                backgroundColor: colors.primary,
+                borderTopLeftRadius: 24,
+                borderTopRightRadius: 24,
+                // position: 'absolute',
+                borderTopWidth: 0,
+                height: 100,
+                paddingTop: 8,
+                justifyContent: 'center', 
+                paddingLeft: 70,
+            },
+            tabBarItemStyle:{
+                flex: 0, 
+                width: 60,
+            },
+            tabBarItemStyle:{
+                fontSize: 16,
+                fontWeight: '700',
+            },
+        }}>
+            <Tab.Screen name="HomeTab" component={HomeStack} 
+            options={{
+                tabBarIcon: ({ color }) => (
+                  <Image 
+                    source={HomeIcon} 
+                    style={{ width: 22, height: 22, tintColor: color }} 
+                    resizeMode="contain"
+                  />
+                ),
+            }}
+            listeners={({navigation}) => ({
+                tabPress: (e) => {
+                    navigation.navigate("HomeTab", { screen: "Home"});
+                },
+            })}
+            />
+            <Tab.Screen name="Scan" component={ScanStack} options={{ tabBarButton: () => null }}/>
+            <Tab.Screen name="Journal" component={JournalScreen} options={{
+                tabBarIcon: ({ color }) => (
+                  <Image 
+                    source={JournalIcon} 
+                    style={{ width: 22, height: 22, tintColor: color }} 
+                    resizeMode="contain"
+                  />
+                ),
+            }}/>
+            <Tab.Screen name="Parent" component={ParentStack} options={{ tabBarButton: () => null }}/>
         </Tab.Navigator>
     );
 };

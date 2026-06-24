@@ -7,7 +7,7 @@ import { useSelectedChild } from '../context/SelectedChildContext';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
+import colors from "../constants/colors.js";
 
 const HomeScreen = ({ navigation, route }) => {
 
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   homeCard: {
-    backgroundColor: '#E8E8E8',
+    backgroundColor:colors.tertiary,
     borderRadius: 20,
     padding: 24,
   },
