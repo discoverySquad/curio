@@ -14,6 +14,8 @@ const ActivityDescription = ({ navigation, route }) => {
     const [error, setError] = useState('');
     const [isSpeaking, setIsSpeaking] = useState(false);
 
+    const [isPressed, setIsPressed] = useState(false);
+
     useEffect(() => {
         fetchRandomTask();
 
@@ -129,15 +131,36 @@ const ActivityDescription = ({ navigation, route }) => {
 
             {task?.img ? <Image source={{ uri: task.img }} style={styles.taskImage} /> : null}
 
-            <Text style={styles.description}>{task?.description}</Text>
+            
 
-            <View style={styles.soundRow}>
+            {/* <View style={styles.soundRow}>
                 <Pressable style={styles.speakerButton} onPress={toggleSpeech}>
                     <Ionicons name={isSpeaking ? 'volume-mute' : 'volume-high'} size={22} color="#FFFFFF" />
                 </Pressable>
+            </View> */}
+
+            <View style={styles.soundRow}>
+                <Pressable
+                    onPress={toggleSpeech}
+                    onPressIn={() => setIsPressed(true)}
+                    onPressOut={() => setIsPressed(false)}
+                >
+                    <Image
+                        source={
+                            isSpeaking
+                                ? require('../assets/State=Pressed.png')
+                                : require('../assets/State=Default.png')
+                        }
+                        style={{ width: 44, height: 44 }}
+                        resizeMode="contain"
+                    />
+                </Pressable>
             </View>
 
+            <Text style={styles.description}>{task?.description}</Text>
+
             <View style={styles.tipContainer}>
+                <Image style={styles.infoIcon} source={require('../assets/Background_icon.png')} />
                 <Text style={styles.tipText}>Explore safely and ask an adult if needed.</Text>
             </View>
 
@@ -181,26 +204,28 @@ const styles = StyleSheet.create({
         fontSize: 28,
         fontWeight: '700',
         textAlign: 'center',
-        color: '#111111',
+        color: '#574239',
     },
     taskImage: {
-        width: 300,
-        height: 300,
-        borderRadius: 16,
-        marginVertical: 16,
+        width: 318,
+        height: 318,
+        borderRadius: 35,
+        // marginVertical: 16,
+        marginTop:40,
     },
     description: {
         width: '100%',
         fontSize: 16,
         lineHeight: 22,
-        textAlign: 'center',
+        textAlign: 'left',
         color: '#222222',
-        marginBottom: 12,
+        marginBottom: 41,
     },
     soundRow: {
         width: '100%',
         alignItems: 'flex-start',
-        marginBottom: 16,
+        marginBottom: 15,
+        marginTop:41
     },
     speakerButton: {
         width: 42,
@@ -211,19 +236,28 @@ const styles = StyleSheet.create({
         backgroundColor: '#4D4D4D',
     },
     tipContainer: {
-        backgroundColor: '#D9D9D9',
+        flex:1,
+        flexDirection:'row',
+        gap:24,
+        backgroundColor: '#F0BA7A',
         width: '100%',
         minHeight: 110,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 32,
         paddingHorizontal: 20,
-        marginBottom: 20,
+        marginBottom: 41,
+    },
+    infoIcon:{
+        width:80,
+        height:80
     },
     tipText: {
-        fontSize: 15,
-        textAlign: 'center',
-        color: '#111111',
+        fontSize: 16,
+        textAlign: 'left',
+        color: '#000000',
+        width:206,
+        lineHeight:24
     },
     buttonSection: {
         width: '100%',
