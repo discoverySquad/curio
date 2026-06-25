@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {Image } from 'react-native';
+import {Image, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -47,7 +47,7 @@ const HomeStack = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Test" component={Test} />
-            <Stack.Screen name="ActivityDescription" component={ActivityDescription} />
+            <Stack.Screen name="ActivityDescription" component={ActivityDescription} options={{ title: 'Explore the World!' }}/>
             <Stack.Screen name="TryAgain" component={TryAgain} />
             <Stack.Screen name="Feedback" component={Feedback} />
             <Stack.Screen name="SelectCategory" component={SelectCategory} />
@@ -57,8 +57,23 @@ const HomeStack = () => {
 
 const ScanStack = () => {
     return (
-        <Stack.Navigator>
-            <Stack.Screen name="ActivityDescription" component={ActivityDescription} />
+        <Stack.Navigator
+        screenOptions={{
+            headerBackButtonDisplayMode: 'minimal',
+            headerTintColor: colors.surface,
+            headerButtonStyle: { backgroundColor: 'transparent' },
+            headerBackground: () => (
+                <View style={{
+                    flex: 1,
+                    backgroundColor: colors.primary,
+                    borderBottomLeftRadius: 32,
+                    borderBottomRightRadius: 32,
+                    height:60
+                }} />
+            ),
+        }}
+        >
+            <Stack.Screen name="ActivityDescription" component={ActivityDescription} options={{ title: 'Explore the World!' }} />
             <Stack.Screen name="SelectCategory" component={SelectCategory} />
             <Stack.Screen name="ScanCamera" component={ScanScreen} options={{ title: 'Scan' }} />
             <Stack.Screen name="Feedback" component={Feedback} options={{ title: 'Explore the World!' }} />
