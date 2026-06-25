@@ -1,12 +1,14 @@
 import { useState, useEffect, useLayoutEffect } from 'react';
 import { View, Text, TouchableOpacity, Switch, StyleSheet, ScrollView, Image, Alert, ActivityIndicator, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import React from 'react';
 
 import CustomButton from '../../components/CustomButton.js'
 import { useSelectedChild } from '../../context/SelectedChildContext';
 
 const PARENT_ID = '6a15e296dd882ca29e6355ae';
-const CHILD_ID  = '6a28f66e68e34f4224b78383';
+// const CHILD_ID  = '6a28f66e68e34f4224b78383';
 
 export default function SettingParentScreen({ navigation }) {
     const [children, setChildren] = useState([]);
@@ -19,9 +21,11 @@ export default function SettingParentScreen({ navigation }) {
     const { selectedChild } = useSelectedChild();
     const currentChildId = selectedChild?._id;
 
-    useEffect(() => {
+    useFocusEffect(
+    React.useCallback(() => {
         loadChildren();
-    }, []);
+    }, [])
+);
 
     const loadSelectedChild = async() => {
         const saveChild = await AsyncStorage.getItem("selectedChild");
@@ -55,7 +59,7 @@ export default function SettingParentScreen({ navigation }) {
           setChildren(childList);
         }
 
-        const currentChild = childList.find((child) => child._id === CHILD_ID);
+        const currentChild = childList.find((child) => child._id === currentChildId);
             if(currentChild){
                 setTimeLimit(currentChild.timeLimit);
             }
@@ -249,7 +253,7 @@ export default function SettingParentScreen({ navigation }) {
                             : `Daily limit: ${timeLimit} minutes`}
                         </Text>
                     </View>
-                    <TouchableOpacity onPress={() => navigation.navigate("ScreenTime")}>
+                    <TouchableOpacity onPress={() => navigation.navigate("ScreenTime", { childId: currentChildId })}>
                       <Image source={require('../../assets/pencil.png')} style={styles.pencilSmall} />
                     </TouchableOpacity>
                 </View>
