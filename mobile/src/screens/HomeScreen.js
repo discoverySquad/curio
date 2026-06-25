@@ -56,15 +56,11 @@ const HomeScreen = ({ navigation, route }) => {
   //   getChild();
   // }, [childId]);
 
-    useEffect(() => {
-    const loadChild = async () => {
-      try {
-          let id = route?.params?.childId || selectedChild?._id;
-
-          // immediately reflect selectedChild in UI to avoid mismatch
-          if (selectedChild) {
-            setChild(selectedChild);
-          }
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadChild = async () => {
+        try {
+            let id = route?.params?.childId || selectedChild?._id;
 
           if (!id) {
             const saved = await AsyncStorage.getItem('selectedChild');
@@ -107,8 +103,9 @@ const HomeScreen = ({ navigation, route }) => {
       }
     };
 
-    loadChild();
-  }, [childIdFromRoute, selectedChild]);
+      loadChild();
+    }, [route?.params?.childId, selectedChild?._id])
+  );
 
   useFocusEffect(
     React.useCallback(() => {
