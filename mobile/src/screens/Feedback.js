@@ -156,7 +156,7 @@ const Feedback = ({ navigation, route }) => {
                 style={styles.changeActivityBtn}
                 onPress={goToChangeCategory}
             >
-                <Text style={styles.changeActivityBtnText}>Change Activity</Text>
+                <Text style={[styles.changeActivityBtnText,typography.body]}>Change Activity</Text>
             </Pressable>
         </ScrollView>
     );
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         // fontSize: 15,
         lineHeight: 24,
-        marginBottom: 18,
+        marginBottom: 41,
         color: '#3D332E',
     },
     resultContainer: {
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F0BA7A',
         borderRadius: 16,
         padding: 18,
-        marginBottom: 20,
+        marginBottom: 41,
     },
     label: {
         fontSize: 14,
@@ -259,13 +259,14 @@ const styles = StyleSheet.create({
         width: '100%',
         marginBottom: 10,
     },
-    changeCategoryBtn: {
-        marginTop: 4,
+    changeActivityBtn: {
+        marginVertical: 18,
     },
-    changeCategoryBtnText: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#111111',
+    changeActivityBtnText: {
+        // fontSize: 16,
+        // fontWeight: '600',
+        color: '#3D332E',
+        // marginVertical: 18
     },
 });
 
