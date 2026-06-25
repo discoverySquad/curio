@@ -27,7 +27,7 @@ export const typography = {
     },
     body: {
         fontFamily: fonts.body,
-        fontSize: 14, 
+        fontSize: 16, 
         fontWeight: '400',
     },
 };
