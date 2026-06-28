@@ -1,22 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-    View,
-    Text,
-    Modal,
-    StyleSheet,
-    ActivityIndicator,
-    Alert,
-    Pressable,
-    Animated,
-} from 'react-native';
+import { View, Text, Modal, StyleSheet, ActivityIndicator, Alert, Pressable, Animated } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImageManipulator from 'expo-image-manipulator';
-
+import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { apiRequest } from '../services/api.js';
 import { useSelectedChild } from '../context/SelectedChildContext';
-
-// const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
 
 export default function ScanScreen({ navigation, route }) {
     const cameraRef = useRef(null);
@@ -25,15 +15,14 @@ export default function ScanScreen({ navigation, route }) {
     const [permission, requestPermission] = useCameraPermissions();
     const [loading, setLoading] = useState(false);
     const [warning, setWarning] = useState(null);
-    const [photoUri, setPhotoUri] = useState(null);
+    const [torchOn, setTorchOn] = useState(false);
 
     const { selectedChild, setSelectedChild } = useSelectedChild();
     const childId = selectedChild?._id;
-    // const childId = route.params?.childId || selectedChild?._id || DUMMY_CHILD_ID;
+
     const taskName = route.params?.taskName || route.params?.activityTitle;
     const categoryName = route.params?.categoryName || route.params?.category || 'Nature';
-    console.log('route.params:', JSON.stringify(route.params));
-    const activityTitle = route.params?.activityTitle || 'Scan Activity';
+    const activityTitle = route.params?.activityTitle || taskName || 'Scan Activity';
 
     useEffect(() => {
         if (!loading) {
@@ -54,7 +43,7 @@ export default function ScanScreen({ navigation, route }) {
                     duration: 350,
                     useNativeDriver: true,
                 }),
-            ])
+            ]),
         );
 
         bounceAnimation.start();
@@ -82,20 +71,20 @@ export default function ScanScreen({ navigation, route }) {
         try {
             setLoading(true);
 
+            if (!childId) {
+                Alert.alert('Select child', 'Please select a child before scanning.');
+                return;
+            }
+
             const photo = await cameraRef.current.takePictureAsync({
                 quality: 0.4,
             });
-            setPhotoUri(photo.uri);
 
-            const resizedPhoto = await ImageManipulator.manipulateAsync(
-                photo.uri,
-                [{ resize: { width: 640 } }],
-                {
-                    compress: 0.5,
-                    format: ImageManipulator.SaveFormat.JPEG,
-                    base64: true,
-                }
-            );
+            const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [{ resize: { width: 640 } }], {
+                compress: 0.5,
+                format: ImageManipulator.SaveFormat.JPEG,
+                base64: true,
+            });
 
             const scanData = await apiRequest('/api/ai/scan', 'POST', {
                 imageBase64: resizedPhoto.base64,
@@ -109,8 +98,6 @@ export default function ScanScreen({ navigation, route }) {
                 return;
             }
 
-            //Calling /api/activity/verify (Amy)
-
             if (taskName && categoryName) {
                 const verifyData = await apiRequest('/api/activity/verify', 'POST', {
                     imageBase64: resizedPhoto.base64,
@@ -119,7 +106,7 @@ export default function ScanScreen({ navigation, route }) {
                     childId,
                 });
 
-                console.log('verifyData:', verifyData); 
+                console.log('verifyData:', verifyData);
 
                 if (!verifyData.isMatch) {
                     navigation.navigate('TryAgain', {
@@ -130,28 +117,29 @@ export default function ScanScreen({ navigation, route }) {
                     return;
                 }
             }
-            //end here
 
-                const factsData = await apiRequest('/api/ai/facts', 'POST', {
-                    objectName: scanData.objectName,
-                    childId,
-                });
+            const factsData = await apiRequest('/api/ai/facts', 'POST', {
+                objectName: scanData.objectName,
+                childId,
+            });
 
             await apiRequest('/api/journal', 'POST', {
                 childId,
                 category: categoryName,
-                activityTitle: activityTitle || taskName || '',
+                activityTitle,
                 objectName: scanData.objectName,
                 facts: factsData.facts || [],
                 correct: scanData.correct !== false,
             });
 
-            // Record a scan count on the backend
             try {
-                const scanResp = await apiRequest('/api/gamification/scan', 'POST', { childId });
+                const scanResp = await apiRequest('/api/gamification/scan', 'POST', {
+                    childId,
+                });
+
                 console.log('completeScan response:', scanResp);
-            } catch (e) {
-                console.log('completeScan failed:', e.message || e);
+            } catch (error) {
+                console.log('completeScan failed:', error.message || error);
             }
 
             const gamificationResp = await apiRequest('/api/gamification/task', 'POST', {
@@ -161,17 +149,20 @@ export default function ScanScreen({ navigation, route }) {
                 categoryKey: categoryName.toLowerCase(),
             });
 
-            // If backend returned updated child info, update context and AsyncStorage
             try {
                 console.log('gamification response:', gamificationResp);
+
                 if (gamificationResp?.child) {
                     const updatedChild = gamificationResp.child;
-                    console.log('Updating selectedChild with:', updatedChild);
-                    if (setSelectedChild) setSelectedChild(updatedChild);
+
+                    if (setSelectedChild) {
+                        setSelectedChild(updatedChild);
+                    }
+
                     await AsyncStorage.setItem('selectedChild', JSON.stringify(updatedChild));
                 }
-            } catch (e) {
-                console.log('Failed to update selectedChild from gamification response', e);
+            } catch (error) {
+                console.log('Failed to update selectedChild from gamification response', error);
             }
 
             navigation.navigate('Feedback', {
@@ -184,7 +175,7 @@ export default function ScanScreen({ navigation, route }) {
                 imageUri: resizedPhoto.uri,
                 childId,
                 categoryName,
-                activityTitle: activityTitle || taskName || '',
+                activityTitle,
             });
         } catch (error) {
             Alert.alert('Scan failed', error.message || 'Please try again.');
@@ -196,7 +187,18 @@ export default function ScanScreen({ navigation, route }) {
     return (
         <View style={styles.container}>
             <View style={styles.cameraFrame}>
-                <CameraView ref={cameraRef} style={styles.camera} facing="back" />
+                <CameraView ref={cameraRef} style={styles.camera} facing="back" enableTorch={torchOn} autofocus="on" animateShutter />
+
+                <Pressable style={styles.flashButton} onPress={() => setTorchOn((current) => !current)}>
+                    <Ionicons name={torchOn ? 'flash' : 'flash-outline'} size={20} color="#FFFFFF" />
+                </Pressable>
+
+                <Pressable
+                    style={styles.helpButton}
+                    onPress={() => Alert.alert('Scan Tip', 'Place the object inside the white corners, then tap the circle button.')}
+                >
+                    <Ionicons name="help" size={22} color="#FFFFFF" />
+                </Pressable>
 
                 <View pointerEvents="none" style={styles.focusOverlay}>
                     <Animated.View
@@ -213,28 +215,18 @@ export default function ScanScreen({ navigation, route }) {
                         <View style={[styles.corner, styles.cornerBottomRight]} />
                     </Animated.View>
                 </View>
-            </View>
 
-            <View style={styles.controls}>
-                <Pressable
-                    style={[styles.scanButtonOuter, loading && styles.scanButtonDisabled]}
-                    onPress={handleScan}
-                    disabled={loading}
-                >
-                    {loading ? (
-                        <ActivityIndicator size="large" color="#4D4D4D" />
-                    ) : (
-                        <View style={styles.scanButtonInner} />
-                    )}
-                </Pressable>
+                <View style={styles.bottomControls}>
+                    <Pressable style={[styles.scanButtonOuter, loading && styles.scanButtonDisabled]} onPress={handleScan} disabled={loading}>
+                        {loading ? <ActivityIndicator size="large" color="#7A6A62" /> : <View style={styles.scanButtonInner} />}
+                    </Pressable>
+                </View>
             </View>
 
             <Modal visible={!!warning} transparent animationType="slide">
                 <View style={styles.modalOverlay}>
                     <View style={[styles.modalBox, warning?.severity === 'high' && styles.highWarning]}>
-                        <Text style={styles.warningTitle}>
-                            {warning?.severity === 'high' ? 'Safety Alert' : 'Try Something Else'}
-                        </Text>
+                        <Text style={styles.warningTitle}>{warning?.severity === 'high' ? 'Safety Alert' : 'Try Something Else'}</Text>
 
                         <Text style={styles.warningText}>{warning?.message}</Text>
 
@@ -254,19 +246,37 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     cameraFrame: {
-        width: '86%',
-        aspectRatio: 3 / 4,
-        alignSelf: 'center',
-        marginTop: 40,
-        borderRadius: 24,
-        overflow: 'hidden',
-        borderWidth: 3,
-        borderColor: '#111111',
+        flex: 1,
         backgroundColor: '#000000',
+        overflow: 'hidden',
         position: 'relative',
     },
     camera: {
         flex: 1,
+    },
+    flashButton: {
+        position: 'absolute',
+        top: 34,
+        left: 22,
+        width: 34,
+        height: 34,
+        borderRadius: 17,
+        backgroundColor: 'rgba(61, 51, 46, 0.72)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 4,
+    },
+    helpButton: {
+        position: 'absolute',
+        top: 34,
+        right: 22,
+        width: 34,
+        height: 34,
+        borderRadius: 17,
+        backgroundColor: 'rgba(61, 51, 46, 0.72)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 4,
     },
     focusOverlay: {
         ...StyleSheet.absoluteFillObject,
@@ -274,14 +284,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     focusBox: {
-        width: 220,
-        height: 220,
+        width: 230,
+        height: 230,
         position: 'relative',
     },
     corner: {
         position: 'absolute',
-        width: 42,
-        height: 42,
+        width: 62,
+        height: 62,
         borderColor: '#FFFFFF',
     },
     cornerTopLeft: {
@@ -289,51 +299,56 @@ const styles = StyleSheet.create({
         left: 0,
         borderTopWidth: 5,
         borderLeftWidth: 5,
-        borderTopLeftRadius: 18,
+        borderTopLeftRadius: 22,
     },
     cornerTopRight: {
         top: 0,
         right: 0,
         borderTopWidth: 5,
         borderRightWidth: 5,
-        borderTopRightRadius: 18,
+        borderTopRightRadius: 22,
     },
     cornerBottomLeft: {
         bottom: 0,
         left: 0,
         borderBottomWidth: 5,
         borderLeftWidth: 5,
-        borderBottomLeftRadius: 18,
+        borderBottomLeftRadius: 22,
     },
     cornerBottomRight: {
         bottom: 0,
         right: 0,
         borderBottomWidth: 5,
         borderRightWidth: 5,
-        borderBottomRightRadius: 18,
+        borderBottomRightRadius: 22,
     },
-    controls: {
-        alignItems: 'center',
-        paddingTop: 24,
-    },
-    scanButtonOuter: {
-        width: 78,
-        height: 78,
-        borderRadius: 39,
-        borderWidth: 4,
-        borderColor: '#4D4D4D',
-        backgroundColor: 'transparent',
+    bottomControls: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 52,
         alignItems: 'center',
         justifyContent: 'center',
+        zIndex: 5,
+    },
+    scanButtonOuter: {
+        width: 82,
+        height: 82,
+        borderRadius: 41,
+        borderWidth: 5,
+        borderColor: 'rgba(255, 255, 255, 0.75)',
+        backgroundColor: 'rgba(61, 51, 46, 0.28)',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     scanButtonInner: {
-        width: 62,
-        height: 62,
-        borderRadius: 31,
-        backgroundColor: '#4D4D4D',
+        width: 64,
+        height: 64,
+        borderRadius: 32,
+        backgroundColor: '#7A6A62',
     },
     scanButtonDisabled: {
-        opacity: 0.7,
+        opacity: 0.85,
     },
     center: {
         flex: 1,
@@ -349,7 +364,7 @@ const styles = StyleSheet.create({
         color: '#111111',
     },
     permissionButton: {
-        backgroundColor: '#4D4D4D',
+        backgroundColor: '#2F6F2F',
         paddingHorizontal: 22,
         paddingVertical: 14,
         borderRadius: 24,

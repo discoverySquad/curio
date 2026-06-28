@@ -5,7 +5,6 @@ import {
     TextInput,
     Pressable,
     StyleSheet,
-    Alert,
     KeyboardAvoidingView,
     ScrollView,
     TouchableWithoutFeedback,
@@ -21,10 +20,9 @@ export default function LoginScreen({ navigation, setUser }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [formError, setFormError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const isValidEmail = (value) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-    };
+    const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 
     const handleLogin = async () => {
         setFormError('');
@@ -45,46 +43,42 @@ export default function LoginScreen({ navigation, setUser }) {
         }
 
         try {
+            setLoading(true);
+
             const data = await apiRequest('/api/auth/login', 'POST', {
                 email: email.trim().toLowerCase(),
                 password,
             });
 
-            if (data.token) {
-                const secureStoreAvailable = await SecureStore.isAvailableAsync();
-
-                if (secureStoreAvailable) {
-                    await SecureStore.setItemAsync('token', data.token);
-                    await SecureStore.setItemAsync('user', JSON.stringify(data.user));
-                }
-
-                setUser(data.user);
-            } else {
+            if (!data.token || !data.user) {
                 setFormError(data.message || 'Login failed. Please try again.');
+                return;
             }
+
+            await SecureStore.setItemAsync('token', data.token);
+            await SecureStore.setItemAsync('user', JSON.stringify(data.user));
+
+            setUser(data.user, 'login');
         } catch (error) {
             setFormError(error.message || 'Login failed. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <KeyboardAvoidingView
-            style={styles.keyboardView}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
+        <KeyboardAvoidingView style={styles.keyboardView} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <ScrollView
-                    contentContainerStyle={styles.scrollContent}
-                    keyboardShouldPersistTaps="handled"
-                    showsVerticalScrollIndicator={false}
-                >
-                    <View style={styles.container}>
-                        <Text style={styles.title}>Curio</Text>
-                        <Text style={styles.subtitle}>Parent Login</Text>
+                <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+                    <View style={styles.card}>
+                        <Text style={styles.logo}>Curio</Text>
+                        <Text style={styles.title}>Welcome back!</Text>
+                        <Text style={styles.subtitle}>Your child's next adventure is waiting.</Text>
 
+                        <Text style={styles.label}>Email</Text>
                         <TextInput
                             style={styles.input}
-                            placeholder="Email"
+                            placeholder="explorer@curio.com"
                             value={email}
                             onChangeText={(value) => {
                                 setEmail(value);
@@ -95,6 +89,7 @@ export default function LoginScreen({ navigation, setUser }) {
                             returnKeyType="next"
                         />
 
+                        <Text style={styles.label}>Password</Text>
                         <TextInput
                             style={styles.input}
                             placeholder="Password"
@@ -110,11 +105,11 @@ export default function LoginScreen({ navigation, setUser }) {
                         {formError ? <Text style={styles.errorText}>{formError}</Text> : null}
 
                         <View style={styles.buttonSection}>
-                            <CustomButton label="Login" onPress={handleLogin} />
+                            <CustomButton label={loading ? 'Logging in...' : 'Login'} onPress={handleLogin} />
                         </View>
 
                         <Pressable onPress={() => navigation.navigate('Register')}>
-                            <Text style={styles.linkText}>Create Parent Account</Text>
+                            <Text style={styles.linkText}>Don't have an account? Create one</Text>
                         </Pressable>
                     </View>
                 </ScrollView>
@@ -133,40 +128,59 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 24,
     },
-    container: {
+    card: {
         width: '100%',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 24,
+        padding: 24,
+    },
+    logo: {
+        fontSize: 42,
+        fontWeight: '800',
+        textAlign: 'center',
+        color: '#2F6F2F',
+        marginBottom: 28,
     },
     title: {
-        fontSize: 38,
-        fontWeight: 'bold',
-        marginBottom: 8,
+        fontSize: 22,
+        fontWeight: '700',
+        textAlign: 'center',
+        marginBottom: 16,
         color: '#111111',
     },
     subtitle: {
-        fontSize: 18,
-        marginBottom: 20,
-        color: '#222222',
+        fontSize: 14,
+        textAlign: 'center',
+        marginBottom: 28,
+        color: '#2F6F2F',
+    },
+    label: {
+        fontSize: 12,
+        fontWeight: '600',
+        marginBottom: 8,
+        color: '#111111',
     },
     input: {
-        borderWidth: 1,
-        borderColor: '#CCCCCC',
-        padding: 12,
-        borderRadius: 8,
-        marginBottom: 12,
-        fontSize: 16,
+        backgroundColor: '#D8CEC9',
+        paddingHorizontal: 18,
+        paddingVertical: 14,
+        borderRadius: 24,
+        marginBottom: 18,
+        fontSize: 15,
+        color: '#111111',
     },
     errorText: {
         fontSize: 14,
-        marginBottom: 12,
+        marginBottom: 14,
         color: '#111111',
     },
     buttonSection: {
         marginTop: 4,
-        marginBottom: 16,
+        marginBottom: 24,
     },
     linkText: {
         textAlign: 'center',
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: '600',
         color: '#111111',
     },
