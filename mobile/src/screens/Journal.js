@@ -1,43 +1,52 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelectedChild } from '../context/SelectedChildContext';
-import {
-    View, Text, StyleSheet, ScrollView,
-    ActivityIndicator, Image,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image } from 'react-native';
+
+
+import colors from '../constants/colors';
+import { Lock } from 'lucide-react-native';
+
 
 // const CHILD_ID = "6a28f66e68e34f4224b78383";
 const LEVEL_TITLES = ['Tiny Explorer', 'Curious Explorer', 'Junior Explore', 'Adventure Ranger', 'Master Explore'];
+
 
 const JournalScreen = ({ route }) => {
     const [child, setChild] = useState(null);
     const [badges, setBadges] = useState([]);
     const [loading, setLoading] = useState(true);
 
+
     const { selectedChild } = useSelectedChild();
+
 
     // useEffect(() => {
     //     if(childId)
     //     fetchData();
     // }, [childId]);
- useEffect(() => {
+    useEffect(() => {
         const load = async () => {
             try {
                 const id = selectedChild?._id;
+
 
                 if (!id) {
                     setLoading(false);
                     return;
                 }
 
-                // まず即UI反映（ズレ防止）
+
                 setChild(selectedChild);
+
 
                 const res = await fetch(
                     `${process.env.EXPO_PUBLIC_API_URL}/api/gamification/${id}`
                 );
 
+
                 const data = await res.json();
+
 
                 setChild(data);
                 setBadges(data.badges || []);
@@ -48,8 +57,10 @@ const JournalScreen = ({ route }) => {
             }
         };
 
+
         load();
     }, [selectedChild]);
+
 
     // const fetchData = async (id) => {
     //     try {
@@ -66,7 +77,9 @@ const JournalScreen = ({ route }) => {
     //     }
     // };
 
+
     if (loading) return <ActivityIndicator style={{ flex: 1 }} />;
+
 
     if (!child) {
         return (
@@ -77,12 +90,19 @@ const JournalScreen = ({ route }) => {
         );
     }
 
+
     const earnedCount = child.earnedBadges?.length ?? 0;
-    const levelTitle = LEVEL_TITLES[child.currentLevel -1] ?? 'Tiny Explorer';
+    const levelTitle = LEVEL_TITLES[child.currentLevel - 1] ?? 'Tiny Explorer';
     const progress = badges.length > 0 ? earnedCount / badges.length : 0;
+    const getBadgeIconUrl = (badgeName) => {
+        const fileName = badgeName.replace(/ /g, '_');
+        return `https://curio4985-bucket.s3.us-east-1.amazonaws.com/${fileName}.png`;
+    };
+
 
     return (
         <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+
 
             {/* avatar, name */}
             <View style={styles.profileSection}>
@@ -90,28 +110,32 @@ const JournalScreen = ({ route }) => {
                     {(() => {
                         const avatar = child.avatar;
                         const avatars = [
-                            require('../assets/avatar1.jpg'),
-                            require('../assets/avatar2.jpg'),
-                            require('../assets/avatar3.jpg'),
-                            require('../assets/avatar4.jpg'),
-                            require('../assets/avatar5.jpg'),
-                            require('../assets/avatar6.jpg'),
+                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Fox.png",
+                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Eagle.png",
+                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Beaver.png",
+                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Moose.png",
+                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Wolf.png",
+                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Bear.png"
                         ];
+
 
                         if (typeof avatar === 'string' && avatar.startsWith('http')) {
                             return <Image source={{ uri: avatar }} style={styles.avatarImage} />;
                         }
 
+
                         const idx = parseInt(avatar, 10);
                         if (!isNaN(idx) && avatars[idx]) {
-                            return <Image source={avatars[idx]} style={styles.avatarImage} />;
+                            return <Image source={{ uri: avatars[idx] }} style={styles.avatarImage} />;
                         }
 
-                        return <Text style={styles.avatarEmoji}>🧒</Text>;
+
+                        // return <Text style={styles.avatarEmoji}>🧒</Text>;
                     })()}
                 </View>
                 <Text style={styles.name}>{child.name}</Text>
             </View>
+
 
             {/* level, badge */}
             <View style={styles.levelRow}>
@@ -119,23 +143,33 @@ const JournalScreen = ({ route }) => {
                 <Text style={styles.titleText}>{levelTitle}</Text>
             </View>
 
+
             {/* progress */}
             <View style={styles.progressBarBg}>
                 <View style={[styles.progressBarFill, { width: `${progress * 100}%` }]} />
             </View>
 
+
             {/* summary */}
             <View style={styles.summaryCard}>
-                <Text style={styles.summaryCount}>{earnedCount} achievements unlocked</Text>
+                <Image style={styles.summaryIcon} source={{ uri: 'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Achievements_Unlocked.png' }} />
+                <Text style={styles.summaryCount}>{earnedCount} achievements unlocked!</Text>
                 <Text style={styles.summarySubtitle}>You're doing great, Explorer!</Text>
             </View>
+
 
             {/* all badges */}
             {badges.map((badge) => (
                 <View key={badge.badgeId} style={[styles.badgeCard, !badge.earned && styles.badgeCardLocked]}>
 
+
                     <View style={[styles.badgeIcon, !badge.earned && styles.badgeIconLocked]}>
+                        <Image
+                            source={{ uri: getBadgeIconUrl(badge.name) }}
+                            style={styles.badgeIconImage}
+                        />
                     </View>
+
 
                     <View style={styles.badgeInfo}>
                         <Text style={[styles.badgeName, !badge.earned && styles.textLocked]}>
@@ -149,66 +183,164 @@ const JournalScreen = ({ route }) => {
                         )}
                     </View>
 
+
                     <View style={styles.badgeRight}>
                         {badge.earned
-                            ? <View style={styles.tag}><Text style={styles.tagText}>Unlocked</Text></View>
-                            : <Text style={styles.lockIcon}>🔒</Text>
+                            ? null
+                            : <Lock size={18}></Lock>
                         }
                     </View>
                 </View>
             ))}
 
+
         </ScrollView>
     );
 };
 
-const styles = StyleSheet.create({
-    screen: { flex: 1, backgroundColor: '#fff' },
-    content: { padding: 20, gap: 14, alignItems: 'center' },
-    emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 },
 
-    profileSection: { alignItems: 'center', gap: 8 },
+const styles = StyleSheet.create({
+    screen: {
+        flex: 1,
+        backgroundColor: '#fff'
+    },
+    content: {
+        padding: 20,
+        gap: 14,
+        alignItems: 'center'
+    },
+    emptyState: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20
+    },
+    profileSection: {
+        alignItems: 'center',
+        gap: 8
+    },
     avatar: {
         width: 80, height: 80, borderRadius: 40,
         backgroundColor: '#D9D9D9',
         justifyContent: 'center', alignItems: 'center',
     },
-    avatarImage: { width: 80, height: 80, borderRadius: 40 },
-    avatarEmoji: { fontSize: 36 },
-    name: { fontSize: 22, fontWeight: '700' },
-
-    levelRow: { flexDirection: 'row', justifyContent: 'space-between', width: '100%' },
-    levelText: { fontSize: 13, fontWeight: '600', color: '#333' },
-    titleText: { fontSize: 13, color: '#666' },
-    progressBarBg: { width: '100%', height: 8, borderRadius: 4, backgroundColor: '#E0E0E0' },
-    progressBarFill: { height: 8, borderRadius: 4, backgroundColor: '#333' },
-
+    avatarImage: {
+        width: 100, height: 100, borderRadius: 40
+    },
+    avatarEmoji: {
+        fontSize: 36
+    },
+    name: {
+        fontSize: 40,
+        fontWeight: '700'
+    },
+    levelRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%'
+    },
+    levelText: {
+        fontSize: 16,
+        fontWeight: '400',
+        color: colors.neutralInk
+    },
+    titleText: {
+        fontSize: 16,
+        fontWeight: 400,
+        color: colors.neutralInk
+    },
+    progressBarBg: {
+        width: '100%',
+        height: 18,
+        borderRadius: 15,
+        borderWidth: 1,
+        borderColor: colors.neutralClay
+    },
+    progressBarFill: {
+        height: 18,
+        borderRadius: 15,
+        backgroundColor: colors.secondary
+    },
     summaryCard: {
-        width: '100%', backgroundColor: '#EFEFEF',
-        borderRadius: 16, padding: 20, alignItems: 'center', gap: 4,
+        width: '100%',
+        backgroundColor: colors.tertiary,
+        borderRadius: 16,
+        height: 170,
+        padding: 20,
+        alignItems: 'center',
+        gap: 4,
     },
-    summaryCount: { fontSize: 16, fontWeight: '700' },
-    summarySubtitle: { fontSize: 13, color: '#666' },
-
+    summaryIcon: {
+        width: 80,
+        height: 85
+    },
+    summaryCount: {
+        fontSize: 24,
+        fontWeight: '700'
+    },
+    summarySubtitle: {
+        fontSize: 16,
+        fontWeight: 400,
+        color: colors.neutralInk
+    },
     badgeCard: {
-        width: '100%', backgroundColor: '#EFEFEF',
-        borderRadius: 16, padding: 16,
-        flexDirection: 'row', alignItems: 'center', gap: 14,
+        width: '100%',
+        backgroundColor: colors.tertiary,
+        borderRadius: 16,
+        height: 150,
+        padding: 30,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 14,
+        position: 'relative'
     },
-    badgeCardLocked: { opacity: 0.5 },
-    badgeEmoji: { fontSize: 24 },
-    badgeInfo: { flex: 1, gap: 2 },
-    badgeName: { fontSize: 16, fontWeight: '700' },
-    badgeDesc: { fontSize: 12, color: '#555' },
-    keepGoing: { fontSize: 11, color: '#888', fontStyle: 'italic' },
-    textLocked: { color: '#999' },
-
-    badgeRight: { alignItems: 'center' },
-    tag: {
-        backgroundColor: '#333', borderRadius: 8,
-        paddingHorizontal: 8, paddingVertical: 4,
+    badgeCardLocked: {
+        backgroundColor: '#F2F4F0',
+        opacity: 0.5
     },
-    tagText: { color: '#fff', fontSize: 11, fontWeight: '600' },
+    badgeEmoji: {
+        fontSize: 24
+    },
+    badgeInfo: {
+        flex: 1,
+        gap: 2
+    },
+    badgeIcon: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    badgeIconLocked: {
+        opacity: 0.2,
+    },
+    badgeIconImage: {
+        width: 70,
+        height: 80,
+        resizeMode: 'contain',
+    },
+    badgeName: {
+        fontSize: 24,
+        fontWeight: '700'
+    },
+    badgeDesc: {
+        fontSize: 16,
+        color: colors.neutralInk
+    },
+    keepGoing: {
+        fontSize: 12,
+        color: '#000000',
+    },
+    textLocked: {
+        color: '#999'
+    },
+    badgeRight: {
+        position: 'absolute',
+        top: 50,
+        right: 30,
+    },
 });
 
+
 export default JournalScreen;
+
+
+
