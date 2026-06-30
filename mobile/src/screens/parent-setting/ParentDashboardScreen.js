@@ -1,22 +1,48 @@
-import { View, Text, Button, StyleSheet, ScrollView, TextInput } from 'react-native';
+import { View, Text, Button, StyleSheet, ScrollView, TextInput, Alert } from 'react-native';
 import { useState } from 'react';
 
 import CustomButton from '../../components/CustomButton.js'
 import colors from '../../constants/colors.js'
 
 
-const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
+// const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
 
-export default function ParentDashboardScreen({ navigation, route }) {
+export default function ParentDashboardScreen({ navigation, route, user }) {
 
     // const parentId = "6a15ddc0752c37728664b230";
-    const parentId = route?.params?.parentId;
-
-    const user = route.params?.user;
+    const parentId = user?.id || user?._id;
     const [password, setPassword] = useState('');
+    // const user = route.params?.user;
+    
 
     const handlePress = async () => {
-        console.log("Start Activity!")
+        if(!password){
+            Alert.alert("Error", "Please enter your password");
+            return;
+        }
+
+        try{
+            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/auth/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: user?.email,
+                    password: password,
+                }),
+            });
+
+            const data = await response.json();
+            if(response.ok){
+                navigation.navigate("SettingParentScreen", {parentId, user: data.user});
+            }else{
+                Alert.alert("Incorrect Passwrod", data.message || "Please try again");
+            }
+        }catch(error){
+            console.error("Password valification error: ", error);
+            Alert.alert("Error", "Something went wrong please try again")
+        }
     }
 
     return (
@@ -24,7 +50,7 @@ export default function ParentDashboardScreen({ navigation, route }) {
             <Text style={styles.title}>Parent Dashboard</Text>
             <Text style={styles.subtitle}>Welcome {user?.fullName || user?.name || 'Parent'}</Text>
 
-            <Button title='Settings - Parent Account' onPress={() => navigation.navigate('SettingParentScreen')} />
+            {/* <Button title='Settings - Parent Account' onPress={() => navigation.navigate('SettingParentScreen')} /> */}
             {/* <Button
                 title="Create Child Profile"
                 onPress={() =>

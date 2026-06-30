@@ -4,8 +4,9 @@ import React from 'react'
 import CustomButton from '../../components/CustomButton'
 import colors from '../../constants/colors';
 
-const EditParentAccount = () => {
-  const PARENT_ID = '6a15e296dd882ca29e6355ae';// temporary
+const EditParentAccount = ({route, user}) => {
+  // const PARENT_ID = '6a15e296dd882ca29e6355ae';// temporary
+  const parentId = user?.id || user?._id || route?.params?.parentId;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ const EditParentAccount = () => {
 
   const loadChildren = async() => {
     try{
-      const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${PARENT_ID}`);
+      const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${parentId}`);
       const data = await res.json();
 
       setName(data.name);
@@ -32,7 +33,7 @@ const EditParentAccount = () => {
 
   const handleParentProfileChange = async() => {
     try{
-      const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${PARENT_ID}`, {
+      const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${parentId}`, {
         method: "PATCH",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({

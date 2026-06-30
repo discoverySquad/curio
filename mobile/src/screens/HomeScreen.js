@@ -56,15 +56,11 @@ const HomeScreen = ({ navigation, route }) => {
   //   getChild();
   // }, [childId]);
 
-    useEffect(() => {
-    const loadChild = async () => {
-      try {
-          let id = route?.params?.childId || selectedChild?._id;
-
-          // immediately reflect selectedChild in UI to avoid mismatch
-          if (selectedChild) {
-            setChild(selectedChild);
-          }
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadChild = async () => {
+        try {
+            let id = route?.params?.childId || selectedChild?._id;
 
           if (!id) {
             const saved = await AsyncStorage.getItem('selectedChild');
@@ -107,8 +103,9 @@ const HomeScreen = ({ navigation, route }) => {
       }
     };
 
-    loadChild();
-  }, [childIdFromRoute, selectedChild]);
+      loadChild();
+    }, [route?.params?.childId, selectedChild?._id])
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -200,7 +197,7 @@ const HomeScreen = ({ navigation, route }) => {
       <View style={styles.homeCard}>
         <View style={styles.explorationTime}>
           <View style={styles.circle}>
-            <Image style={styles.timeCircle} source={require('../assets/circle.png')} />
+            <Image style={styles.timeCircle} source={require('../assets/watch.png')} />
           </View>
           <View style={styles.timeLeftBox}>
             <View>
@@ -226,9 +223,9 @@ const HomeScreen = ({ navigation, route }) => {
   
     <Button 
     title='Parent Settings' 
-    onPress={() => navigation.navigate("MainTabs", 
-      {screen: "Parent", 
-       params: {screen: "ParentDashboard", }
+    onPress={() => 
+      navigation.navigate("Parent", 
+      {screen: "ParentDashboard", 
     })} 
     />
 

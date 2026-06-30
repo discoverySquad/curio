@@ -31,7 +31,7 @@ const Time =({ childId, timeLimit, usageTimeToday }) => {
 
   // sync when data is changed
   useEffect(() => {
-     
+    setRemainingSeconds(initialSeconds);
     remainingSecondsRef.current = initialSeconds;
     limitSecondsRef.current = limitSeconds;
   }, [initialSeconds]);

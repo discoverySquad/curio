@@ -1,17 +1,48 @@
 import { useState } from "react";
 import {
-    ScrollView, View, Text, TouchableOpacity, Alert, TextInput, StyleSheet } from "react-native";
+    ScrollView, View, Text, TouchableOpacity, Alert, TextInput, StyleSheet
+} from "react-native";
+import CustomButton from '../../components/CustomButton'
+import colors from '../../constants/colors';
+
 
 const ScreenTime = ({ navigation, route }) => {
     const [customMinutes, setCustomMinutes] = useState("");
     const [selectedTime, setSelectedTime] = useState(null);
+    const [saving, setSaving] = useState(false);
 
-    const childId = route?.params?.childId; 
+    const childId = route?.params?.childId;
     // const CHILD_ID = "6a15ddc0752c37728664b230";
 
-    const saveTime = async (minutes) => {
+    const PRESET_TIMES = [20, 30, 60];
+
+    const handleSelectPreset = (minutes) => {
+        setSelectedTime(minutes);
+        setCustomMinutes("");
+    };
+
+    const handleChangeCustom = (text) => {
+        setCustomMinutes(text);
+        setSelectedTime(null);
+    };
+
+    const saveTime = async () => {
+        const minutes = customMinutes ? Number(customMinutes) : selectedTime;
+
+        if (!minutes || minutes <= 0) {
+            Alert.alert("Error", "Please select or enter a valid time");
+            return;
+        }
+
+        if (!childId) {
+            Alert.alert("Error", "Child profile is missing");
+            return;
+        }
+
         try {
-            await fetch(
+            setSaving(true);
+
+            const res = await fetch(
                 `${process.env.EXPO_PUBLIC_API_URL}/api/child/${childId}`,
                 {
                     method: "PATCH",
@@ -24,21 +55,16 @@ const ScreenTime = ({ navigation, route }) => {
                 }
             );
 
+            if (!res.ok) {
+                throw new Error("Request failed");
+            }
+
             navigation.goBack();
         } catch (error) {
             Alert.alert("Error", "Failed to update time");
+        } finally {
+            setSaving(false);
         }
-    };
-
-    const handleCustom = async () => {
-        const minutes = Number(customMinutes);
-
-        if (!minutes || minutes <= 0) {
-            Alert.alert("Error", "Invalid time");
-            return;
-        }
-
-        await saveTime(minutes);
     };
 
     return (
@@ -50,14 +76,29 @@ const ScreenTime = ({ navigation, route }) => {
                     Choose how long your little explorer can play today.
                 </Text>
 
-                <TouchableOpacity
+                {PRESET_TIMES.map((minutes) => (
+                    <TouchableOpacity
+                        key={minutes}
+                        style={[
+                            styles.button,
+                            selectedTime === minutes && styles.buttonSelected,
+                        ]}
+                        onPress={() => handleSelectPreset(minutes)}
+                    >
+                        <Text style={selectedTime === minutes && styles.buttonTextSelected}>
+                            {minutes}m
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+
+                {/* <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
-                        setSelectedTime(15);
-                        saveTime(15);
+                        setSelectedTime(20);
+                        saveTime(20);
                     }}
                 >
-                    <Text>15m</Text>
+                    <Text>20m</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -82,23 +123,21 @@ const ScreenTime = ({ navigation, route }) => {
 
                 {selectedTime && (
                     <Text>Selected: {selectedTime} minutes</Text>
-                )}
+                )} */}
 
                 {/* custom input */}
                 <TextInput
                     placeholder="Enter minutes (e.g. 45)"
                     keyboardType="numeric"
                     value={customMinutes}
-                    onChangeText={setCustomMinutes}
+                    onChangeText={handleChangeCustom}
                     style={styles.input}
                 />
 
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={handleCustom}
-                >
-                    <Text>Save Limit</Text>
-                </TouchableOpacity>
+                <CustomButton
+                    label={saving ? "Saving..." : "SAVE"}
+                    onPress={saving ? undefined : saveTime}
+                />
             </View>
         </ScrollView>
     );
@@ -124,6 +163,13 @@ const styles = StyleSheet.create({
         width: 120,
         alignItems: "center",
     },
+    buttonSelected: {
+        backgroundColor: "#4D4D4D",
+    },
+    buttonTextSelected: {
+        color: "#FFFFFF",
+        fontWeight: "700",
+    },
     input: {
         borderWidth: 1,
         padding: 10,
@@ -131,6 +177,9 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         borderRadius: 10,
     },
+    saveButtonText: {
+        color: colors.neutralMist
+    }
 });
 
 export default ScreenTime;

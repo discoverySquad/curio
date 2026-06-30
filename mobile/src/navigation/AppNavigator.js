@@ -1,11 +1,14 @@
-import { useState } from 'react';
-import {Image } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Image, View } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import colors from '../constants/colors.js';
 
-// Existing Screens
+import colors from '../constants/colors.js';
+import { useSelectedChild } from '../context/SelectedChildContext';
+
 import HomeScreen from '../screens/HomeScreen.js';
 import JournalScreen from '../screens/Journal.js';
 import Test from '../screens/Test.js';
@@ -15,11 +18,9 @@ import Feedback from '../screens/Feedback.js';
 import SelectCategory from '../screens/SelectCategory.js';
 import ScreenTime from '../screens/parent-setting/ScreenTime.js';
 
-// Auth Screens
 import LoginScreen from '../screens/LoginScreen.js';
 import RegisterScreen from '../screens/RegisterScreen.js';
 
-// Parent Screens
 import ParentDashboardScreen from '../screens/parent-setting/ParentDashboardScreen.js';
 import CreateChildScreen from '../screens/parent-setting/CreateChildScreen.js';
 import SelectChild from '../screens/parent-setting/SelectChild.js';
@@ -27,17 +28,64 @@ import EditParentAccount from '../screens/parent-setting/EditParentAccount.js';
 import SettingParentScreen from '../screens/parent-setting/SettingParentScreen.js';
 import EditChildScreen from '../screens/parent-setting/EditChildScreen.js';
 
-// Scan Screens
 import ScanScreen from '../screens/ScanScreen.js';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const AuthStack = () => {
+const HomeIcon = require('../assets/home_icon.png');
+const JournalIcon = require('../assets/journal_icon.png');
+
+const AuthStack = ({ setUser }) => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="Login">{(props) => <LoginScreen {...props} setUser={setUser} />}</Stack.Screen>
+
+            <Stack.Screen name="Register">{(props) => <RegisterScreen {...props} setUser={setUser} />}</Stack.Screen>
+        </Stack.Navigator>
+    );
+};
+
+const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild' }) => {
+    const parentId = user?.id || user?._id;
+
+    return (
+        <Stack.Navigator initialRouteName={initialRouteName}>
+            <Stack.Screen name="SelectChild" options={{ title: 'Select Child' }}>
+                {(props) => (
+                    <SelectChild
+                        {...props}
+                        route={{
+                            ...props.route,
+                            params: {
+                                ...(props.route.params || {}),
+                                parentId,
+                            },
+                        }}
+                    />
+                )}
+            </Stack.Screen>
+
+            <Stack.Screen name="CreateChild" options={{ title: 'Create Child Profile' }}>
+                {(props) => (
+                    <CreateChildScreen
+                        {...props}
+                        setUser={setUser}
+                        route={{
+                            ...props.route,
+                            params: {
+                                ...(props.route.params || {}),
+                                parentId,
+                            },
+                        }}
+                    />
+                )}
+            </Stack.Screen>
+            <Stack.Screen
+                name="SettingParentScreen"
+                component={SettingParentScreen}
+                options={{ title: 'Settings' }}
+            />
         </Stack.Navigator>
     );
 };
@@ -57,122 +105,163 @@ const HomeStack = () => {
 
 const ScanStack = () => {
     return (
-        <Stack.Navigator>
-            <Stack.Screen name="ActivityDescription" component={ActivityDescription} />
+        <Stack.Navigator
+            screenOptions={{
+                headerBackButtonDisplayMode: 'minimal',
+                headerTintColor: colors.surface,
+                headerButtonStyle: { backgroundColor: 'transparent' },
+                headerBackground: () => (
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: colors.primary,
+                            borderBottomLeftRadius: 32,
+                            borderBottomRightRadius: 32,
+                            height: 60,
+                        }}
+                    />
+                ),
+            }}
+        >
+            <Stack.Screen name="ActivityDescription" component={ActivityDescription} options={{ title: 'Explore the World!' }} />
             <Stack.Screen name="SelectCategory" component={SelectCategory} />
-            <Stack.Screen name="ScanCamera" component={ScanScreen} options={{ title: 'Scan' }} />
+            <Stack.Screen name="ScanCamera" component={ScanScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Feedback" component={Feedback} options={{ title: 'Explore the World!' }} />
             <Stack.Screen name="TryAgain" component={TryAgain} options={{ title: 'Try Again' }} />
         </Stack.Navigator>
     );
 };
 
-const ParentStack = () => {
+const ParentStack = ({user}) => {
     return (
-        <Stack.Navigator screenOptions={{ 
-            headerBackButtonDisplayMode: 'minimal',
-            headerStyle: { backgroundColor: colors.primary },  
-            headerTintColor:  colors.surface,
-            headerButtonStyle: { backgroundColor: 'transparent' }
-        }}>
-            <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} options={{ title: 'Parent Dashboard' }} />
+        <Stack.Navigator
+            screenOptions={{
+                headerBackButtonDisplayMode: 'minimal',
+                headerStyle: { backgroundColor: colors.primary },
+                headerTintColor: colors.surface,
+                headerButtonStyle: { backgroundColor: 'transparent' },
+            }}
+        >
+            
+            <Stack.Screen name="ParentDashboard" options={{ title: 'Parent Dashboard' }}>
+                {(props) => <ParentDashboardScreen {...props} user={user} />}
+            </Stack.Screen>
             <Stack.Screen name="CreateChild" component={CreateChildScreen} options={{ title: 'Create Child Profile' }} />
             <Stack.Screen name="SelectChild" component={SelectChild} options={{ title: 'Select Child' }} />
-            {/* <Stack.Screen name="UpdateChild" component={EditChildScreen} options={{ title: 'Edit Profile' }} /> */}
             <Stack.Screen name="EditChild" component={EditChildScreen} options={{ title: 'Edit Profile' }} />
-      <Stack.Screen name="ScreenTime" component={ScreenTime} />
-      <Stack.Screen name="SelectCategory" component={SelectCategory} />
-      <Stack.Screen name='EditParentAccount' component={EditParentAccount} />
-      <Stack.Screen name='SettingParentScreen' component={SettingParentScreen} options={{ title: 'Settings'}}  />
-
-    </Stack.Navigator>
+            <Stack.Screen name="ScreenTime" component={ScreenTime} />
+            <Stack.Screen name="SelectCategory" component={SelectCategory} />
+            <Stack.Screen name="EditParentAccount" component={EditParentAccount} />
+            <Stack.Screen name="SettingParentScreen" component={SettingParentScreen} options={{ title: 'Settings' }} />
+        </Stack.Navigator>
     );
 };
 
-const HomeIcon = require('../assets/home_icon.png');
-const JournalIcon = require('../assets/journal_icon.png');
-
-const MainTabs = () => {
+const MainTabs = ({user}) => {
     return (
-        <Tab.Navigator screenOptions={{
-            tabBarActiveTintColor: colors.surface,
-            tabBarInactiveTintColor: colors.surface,
-            tabBarStyle:{
-                backgroundColor: colors.primary,
-                borderTopLeftRadius: 24,
-                borderTopRightRadius: 24,
-                // position: 'absolute',
-                borderTopWidth: 0,
-                height: 100,
-                paddingTop: 8,
-                justifyContent: 'center', 
-                paddingLeft: 70,
-            },
-            tabBarItemStyle:{
-                flex: 0, 
-                width: 60,
-            },
-            tabBarItemStyle:{
-                fontSize: 16,
-                fontWeight: '700',
-            },
-        }}>
-            <Tab.Screen name="HomeTab" component={HomeStack} 
-            options={{
-                tabBarIcon: ({ color }) => (
-                  <Image 
-                    source={HomeIcon} 
-                    style={{ width: 22, height: 22, tintColor: color }} 
-                    resizeMode="contain"
-                  />
-                ),
-            }}
-            listeners={({navigation}) => ({
-                tabPress: (e) => {
-                    navigation.navigate("HomeTab", { screen: "Home"});
+        <Tab.Navigator
+            screenOptions={{
+                tabBarActiveTintColor: colors.surface,
+                tabBarInactiveTintColor: colors.surface,
+                tabBarStyle: {
+                    backgroundColor: colors.primary,
+                    borderTopLeftRadius: 24,
+                    borderTopRightRadius: 24,
+                    borderTopWidth: 0,
+                    height: 100,
+                    paddingTop: 8,
+                    justifyContent: 'center',
+                    paddingLeft: 70,
                 },
-            })}
+                tabBarItemStyle: {
+                    flex: 0,
+                    width: 60,
+                },
+            }}
+        >
+            <Tab.Screen
+                name="HomeTab"
+                component={HomeStack}
+                options={{
+                    tabBarIcon: ({ color }) => <Image source={HomeIcon} style={{ width: 22, height: 22, tintColor: color }} resizeMode="contain" />,
+                }}
             />
-            <Tab.Screen name="Scan" component={ScanStack} options={{ tabBarButton: () => null }}/>
-            <Tab.Screen name="Journal" component={JournalScreen} options={{
-                tabBarIcon: ({ color }) => (
-                  <Image 
-                    source={JournalIcon} 
-                    style={{ width: 22, height: 22, tintColor: color }} 
-                    resizeMode="contain"
-                  />
-                ),
-            }}/>
-            <Tab.Screen name="Parent" component={ParentStack} options={{ tabBarButton: () => null }}/>
+
+            <Tab.Screen name="Scan" component={ScanStack} options={{ tabBarButton: () => null }} />
+
+            <Tab.Screen
+                name="Journal"
+                component={JournalScreen}
+                options={{
+                    tabBarIcon: ({ color }) => (
+                        <Image source={JournalIcon} style={{ width: 22, height: 22, tintColor: color }} resizeMode="contain" />
+                    ),
+                }}
+            />
+
+            <Tab.Screen name="Parent" options={{ tabBarButton: () => null }}>
+                {(props) => <ParentStack {...props} user={user} />}
+            </Tab.Screen>
         </Tab.Navigator>
     );
 };
 
-const RootStack = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="SelectChildStart"
-        component={SelectChild}
-        options={{ title: "Select Child" }}
-      />
-
-      <Stack.Screen
-        name="MainTabs"
-        component={MainTabs}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
+const LoadingScreen = () => {
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
+            <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+    );
 };
 
 const AppNavigator = () => {
-    // Temporary:
-    // false = show Login/Register
-    // true = skip auth and show main app
-    const [isLoggedIn] = useState(true);
+    const [user, setUserState] = useState(null);
+    const [setupStartRoute, setSetupStartRoute] = useState('SelectChild');
+    const [loading, setLoading] = useState(true);
+    const { selectedChild, setSelectedChild } = useSelectedChild();
 
-    return <NavigationContainer>{isLoggedIn ? <RootStack /> : <AuthStack />}</NavigationContainer>;
+    useEffect(() => {
+        const loadStoredUser = async () => {
+            try {
+                await SecureStore.deleteItemAsync('token');
+                await SecureStore.deleteItemAsync('user');
+                await AsyncStorage.removeItem('selectedChild');
+
+                setUserState(null);
+                setSelectedChild(null);
+            } catch (error) {
+                console.log('Load user error:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadStoredUser();
+    }, []);
+
+const setUser = async (nextUser, authType = 'login') => {
+    setUserState(nextUser);
+    setSelectedChild(null);
+    await AsyncStorage.removeItem('selectedChild');
+
+    if (authType === 'register') {
+        setSetupStartRoute('CreateChild');
+    } else {
+        setSetupStartRoute('SelectChild');
+    }
+};
+
+    return (
+        <NavigationContainer>
+            {!user ? (
+                <AuthStack setUser={setUser} />
+            ) : !selectedChild ? (
+                <SetupStack user={user} setUser={setUserState} initialRouteName={setupStartRoute} />
+            ) : (
+                <MainTabs user={user} />
+            )}
+        </NavigationContainer>
+    );
 };
 
 export default AppNavigator;

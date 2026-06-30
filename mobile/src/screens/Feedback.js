@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSelectedChild } from '../context/SelectedChildContext';
 import { apiRequest } from '../services/api.js';
 import CustomButton from '../components/CustomButton.js';
+import { typography } from '../constants/fonts';
 
 // const TEST_CHILD_ID = '6a28f66e68e34f4224b78383';
 
@@ -17,6 +18,7 @@ const Feedback = ({ navigation, route }) => {
     const categoryName = route.params?.categoryName || route.params?.category || 'Nature';
 
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [isPressed, setIsPressed] = useState(false);
 
     const objectName = result?.objectName || 'Unknown object';
     const facts = Array.isArray(result?.facts) ? result.facts.slice(0, 3) : [];
@@ -84,7 +86,7 @@ const Feedback = ({ navigation, route }) => {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-            <Text style={styles.h1}>Mission Complete!</Text>
+            <Text style={[styles.h2, typography.h2]}>Mission Complete!</Text>
 
             <View style={styles.imgContainer}>
                 {imageUri ? (
@@ -96,19 +98,37 @@ const Feedback = ({ navigation, route }) => {
                 )}
             </View>
 
-            <View style={styles.soundRow}>
+            {/* <View style={styles.soundRow}>
                 <Pressable style={styles.speakerButton} onPress={toggleSpeech}>
                     <Ionicons name={isSpeaking ? 'volume-mute' : 'volume-high'} size={22} color="#FFFFFF" />
                 </Pressable>
+            </View> */}
+
+            <View style={styles.soundRow}>
+                <Pressable
+                    onPress={toggleSpeech}
+                    onPressIn={() => setIsPressed(true)}
+                    onPressOut={() => setIsPressed(false)}
+                >
+                <Image
+                    source={
+                        isSpeaking
+                        ? require('../assets/State=Pressed.png')
+                        : require('../assets/State=Default.png')
+                    }
+                    style={{ width: 44, height: 44 }}
+                    resizeMode="contain"
+                />
+                </Pressable>
             </View>
 
-            <Text style={styles.message}>Nice exploring! Keep looking around. The world is full of surprises.</Text>
+            <Text style={[styles.message, typography.body]}>Nice exploring! Keep looking around - The world is full of surprises.</Text>
 
             <View style={styles.resultContainer}>
-                <Text style={styles.label}>You scanned:</Text>
+                {/* <Text style={styles.label}>You scanned:</Text> */}
                 <Text style={styles.objectName}>{objectName}</Text>
 
-                <Text style={styles.factTitle}>3 Fun Facts</Text>
+                {/* <Text style={styles.factTitle}>3 Fun Facts</Text> */}
 
                 {facts.length > 0 ? (
                     facts.map((fact, index) => (
@@ -136,7 +156,7 @@ const Feedback = ({ navigation, route }) => {
                 style={styles.changeActivityBtn}
                 onPress={goToChangeCategory}
             >
-                <Text style={styles.changeActivityBtnText}>Change Activity</Text>
+                <Text style={[styles.changeActivityBtnText,typography.body]}>Change Activity</Text>
             </Pressable>
         </ScrollView>
     );
@@ -152,20 +172,20 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         paddingTop: 40,
     },
-    h1: {
+    h2: {
         width: '100%',
         fontSize: 28,
         fontWeight: '700',
         textAlign: 'center',
-        marginBottom: 20,
+        marginBottom: 40,
         color: '#111111',
     },
     imgContainer: {
-        height: 190,
-        width: '100%',
+        height: 318,
+        width: 318,
         borderRadius: 16,
         overflow: 'hidden',
-        marginBottom: 14,
+        marginBottom: 41,
         backgroundColor: '#A6A5A5',
     },
     scannedImage: {
@@ -186,7 +206,7 @@ const styles = StyleSheet.create({
     soundRow: {
         width: '100%',
         alignItems: 'flex-start',
-        marginBottom: 12,
+        marginBottom: 15,
     },
     speakerButton: {
         width: 42,
@@ -197,19 +217,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#4D4D4D',
     },
     message: {
-        width: '100%',
+        // width: '100%',
         textAlign: 'left',
-        fontSize: 15,
-        lineHeight: 21,
-        marginBottom: 18,
-        color: '#222222',
+        // fontSize: 15,
+        lineHeight: 24,
+        marginBottom: 41,
+        color: '#3D332E',
     },
     resultContainer: {
         width: '100%',
-        backgroundColor: '#E8E8E8',
+        backgroundColor: '#F0BA7A',
         borderRadius: 16,
         padding: 18,
-        marginBottom: 20,
+        marginBottom: 41,
     },
     label: {
         fontSize: 14,
@@ -239,13 +259,14 @@ const styles = StyleSheet.create({
         width: '100%',
         marginBottom: 10,
     },
-    changeCategoryBtn: {
-        marginTop: 4,
+    changeActivityBtn: {
+        marginVertical: 18,
     },
-    changeCategoryBtnText: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#111111',
+    changeActivityBtnText: {
+        // fontSize: 16,
+        // fontWeight: '600',
+        color: '#3D332E',
+        // marginVertical: 18
     },
 });
 

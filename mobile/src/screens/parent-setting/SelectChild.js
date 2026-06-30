@@ -1,44 +1,58 @@
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, Button, ScrollView } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelectedChild } from '../../context/SelectedChildContext';
 
-const PARENT_ID = '6a15e296dd882ca29e6355ae'; // temp
+// const PARENT_ID = '6a15e296dd882ca29e6355ae'; // temp
 
-const SelectChild = ({ navigation }) => {
+const SelectChild = ({ navigation, route }) => {
     const [children, setChildren] = useState([]);
 
     useEffect(() => {
         ShowChildren();
     }, []);
 
+    const getParentId = async () => {
+        if (route?.params?.parentId) {
+            return route.params.parentId;
+        }
+
+        const userStr = await SecureStore.getItemAsync('user');
+        const user = userStr ? JSON.parse(userStr) : null;
+
+        return user?.id || user?._id;
+    };
+
     const ShowChildren = async () => {
         try {
-            const res = await fetch(
-                `${process.env.EXPO_PUBLIC_API_URL}/api/parent/${PARENT_ID}`
-            );
+            const parentId = await getParentId();
+
+            if (!parentId) {
+                Alert.alert('Error', 'Parent ID is missing. Please log in again.');
+                return;
+            }
+
+            const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${parentId}`);
 
             const parentData = await res.json();
 
-            console.log("parentData =", parentData);
-            console.log("childId =", parentData.childId);
+            console.log('parentData =', parentData);
+            console.log('childId =', parentData.childId);
 
             const childList = parentData.childId || [];
 
             const list = childList || [];
             //if API returned only IDs, fetch each child's details
             if (typeof list[0] === 'string') {
-
                 try {
                     const newList = [];
 
                     for (let i = 0; i < list.length; i++) {
                         const id = list[i];
 
-                        const res = await fetch(
-                            `${process.env.EXPO_PUBLIC_API_URL}/api/child/${id}`
-                        );
+                        const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/child/${id}`);
 
                         if (res.ok) {
                             const data = await res.json();
@@ -49,18 +63,15 @@ const SelectChild = ({ navigation }) => {
                     }
 
                     setChildren(newList);
-
                 } catch (error) {
-                    console.log("error:", error);
+                    console.log('error:', error);
                     setChildren(list);
                 }
-
             } else {
                 setChildren(list);
             }
-
         } catch (error) {
-            console.error("Failed loading children:", error);
+            console.error('Failed loading children:', error);
         }
     };
 
@@ -70,19 +81,12 @@ const SelectChild = ({ navigation }) => {
         try {
             await AsyncStorage.setItem('selectedChild', JSON.stringify(child));
             console.log('saved child =', child);
-            if (setSelectedChild) setSelectedChild(child);
 
-            navigation.reset({
-                index: 0,
-                routes: [
-                    {
-                        name: 'MainTabs',
-                        params: { screen: 'HomeTab', params: { childId: child._id } }
-                    }
-                ]
-            });
+            if (setSelectedChild) {
+                setSelectedChild(child);
+            }
         } catch (error) {
-            console.error('Failed saving child or navigating:', error);
+            console.error('Failed saving child:', error);
             Alert.alert('Error', 'Could not select child. Please try again.');
         }
     };
@@ -97,27 +101,24 @@ const SelectChild = ({ navigation }) => {
                     const name = typeof child === 'string' ? child : child.name;
                     const avatar = typeof child === 'string' ? null : child.avatar;
                     const avatars = [
-                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Fox.png",
-                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Eagle.png",
-                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Beaver.png",
-                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Moose.png",
-                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Wolf.png",
-                        "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Bear.png"
+                        'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Fox.png',
+                        'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Eagle.png',
+                        'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Beaver.png',
+                        'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Moose.png',
+                        'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Wolf.png',
+                        'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Bear.png',
                     ];
 
                     let avatarSource = require('../../assets/avatar1.jpg');
                     const index = parseInt(avatar, 10);
 
                     if (!isNaN(index) && avatars[index]) {
-                        avatarSource = { uri: avatars[index]};
+                        avatarSource = { uri: avatars[index] };
                     } else if (typeof avatar === 'string' && avatar.startsWith('http')) {
                         avatarSource = { uri: avatar };
                     }
                     return (
-                        <TouchableOpacity
-                            key={id} style={styles.profileItem}
-                            onPress={() => handleSelectChild(child)}
-                        >
+                        <TouchableOpacity key={id} style={styles.profileItem} onPress={() => handleSelectChild(child)}>
                             <Image source={avatarSource} style={styles.avatar} />
                             <Text style={styles.name}>{name}</Text>
                         </TouchableOpacity>
@@ -127,33 +128,27 @@ const SelectChild = ({ navigation }) => {
                     <View style={[styles.avatar, styles.addBtn]}>
                         <Button
                             title="+"
-                            onPress={() => navigation.navigate('MainTabs', {
-                                screen: 'Parent',
-                                params: {
-                                    screen: 'CreateChild',
-                                },
-                            }
-                            )}
+                            onPress={async () => {
+                                const parentId = await getParentId();
+
+                                navigation.navigate('CreateChild', {
+                                    parentId,
+                                });
+                            }}
                             style={styles.addBtnText}
-                        >
-                        </Button>
+                        ></Button>
                     </View>
                     <Text style={styles.name}>Add{'\n'}Profile</Text>
                 </TouchableOpacity>
             </View>
 
-            <Button title='Parent Settings' onPress={() => navigation.navigate('MainTabs', {
-                screen: 'Parent',
-                params: {
-                    screen: 'SettingParentScreen',
-                },
-            })
-            }
+            <Button
+                title="Parent Settings"
+                onPress={() => navigation.navigate('SettingParentScreen')}
             />
-
         </ScrollView>
-    )
-}
+    );
+};
 
 export default SelectChild;
 
