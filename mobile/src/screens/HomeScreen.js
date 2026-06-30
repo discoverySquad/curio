@@ -197,7 +197,7 @@ const HomeScreen = ({ navigation, route }) => {
       <View style={styles.homeCard}>
         <View style={styles.explorationTime}>
           <View style={styles.circle}>
-            <Image style={styles.timeCircle} source={require('../assets/circle.png')} />
+            <Image style={styles.timeCircle} source={require('../assets/watch.png')} />
           </View>
           <View style={styles.timeLeftBox}>
             <View>
@@ -223,9 +223,9 @@ const HomeScreen = ({ navigation, route }) => {
   
     <Button 
     title='Parent Settings' 
-    onPress={() => navigation.navigate("MainTabs", 
-      {screen: "Parent", 
-       params: {screen: "ParentDashboard", }
+    onPress={() => 
+      navigation.navigate("Parent", 
+      {screen: "ParentDashboard", 
     })} 
     />
 

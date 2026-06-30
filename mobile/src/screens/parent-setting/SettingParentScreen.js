@@ -7,10 +7,12 @@ import React from 'react';
 import CustomButton from '../../components/CustomButton.js'
 import { useSelectedChild } from '../../context/SelectedChildContext';
 
-const PARENT_ID = '6a15e296dd882ca29e6355ae';
+// const PARENT_ID = '6a15e296dd882ca29e6355ae';
 // const CHILD_ID  = '6a28f66e68e34f4224b78383';
 
-export default function SettingParentScreen({ navigation }) {
+export default function SettingParentScreen({ navigation, route, user }) {
+    const parentId = user?.id || user?._id || route?.params?.parentId;
+
     const [children, setChildren] = useState([]);
     const [loading, setLoading] = useState(true);
     const [notificationOn, setNotificationOn] = useState(null);
@@ -20,6 +22,15 @@ export default function SettingParentScreen({ navigation }) {
     
     const { selectedChild } = useSelectedChild();
     const currentChildId = selectedChild?._id;
+
+    const avatars = [
+    'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Fox.png',
+    'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Eagle.png',
+    'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Beaver.png',
+    'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Moose.png',
+    'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Wolf.png',
+    'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Bear.png',
+];
 
     useFocusEffect(
     React.useCallback(() => {
@@ -36,13 +47,19 @@ export default function SettingParentScreen({ navigation }) {
     };
 
     const loadChildren = async () => {
+
         try{
-            const parentRes = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${PARENT_ID}`);
+            const parentRes = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${parentId}`);
             const parentData= await parentRes.json();
+
+            console.log("parentData:", JSON.stringify(parentData, null, 2)); //test
 
             setNotificationOn(parentData.notification); 
 
-        const childList = parentData.childId || [];
+            const childList = parentData.childId || [];
+            // setChildren(childList);
+
+        // const childList = parentData.childId || [];
 
         if (childList.length > 0 && typeof childList[0] === 'string') {
           const detailedChildren = [];
@@ -55,6 +72,10 @@ export default function SettingParentScreen({ navigation }) {
           }
 
           setChildren(detailedChildren);
+          const currentChild = detailedChildren.find((child) => child._id === currentChildId);
+            if (currentChild) {
+                setTimeLimit(currentChild.timeLimit);
+            }
         } else {
           setChildren(childList);
         }
@@ -83,7 +104,7 @@ export default function SettingParentScreen({ navigation }) {
 
         setNotificationOn(value);
         try{
-            const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${PARENT_ID}`, {
+            const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${parentId}`, {
                 method: "PATCH",
                 headers: {"Content-Type" : "application/json"},
                 body: JSON.stringify({notification: value}),
@@ -109,7 +130,7 @@ export default function SettingParentScreen({ navigation }) {
 
     const handleArchive = async() => {
     try{
-        const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${PARENT_ID}/archive`, {
+        const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${parentId}/archive`, {
             method: "PATCH",
             headers: {"Content-Type": "application/json"},
         });
@@ -129,7 +150,7 @@ export default function SettingParentScreen({ navigation }) {
 
     const handleDelete = async() => {
     try{
-        const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${PARENT_ID}`, {
+        const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${parentId}`, {
             method: "DELETE",
         });
         if(!res.ok){
@@ -195,35 +216,34 @@ export default function SettingParentScreen({ navigation }) {
                   onPress={() => {
                     if(editMode) return;
 
-                    navigation.navigate("MainTabs", {
-                        screen: "HomeTab",
-                        params: {
-                            screen: "Home",
-                            params: {
-                                childId: child._id,
-                            },
-                        },
+                    navigation.navigate("HomeTab", {
+                      screen: "Home",
+                      params: {
+                        childId: child._id,
+                       },
                     });
                   }}
                   activeOpacity={0.8}
                 >
                   <View style={styles.avatarWrapper}>
-                    <View style={[
-                      styles.profileAvatar,
-                      editMode && styles.profileAvatarEditMode
-                    ]} />
-                    {editMode && (
-                  <TouchableOpacity
-                    style={styles.editChildIcon}
-                    onPress={() => navigation.navigate("EditChild", { childId: child._id })}
-                    hitSlop={8}
-                  >
                     <Image
-                      source={require("../../assets/pencil.png")}
-                      style={styles.editChildPencil}
-                    />
-                  </TouchableOpacity>
-                )}
+                      source={{uri: avatars[child.avatar]}}
+                      style={[
+                        styles.profileAvatar,
+                        editMode && styles.profileAvatarEditMode
+                      ]}
+                      />
+                      {editMode && (
+                        <TouchableOpacity
+                          style={styles.editChildIcon}
+                          onPress={() => navigation.navigate("EditChild", {childId: child._id})}
+                          hitSlop={8}>
+                          <Image
+                            source={require("../../assets/pencil.png")}
+                            style={styles.editChildPencil}
+                          />
+                          </TouchableOpacity>
+                      )}
                   </View>
                   <Text style={styles.profileName}>{child.name}</Text>
                 </TouchableOpacity>
@@ -443,6 +463,11 @@ avatarWrapper: {
   height: 60,
   alignItems: 'center',
   justifyContent: 'center',
+},
+profileAvatar: {
+    width: 60, 
+    height: 60, 
+    borderRadius: 30, 
 },
 profileAvatarEditMode: {
   opacity: 0.4,

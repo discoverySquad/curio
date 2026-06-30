@@ -81,6 +81,11 @@ const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild' }) => {
                     />
                 )}
             </Stack.Screen>
+            <Stack.Screen
+                name="SettingParentScreen"
+                component={SettingParentScreen}
+                options={{ title: 'Settings' }}
+            />
         </Stack.Navigator>
     );
 };
@@ -127,7 +132,7 @@ const ScanStack = () => {
     );
 };
 
-const ParentStack = () => {
+const ParentStack = ({user}) => {
     return (
         <Stack.Navigator
             screenOptions={{
@@ -137,7 +142,10 @@ const ParentStack = () => {
                 headerButtonStyle: { backgroundColor: 'transparent' },
             }}
         >
-            <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} options={{ title: 'Parent Dashboard' }} />
+            
+            <Stack.Screen name="ParentDashboard" options={{ title: 'Parent Dashboard' }}>
+                {(props) => <ParentDashboardScreen {...props} user={user} />}
+            </Stack.Screen>
             <Stack.Screen name="CreateChild" component={CreateChildScreen} options={{ title: 'Create Child Profile' }} />
             <Stack.Screen name="SelectChild" component={SelectChild} options={{ title: 'Select Child' }} />
             <Stack.Screen name="EditChild" component={EditChildScreen} options={{ title: 'Edit Profile' }} />
@@ -149,7 +157,7 @@ const ParentStack = () => {
     );
 };
 
-const MainTabs = () => {
+const MainTabs = ({user}) => {
     return (
         <Tab.Navigator
             screenOptions={{
@@ -191,7 +199,9 @@ const MainTabs = () => {
                 }}
             />
 
-            <Tab.Screen name="Parent" component={ParentStack} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="Parent" options={{ tabBarButton: () => null }}>
+                {(props) => <ParentStack {...props} user={user} />}
+            </Tab.Screen>
         </Tab.Navigator>
     );
 };
@@ -248,7 +258,7 @@ const setUser = async (nextUser, authType = 'login') => {
             ) : !selectedChild ? (
                 <SetupStack user={user} setUser={setUserState} initialRouteName={setupStartRoute} />
             ) : (
-                <MainTabs />
+                <MainTabs user={user} />
             )}
         </NavigationContainer>
     );
