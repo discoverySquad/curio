@@ -36,6 +36,8 @@ const Tab = createBottomTabNavigator();
 const HomeIcon = require('../assets/home_icon.png');
 const JournalIcon = require('../assets/journal_icon.png');
 
+
+
 const AuthStack = ({ setUser }) => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -81,6 +83,9 @@ const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild' }) => {
                     />
                 )}
             </Stack.Screen>
+            <Stack.Screen name='ParentDashboard' options={{ title: "Parent Dashborad"}}>
+                {(props) => <ParentDashboardScreen {...props} user={user} />}
+            </Stack.Screen>
             <Stack.Screen
                 name="SettingParentScreen"
                 component={SettingParentScreen}
@@ -90,10 +95,12 @@ const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild' }) => {
     );
 };
 
-const HomeStack = () => {
+const HomeStack = ({ onLogout }) => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Home"  options={{}}>
+                {(props) => <HomeScreen {...props} onLogout={onLogout} />}
+            </Stack.Screen>
             <Stack.Screen name="Test" component={Test} />
             <Stack.Screen name="ActivityDescription" component={ActivityDescription} />
             <Stack.Screen name="TryAgain" component={TryAgain} />
@@ -132,7 +139,7 @@ const ScanStack = () => {
     );
 };
 
-const ParentStack = ({user}) => {
+const ParentStack = ({user, onLogout }) => {
     return (
         <Stack.Navigator
             screenOptions={{
@@ -152,12 +159,14 @@ const ParentStack = ({user}) => {
             <Stack.Screen name="ScreenTime" component={ScreenTime} />
             <Stack.Screen name="SelectCategory" component={SelectCategory} />
             <Stack.Screen name="EditParentAccount" component={EditParentAccount} />
-            <Stack.Screen name="SettingParentScreen" component={SettingParentScreen} options={{ title: 'Settings' }} />
+            <Stack.Screen name="SettingParentScreen" options={{ title: 'Settings' }} >
+                {(props) => <SettingParentScreen {...props} user={user} onLogout={onLogout} />}
+            </Stack.Screen>
         </Stack.Navigator>
     );
 };
 
-const MainTabs = ({user}) => {
+const MainTabs = ({user, onLogout}) => {
     return (
         <Tab.Navigator
             screenOptions={{
@@ -181,11 +190,12 @@ const MainTabs = ({user}) => {
         >
             <Tab.Screen
                 name="HomeTab"
-                component={HomeStack}
                 options={{
                     tabBarIcon: ({ color }) => <Image source={HomeIcon} style={{ width: 22, height: 22, tintColor: color }} resizeMode="contain" />,
                 }}
-            />
+            >
+                {(props) => <HomeStack {...props} onLogout={onLogout} />}
+            </Tab.Screen>
 
             <Tab.Screen name="Scan" component={ScanStack} options={{ tabBarButton: () => null }} />
 
@@ -200,7 +210,7 @@ const MainTabs = ({user}) => {
             />
 
             <Tab.Screen name="Parent" options={{ tabBarButton: () => null }}>
-                {(props) => <ParentStack {...props} user={user} />}
+                {(props) => <ParentStack {...props} user={user} onLogout={onLogout} />}
             </Tab.Screen>
         </Tab.Navigator>
     );
@@ -219,6 +229,14 @@ const AppNavigator = () => {
     const [setupStartRoute, setSetupStartRoute] = useState('SelectChild');
     const [loading, setLoading] = useState(true);
     const { selectedChild, setSelectedChild } = useSelectedChild();
+
+    const logout = async () => {
+    await SecureStore.deleteItemAsync('token');
+    await SecureStore.deleteItemAsync('user');
+    await AsyncStorage.removeItem('selectedChild');
+    setSelectedChild(null);
+    setUserState(null);
+};
 
     useEffect(() => {
         const loadStoredUser = async () => {
@@ -258,7 +276,7 @@ const setUser = async (nextUser, authType = 'login') => {
             ) : !selectedChild ? (
                 <SetupStack user={user} setUser={setUserState} initialRouteName={setupStartRoute} />
             ) : (
-                <MainTabs user={user} />
+                <MainTabs user={user} onLogout={logout} />
             )}
         </NavigationContainer>
     );

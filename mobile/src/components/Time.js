@@ -17,7 +17,7 @@ const saveUsageTime = async (childId, usedSeconds) => {
 };
 
 // time component
-const Time =({ childId, timeLimit, usageTimeToday }) => {
+const Time =({ childId, timeLimit, usageTimeToday, onTimeUp }) => {
   // Type conversion and validation
   const timeLimitNum = Number(timeLimit) || 0;
   const usageTimeTodayNum = Number(usageTimeToday) || 0;
@@ -71,6 +71,13 @@ const Time =({ childId, timeLimit, usageTimeToday }) => {
     const subscription = AppState.addEventListener("change", handleAppStateChange);
     return () => subscription.remove(); // clean old data
   }, []);
+
+  // for auto logout
+  useEffect(() => {
+      if (remainingSeconds === 0 && onTimeUp) {
+        onTimeUp();
+      }
+    }, [remainingSeconds]);
 
   const minutes = Math.floor(remainingSeconds / 60);
   const seconds = remainingSeconds % 60;

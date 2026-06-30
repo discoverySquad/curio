@@ -144,7 +144,8 @@ const SelectChild = ({ navigation, route }) => {
 
             <Button
                 title="Parent Settings"
-                onPress={() => navigation.navigate('SettingParentScreen')}
+                onPress={() => 
+                    navigation.navigate("ParentDashboard")}
             />
         </ScrollView>
     );

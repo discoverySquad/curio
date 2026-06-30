@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import colors from "../constants/colors.js";
 
-const HomeScreen = ({ navigation, route }) => {
+const HomeScreen = ({ navigation, route, onLogout }) => {
 
   // const childId = route?.params?.childId;
   // const CHILD_ID = "6a28f66e68e34f4224b78383"; // for temporary test
@@ -21,7 +21,6 @@ const HomeScreen = ({ navigation, route }) => {
   const [todayMissionCount, setTodayMissionCount] = useState(0);
   const goalTotal = 5;
   // const [timeLimit, setTimeLimit] = useState("");
-
 
   // useEffect(() => {
   //   console.log("route params =", route?.params);
@@ -209,6 +208,7 @@ const HomeScreen = ({ navigation, route }) => {
                   childId={child._id}
                   timeLimit={child.timeLimit}
                   usageTimeToday={child.usageTimeToday}
+                  onTimeUp={onLogout}
                 />
               ) : (
                 <Text>Loading...</Text>
