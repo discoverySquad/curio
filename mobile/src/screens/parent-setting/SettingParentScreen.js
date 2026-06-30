@@ -10,7 +10,7 @@ import { useSelectedChild } from '../../context/SelectedChildContext';
 // const PARENT_ID = '6a15e296dd882ca29e6355ae';
 // const CHILD_ID  = '6a28f66e68e34f4224b78383';
 
-export default function SettingParentScreen({ navigation, route, user }) {
+export default function SettingParentScreen({ navigation, route, user, onLogout }) {
     const parentId = user?.id || user?._id || route?.params?.parentId;
 
     const [children, setChildren] = useState([]);
@@ -91,7 +91,9 @@ export default function SettingParentScreen({ navigation, route, user }) {
            }
     };
 
-
+    const handleLogout = async () => {
+        await onLogout();
+    };
 
     const handleSelectChild = (child) => {
         navigation.navigate('Scan', {
@@ -122,10 +124,6 @@ export default function SettingParentScreen({ navigation, route, user }) {
 
     const handleTempClick = () => {
         console.log("temp click");
-    }
-
-    const handleLogout = () => {
-        console.log("logout");
     }
 
     const handleArchive = async() => {
