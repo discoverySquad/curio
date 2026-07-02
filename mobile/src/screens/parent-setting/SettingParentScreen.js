@@ -6,6 +6,7 @@ import React from 'react';
 
 import CustomButton from '../../components/CustomButton.js'
 import { useSelectedChild } from '../../context/SelectedChildContext';
+import { typography } from '../../constants/fonts.js';
 
 // const PARENT_ID = '6a15e296dd882ca29e6355ae';
 // const CHILD_ID  = '6a28f66e68e34f4224b78383';
@@ -22,6 +23,8 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
     
     const { selectedChild } = useSelectedChild();
     const currentChildId = selectedChild?._id;
+
+    const [optionsModalVisible, setOptionsModalVisible] = useState(false);
 
     const avatars = [
     'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Fox.png',
@@ -168,28 +171,17 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
     navigation.setOptions({
         headerRight: () => (
             <TouchableOpacity 
-                onPress={() => {
-                    Alert.alert(
-                        "Account Options",
-                        "",
-                        [
-                            { text: "Archive Account", onPress: handleArchive },
-                            { text: "Delete Account", onPress: handleDelete, style: "destructive" },
-                            { text: "Cancel", style: "cancel" },
-                        ]
-                    );
-                }}
+                onPress={() => setOptionsModalVisible(true)}
                 style={{ marginRight: 4 }}
             >
                 <Image 
                     source={require('../../assets/Delete-Profile-Icon-Parent.png')}
-                    style={{ width: 32, height: 26, }}
+                    style={{ width: 32, height: 26 }}
                 />
-
             </TouchableOpacity>
-          ),
-        });
-    }, [navigation, handleArchive, handleDelete]);
+        ),
+    });
+}, [navigation]);
 
 
     if(loading){
@@ -326,6 +318,40 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
                 </View>
             </Modal> */}
 
+            <Modal
+    visible={optionsModalVisible}
+    transparent={true}
+    animationType='fade'
+>
+    <View style={styles.modalOverlay}>
+        <View style={styles.modalBox}>
+            <Text style={[styles.modalTitle, typography.h2]}>Are you sure?</Text>
+            
+            <Text style={[styles.modalText, typography.body]}>This will archive the child profile. Achievements, badges, and points will be saved.</Text>
+            <CustomButton
+                style={[styles.archiveBtn,typography.heading]}
+                label="Archive Account"
+                onPress={() => {
+                    setOptionsModalVisible(false);
+                    handleArchive();
+                }}
+            />
+
+            <CustomButton
+                style={[styles.deleteBtn,typography.heading]}
+                label="Delete Account"
+                onPress={() => {
+                    setOptionsModalVisible(false);
+                    handleDelete();
+                }}
+            />
+
+            <TouchableOpacity onPress={() => setOptionsModalVisible(false)}>
+                <Text style={[styles.cancelText, typography.body]}>Cancel</Text>
+            </TouchableOpacity>
+        </View>
+    </View>
+</Modal>
         </ScrollView>
     );
 }
@@ -495,4 +521,11 @@ editProfile: {
   alignItems: 'center',
   marginTop: 4,
 },
+modalText:{
+  textAlign:"center",
+  marginBottom: 10
+},
+deleteBtn:{
+  marginBottom: 20
+}
 });

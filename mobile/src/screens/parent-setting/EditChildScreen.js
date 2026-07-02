@@ -5,6 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 import { apiRequest } from '../../services/api.js';
 import CustomButton from '../../components/CustomButton.js';
 import colors from '../../constants/colors.js';
+import { typography } from '../../constants/fonts.js';
 
 export default function EditChildScreen({ navigation, route }){
   const { childId } = route.params;
@@ -173,11 +174,14 @@ export default function EditChildScreen({ navigation, route }){
         >
           <View style={styles.modalOverlay}>
               <View style={styles.modalBox}>
-                  <Text style={styles.modalTitle}>Are you sure?</Text>
-                  <Text style={styles.modalText}>This will archive the child profile. Achievements, badges, and points will be saved.</Text>
-                  <CustomButton label="Archive Profile" onPress={handleArchive} />
+                  <Text style={[styles.modalTitle, typography.h2]}>Are you sure?</Text>
+                  <Text style={[styles.modalText, typography.body]}>This will archive the child profile. Achievements, badges, and points will be saved.</Text>
+                  <CustomButton 
+                  label="Archive Profile"
+                  style={typography.heading} 
+                  onPress={handleArchive} />
                   <TouchableOpacity onPress={() => setArchiveModalVisible(false)}>
-                      <Text style={styles.cancelText}>Cancel</Text>
+                      <Text style={[styles.cancelText, typography.body]}>Cancel</Text>
                   </TouchableOpacity>
               </View>
           </View>
@@ -277,9 +281,11 @@ archiveLink: {
   modalBox: {
     width: "80%",
     backgroundColor: "#fff",
-    borderRadius: 24,
+    borderRadius: 32,
     padding: 24,
     alignItems: "center",
+    paddingVertical: 21,
+    paddingHorizontal: 34
   },
   modalTitle: {
     fontSize: 18,
@@ -295,6 +301,6 @@ archiveLink: {
   cancelText: {
     fontSize: 12,
     color: '#555',
-    marginTop: 8,
+    marginTop: 20,
   },
 });
