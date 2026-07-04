@@ -106,8 +106,6 @@ export default function ScanScreen({ navigation, route }) {
                     childId,
                 });
 
-                console.log('verifyData:', verifyData);
-
                 if (!verifyData.isMatch) {
                     navigation.navigate('TryAgain', {
                         childId,
@@ -133,11 +131,9 @@ export default function ScanScreen({ navigation, route }) {
             });
 
             try {
-                const scanResp = await apiRequest('/api/gamification/scan', 'POST', {
+                await apiRequest('/api/gamification/scan', 'POST', {
                     childId,
                 });
-
-                console.log('completeScan response:', scanResp);
             } catch (error) {
                 console.log('completeScan failed:', error.message || error);
             }
@@ -150,8 +146,6 @@ export default function ScanScreen({ navigation, route }) {
             });
 
             try {
-                console.log('gamification response:', gamificationResp);
-
                 if (gamificationResp?.child) {
                     const updatedChild = gamificationResp.child;
 
@@ -201,14 +195,7 @@ export default function ScanScreen({ navigation, route }) {
                 </Pressable>
 
                 <View pointerEvents="none" style={styles.focusOverlay}>
-                    <Animated.View
-                        style={[
-                            styles.focusBox,
-                            {
-                                transform: [{ scale: focusScale }],
-                            },
-                        ]}
-                    >
+                    <Animated.View style={[styles.focusBox, { transform: [{ scale: focusScale }] }]}>
                         <View style={[styles.corner, styles.cornerTopLeft]} />
                         <View style={[styles.corner, styles.cornerTopRight]} />
                         <View style={[styles.corner, styles.cornerBottomLeft]} />
@@ -227,7 +214,6 @@ export default function ScanScreen({ navigation, route }) {
                 <View style={styles.modalOverlay}>
                     <View style={[styles.modalBox, warning?.severity === 'high' && styles.highWarning]}>
                         <Text style={styles.warningTitle}>{warning?.severity === 'high' ? 'Safety Alert' : 'Try Something Else'}</Text>
-
                         <Text style={styles.warningText}>{warning?.message}</Text>
 
                         <Pressable style={styles.modalButton} onPress={() => setWarning(null)}>
@@ -243,20 +229,21 @@ export default function ScanScreen({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#000000',
     },
     cameraFrame: {
         flex: 1,
         backgroundColor: '#000000',
         overflow: 'hidden',
         position: 'relative',
+        marginTop: -28,
     },
     camera: {
         flex: 1,
     },
     flashButton: {
         position: 'absolute',
-        top: 34,
+        top: 62,
         left: 22,
         width: 34,
         height: 34,
@@ -268,7 +255,7 @@ const styles = StyleSheet.create({
     },
     helpButton: {
         position: 'absolute',
-        top: 34,
+        top: 62,
         right: 22,
         width: 34,
         height: 34,
