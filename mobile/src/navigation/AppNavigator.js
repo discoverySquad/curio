@@ -349,12 +349,16 @@ const ParentStack = ({ user, onLogout }) => {
             <Stack.Screen name="EditChild" component={EditChildScreen} options={{ title: 'Edit Profile' }} />
             <Stack.Screen name="ScreenTime" component={ScreenTime} options={{ title: 'Screen Time' }} />
             <Stack.Screen name="SelectCategory" component={SelectCategory} options={{ title: 'Choose Activity' }} />
-            <Stack.Screen name="EditParentAccount" component={EditParentAccount} options={{ title: 'Edit Account' }} />
+            <Stack.Screen name="EditParentAccount" options={{ title: 'Edit Account' }} >
+                {(props) => <EditParentAccount {...props} user={user} />}
+            </Stack.Screen>
 
             <Stack.Screen name="SettingParentScreen" options={{ title: 'Settings' }}>
                 {(props) => <SettingParentScreen {...props} user={user} onLogout={onLogout} />}
             </Stack.Screen>
-            <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ title: 'Change Password' }} />
+            <Stack.Screen name="ChangePassword" options={{ title: 'Change Password' }} >
+                {(props) => <ChangePassword {...props} user={user} />}
+            </Stack.Screen>
         </Stack.Navigator>
     );
 };

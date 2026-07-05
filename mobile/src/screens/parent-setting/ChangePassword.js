@@ -6,13 +6,13 @@ import { Ionicons } from '@expo/vector-icons';
 import CustomButton from '../../components/CustomButton'
 import colors from '../../constants/colors';
 
-const ChangePassword = ({ route }) => {
+const ChangePassword = ({ route, user }) => {
 
-  const user = route?.params?.user;
+  // const user = route?.params?.user;
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, newConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -89,7 +89,6 @@ const ChangePassword = ({ route }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.label}>Current Password</Text>
         <PasswordInput
           label="Current Password"
           value={currentPassword}
