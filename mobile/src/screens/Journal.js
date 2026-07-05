@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelectedChild } from '../context/SelectedChildContext';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image } from 'react-native';
-
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import colors from '../constants/colors';
 import { Lock } from 'lucide-react-native';
-
 
 // const CHILD_ID = "6a28f66e68e34f4224b78383";
 const LEVEL_TITLES = ['Tiny Explorer', 'Curious Explorer', 'Junior Explore', 'Adventure Ranger', 'Master Explore'];
 
 
 const JournalScreen = ({ route }) => {
+    const navigation = useNavigation();
+
     const [child, setChild] = useState(null);
     const [badges, setBadges] = useState([]);
     const [loading, setLoading] = useState(true);
-
-
     const { selectedChild } = useSelectedChild();
 
 
@@ -30,23 +28,18 @@ const JournalScreen = ({ route }) => {
             try {
                 const id = selectedChild?._id;
 
-
                 if (!id) {
                     setLoading(false);
                     return;
                 }
 
-
                 setChild(selectedChild);
-
 
                 const res = await fetch(
                     `${process.env.EXPO_PUBLIC_API_URL}/api/gamification/${id}`
                 );
 
-
                 const data = await res.json();
-
 
                 setChild(data);
                 setBadges(data.badges || []);
@@ -56,7 +49,6 @@ const JournalScreen = ({ route }) => {
                 setLoading(false);
             }
         };
-
 
         load();
     }, [selectedChild]);
@@ -106,32 +98,37 @@ const JournalScreen = ({ route }) => {
 
             {/* avatar, name */}
             <View style={styles.profileSection}>
-                <View style={styles.avatar}>
-                    {(() => {
-                        const avatar = child.avatar;
-                        const avatars = [
-                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Fox.png",
-                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Eagle.png",
-                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Beaver.png",
-                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Moose.png",
-                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Wolf.png",
-                            "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Bear.png"
-                        ];
+                <View style={styles.avatarContainer}>
+                    <View style={styles.avatar}>
+                        {(() => {
+                            const avatar = child.avatar;
+                            const avatars = [
+                                "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Fox.png",
+                                "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Eagle.png",
+                                "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Beaver.png",
+                                "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Moose.png",
+                                "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Wolf.png",
+                                "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Bear.png"
+                            ];
 
 
-                        if (typeof avatar === 'string' && avatar.startsWith('http')) {
-                            return <Image source={{ uri: avatar }} style={styles.avatarImage} />;
-                        }
+                            if (typeof avatar === 'string' && avatar.startsWith('http')) {
+                                return <Image source={{ uri: avatar }} style={styles.avatarImage} />;
+                            }
 
 
-                        const idx = parseInt(avatar, 10);
-                        if (!isNaN(idx) && avatars[idx]) {
-                            return <Image source={{ uri: avatars[idx] }} style={styles.avatarImage} />;
-                        }
+                            const idx = parseInt(avatar, 10);
+                            if (!isNaN(idx) && avatars[idx]) {
+                                return <Image source={{ uri: avatars[idx] }} style={styles.avatarImage} />;
+                            }
 
 
-                        // return <Text style={styles.avatarEmoji}>🧒</Text>;
-                    })()}
+                            // return <Text style={styles.avatarEmoji}>🧒</Text>;
+                        })()}
+                    </View>
+                    <Pressable onPress={() => navigation.navigate('AvatarChange', { childId: child?._id || selectedChild?._id })}>
+                        <Image style={styles.pen} source={require('../assets/editButton.png')} />
+                    </Pressable>
                 </View>
                 <Text style={styles.name}>{child.name}</Text>
             </View>
@@ -219,6 +216,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 8
     },
+    avatarContainer: {
+        position: 'relative',
+        width: 100,
+        height: 100,
+    },
     avatar: {
         width: 80, height: 80, borderRadius: 40,
         backgroundColor: '#D9D9D9',
@@ -229,6 +231,14 @@ const styles = StyleSheet.create({
     },
     avatarEmoji: {
         fontSize: 36
+    },
+    pen: {
+        position: 'absolute',
+        right: 45,
+        bottom: -26,
+        width: 28,
+        height: 28,
+        zIndex: 10,
     },
     name: {
         fontSize: 40,
