@@ -19,10 +19,10 @@ const EditParentAccount = ({navigation, route, user}) => {
 
   const loadParent = async() => {
     try{
-      console.log("parentId:", parentId);  // test
+      // console.log("parentId:", parentId);  // test
       const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${parentId}`);
       const data = await res.json();
-      console.log("loaded parent data:", data);  // test
+      // console.log("loaded parent data:", data);  // test
 
       setName(data.name);
       setEmail(data.email);
@@ -49,8 +49,8 @@ const EditParentAccount = ({navigation, route, user}) => {
       }
 
       const data = await res.json();
-      console.log("response status:", res.status); //test
-      console.log("updated parent: ", data);
+      // console.log("response status:", res.status); //test
+      // console.log("updated parent: ", data);
       setShowModal(true)
       
     }catch(error){
