@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, Button, Alert, Modal, TouchableOpacity } from 'react-native'
 import React from 'react'
 import CustomButton from '../../components/CustomButton'
-import colors from '../../constants/colors';
+import colors from '../../constants/colors.js'
 
-const EditParentAccount = ({route, user}) => {
+const EditParentAccount = ({navigation, route, user}) => {
   // const PARENT_ID = '6a15e296dd882ca29e6355ae';// temporary
   const parentId = user?.id || user?._id || route?.params?.parentId;
 
@@ -14,13 +14,15 @@ const EditParentAccount = ({route, user}) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-      loadChildren();
+      loadParent();
     }, []);
 
-  const loadChildren = async() => {
+  const loadParent = async() => {
     try{
+      console.log("parentId:", parentId);  // test
       const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${parentId}`);
       const data = await res.json();
+      console.log("loaded parent data:", data);  // test
 
       setName(data.name);
       setEmail(data.email);
@@ -41,20 +43,24 @@ const EditParentAccount = ({route, user}) => {
           email
         }),
       });
-      const data = res.json();
-      console.log("updated parent: ", data);
-      setShowModal(true)
 
       if(!res.ok){
         throw new Error("Fail updating parent profile");
       }
+
+      const data = await res.json();
+      console.log("response status:", res.status); //test
+      console.log("updated parent: ", data);
+      setShowModal(true)
+      
     }catch(error){
-      console.log
+    console.error("Update error:", error); 
+    Alert.alert("Error", "Failed to update profile");
     }
   };
 
   const handleParentPasswordChange = () => {
-    console.log("change password")
+    navigation.navigate("ChangePassword", { user });
   }
 
   if (loading) {
@@ -64,7 +70,6 @@ const EditParentAccount = ({route, user}) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.formContainer}>
-        <Text>EditParentAccount</Text>
          <Text style={styles.label}>Name</Text>
          <TextInput 
           style={styles.input} 
@@ -80,9 +85,15 @@ const EditParentAccount = ({route, user}) => {
           autoCapitalize='none' 
          />
 
-         <CustomButton style={styles.changePassword} label="Change Password" onPress={handleParentPasswordChange} />
+         <CustomButton style={styles.saveChangeButton} label="Save Changes" onPress={handleParentProfileChange} />
+
+         
       </View>
-      <CustomButton label="Confirm Changes" onPress={handleParentProfileChange} />
+
+      <TouchableOpacity style={styles.changePasswordButton} onPress={handleParentPasswordChange}>
+        <Text style={styles.changePasswordText}>Change Password</Text>
+      </TouchableOpacity>
+      
 
       <Modal
         visible={showModal}
@@ -91,9 +102,11 @@ const EditParentAccount = ({route, user}) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
             <Text style={styles.modalText}>
-              Your changes have been saved!
+              Changes Saved
             </Text>
-            <CustomButton label="OK" onPress={() => setShowModal(false)} />
+            <TouchableOpacity onPress={() => setShowModal(false)}> 
+              <Text style={styles.closeText}>Close</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -106,12 +119,22 @@ export default EditParentAccount
 const styles = StyleSheet.create({
   container:{
     flex: 1,
-    backgroundColor: '#f5f5f5',
     padding: 16
     },
     formContainer: {
+      backgroundColor: colors.tertiary,
+      borderRadius: 32,
+      padding: 24,
       marginTop: 24,
-      marginBottom: 24.
+      marginBottom: 48,
+      gap: 8,
+    },
+    label: {
+      fontSize: 14,
+      fontWeight: 600,
+      color: "#000",
+      marginTop: 24,
+      marginBottom: 4,
     },
     changeButton: {
     borderColor: colors.tertiary,
@@ -123,19 +146,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: "100%",
     },
-    changePassword: {
-      borderColor:colors.tertiary,
-      backgroundColor: "#FFF"
+    changePasswordButton: {
+      borderWidth: 1.5,
+    borderColor: colors.tertiary,
+    borderRadius: 32,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    marginTop: 8,
     },
+    changePasswordText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+  },
     input: {
         height: 56,
-        borderColor: '#ccc',
-        borderWidth: 1,
         backgroundColor: '#fff',
         borderRadius: 32,
-        padding: 8,
+        paddingHorizontal: 8,
+        fontSize: 15,
         marginVertical: 4,
-        marginHorizontal: 8,
+    },
+    saveChangeButton: {
+      marginTop: 24,
     },
     modalOverlay: {
       flex: 1,
@@ -147,11 +182,13 @@ const styles = StyleSheet.create({
       width: "80%",
       backgroundColor: "#fff",
       borderRadius:24,
-      padding: 24,
+      paddingVertical: 32,
+      paddingHorizontal: 24,
      alignItems: "center",
     },
     modalText: {
-      fontSize: 12,
-      color: '#555',
+      fontSize: 24,
+      color: 'colors.neutral',
+      marginBottom:24,
 },
 })

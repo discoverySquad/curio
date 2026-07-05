@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, ScrollView, TextInput, Alert } from 'react-native';
+import { View, Text, Button, StyleSheet, ScrollView, TextInput, Alert, Image } from 'react-native';
 import { useState } from 'react';
 
 import CustomButton from '../../components/CustomButton.js'
@@ -47,8 +47,7 @@ export default function ParentDashboardScreen({ navigation, route, user }) {
 
     return (
         <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-            <Text style={styles.title}>Parent Dashboard</Text>
-            <Text style={styles.subtitle}>Welcome {user?.fullName || user?.name || 'Parent'}</Text>
+            
 
             {/* <Button title='Settings - Parent Account' onPress={() => navigation.navigate('SettingParentScreen')} /> */}
             {/* <Button
@@ -74,6 +73,7 @@ export default function ParentDashboardScreen({ navigation, route, user }) {
             /> */}
 
             <View style={styles.mainTable}>
+                <Image style={styles.lock} source={require('../../assets/lock.png')} />
                 <Text style={styles.mainText}>Parent Account</Text>
                 <Text style={styles.subText}>Enter your password to manage your settings</Text>
 
@@ -108,18 +108,27 @@ const styles = StyleSheet.create({
         borderRadius: 32,
         width: "90%",
         height: 500,
-        backgroundColor: colors.neutralMist,
+        backgroundColor: colors.tertiary,
     },
     mainText: {
         fontSize: 28,
         fontWeight: 'bold',
         marginBottom: 10,
         textAlign: 'center',
+        color: colors.neutral,
     },
     subText: {
         fontSize: 18,
-        marginBottom: 10,
+        marginBottom: 48,
         textAlign: 'center',
+        color: colors.neutral,
+    },
+    lock: {
+        alignSelf: 'center',
+        width: 60,
+        height: 60,
+        marginBottom: 20,
+        resizeMode: 'contain',
     },
     input: {
         height: 56,
@@ -127,11 +136,15 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         backgroundColor: '#fff',
         borderRadius: 32,
-        padding: 8,
+        padding: 16,
         marginVertical: 4,
         marginHorizontal: 0,
+        color: colors.neutralInk,
     },
     forgetPassword: {
-        marginBottom: 16,
+        marginBottom: 24,
+        marginTop: 8,
+        textAlign: "right",
+
     }
 });
