@@ -41,20 +41,23 @@ const EditParentAccount = ({route, user}) => {
           email
         }),
       });
-      const data = res.json();
-      console.log("updated parent: ", data);
-      setShowModal(true)
 
       if(!res.ok){
         throw new Error("Fail updating parent profile");
       }
+
+      const data = await res.json();
+      console.log("updated parent: ", data);
+      setShowModal(true)
+      
     }catch(error){
-      console.log
+    console.error("Update error:", error); 
+    Alert.alert("Error", "Failed to update profile");
     }
   };
 
   const handleParentPasswordChange = () => {
-    console.log("change password")
+    navigation.navigate("ChangePassword", { user });
   }
 
   if (loading) {
@@ -80,9 +83,11 @@ const EditParentAccount = ({route, user}) => {
           autoCapitalize='none' 
          />
 
+         <CustomButton label="Confirm Changes" onPress={handleParentProfileChange} />
+
          <CustomButton style={styles.changePassword} label="Change Password" onPress={handleParentPasswordChange} />
       </View>
-      <CustomButton label="Confirm Changes" onPress={handleParentProfileChange} />
+      
 
       <Modal
         visible={showModal}
@@ -91,9 +96,11 @@ const EditParentAccount = ({route, user}) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
             <Text style={styles.modalText}>
-              Your changes have been saved!
+              Changes Saved
             </Text>
-            <CustomButton label="OK" onPress={() => setShowModal(false)} />
+            <TouchableOpacity onPress={() => setShowModal(false)}>  // ← 修正: ButtonをTouchableOpacityに変更
+              <Text style={styles.closeText}>Close</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

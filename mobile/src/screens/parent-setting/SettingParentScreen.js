@@ -7,6 +7,7 @@ import React from 'react';
 import CustomButton from '../../components/CustomButton.js'
 import { useSelectedChild } from '../../context/SelectedChildContext';
 import { typography } from '../../constants/fonts.js';
+import colors from '../../constants/colors.js'
 
 // const PARENT_ID = '6a15e296dd882ca29e6355ae';
 // const CHILD_ID  = '6a28f66e68e34f4224b78383';
@@ -245,10 +246,8 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
               </View>
             ))}
                 <TouchableOpacity style={styles.profileItem} onPress={() => navigation.navigate("CreateChild")}>
-                    <View style={[styles.profileAvatar, styles.addBtn]}>
-                    <Text style={styles.addBtnText}>+</Text>
-                    </View>
-                    <Text style={styles.profileName}>Add Profile</Text>
+                  <Image source={require('../../assets/add.png')} style={styles.profileAvatar} resizeMode={"contain"} />
+                  <Text style={styles.profileName}>Add Profile</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={styles.editProfile}
@@ -378,47 +377,43 @@ const styles = StyleSheet.create({
     fontWeight: '600' 
 },
   profilesGrid: {
-     flexDirection: 'row', 
-     flexWrap: 'wrap', 
-     justifyContent: 'center', 
-     gap: 16, 
-     marginBottom: 16 
-},
-  profileItem: { 
+     flexDirection: 'row',
+     flexWrap: 'wrap',
+     justifyContent: 'center',
+     alignItems: 'flex-start',
+     gap: 16,
+     marginBottom: 16,
+  },
+  profileItem: {
+    width: '46%',
     alignItems: 'center',
-    gap: 4 
-},
+    gap: 6,
+    marginVertical: 8,
+  },
   profilePressArea: {
     alignItems: 'center',
     gap: 4,
   },
   profileAvatar: {
-    width: 60, 
-    height: 60, 
-    borderRadius: 30, 
-    backgroundColor: '#b0b0b0' 
-},
-  addBtn: { 
-    backgroundColor: '#fff', 
-    borderWidth: 2, borderColor: '#b0b0b0', 
-    borderStyle: 'dashed', 
-    justifyContent: 'center', 
-    alignItems: 'center' 
-},
-  addBtnText: { 
-    fontSize: 24, 
-    color: '#b0b0b0' 
-},
-  profileName: { 
-    fontSize: 12, 
-    color: '#666' 
-},
+    width: 92,
+    height: 92,
+    borderRadius: 46,
+    backgroundColor: '#b0e6df',
+  },
+
+  profileName: {
+    fontSize: 14,
+    color: '#5a463d',
+    marginTop: 8,
+    textAlign: 'center',
+  },
   card: { 
-    backgroundColor: '#fff', 
+    backgroundColor: colors.tertiary,
     borderRadius: 12, 
     marginBottom: 10, 
     paddingHorizontal: 16, 
-    paddingVertical: 14, borderWidth: 0.5, 
+    paddingVertical: 24, 
+    borderWidth: 0.5, 
     borderColor: '#e0e0e0' 
 },
   row: { 
@@ -441,9 +436,8 @@ const styles = StyleSheet.create({
     tintColor: '#888' 
 },
   pencilSmall: { 
-    width: 16, 
-    height: 16, 
-    tintColor: '#555' 
+    width: 32, 
+    height: 32, 
 },
 editRow: {
   flexDirection: 'row',
@@ -487,16 +481,12 @@ cancelText: {
 },
 avatarWrapper: {
   position: 'relative',
-  width: 60,
-  height: 60,
+  width: 92,
+  height: 92,
   alignItems: 'center',
   justifyContent: 'center',
 },
-profileAvatar: {
-    width: 60, 
-    height: 60, 
-    borderRadius: 30, 
-},
+// profileAvatar is defined above (larger size)
 profileAvatarEditMode: {
   opacity: 0.4,
 },
@@ -504,7 +494,7 @@ editChildIcon: {
   position: 'absolute',
   width: "100%",
   height: "100%",
-  borderRadius: 30,
+  borderRadius: 46,
   backgroundColor: "#777",
   justifyContent: "center",
   alignItems: "center",
@@ -512,8 +502,8 @@ editChildIcon: {
   zIndex: 3,
 },
 editChildPencil: {
-  width: 16,
-  height: 16,
+  width: 24,
+  height: 24,
   tintColor: '#333',
 },
 editProfile: {

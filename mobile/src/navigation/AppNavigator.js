@@ -27,6 +27,7 @@ import SelectChild from '../screens/parent-setting/SelectChild.js';
 import EditParentAccount from '../screens/parent-setting/EditParentAccount.js';
 import SettingParentScreen from '../screens/parent-setting/SettingParentScreen.js';
 import EditChildScreen from '../screens/parent-setting/EditChildScreen.js';
+import ChangePassword from '../screens/parent-setting/ChangePassword.js';
 
 import ScanScreen from '../screens/ScanScreen.js';
 
@@ -162,6 +163,7 @@ const ParentStack = ({user, onLogout }) => {
             <Stack.Screen name="SettingParentScreen" options={{ title: 'Settings' }} >
                 {(props) => <SettingParentScreen {...props} user={user} onLogout={onLogout} />}
             </Stack.Screen>
+            <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ title: 'Change Password' }} />
         </Stack.Navigator>
     );
 };
