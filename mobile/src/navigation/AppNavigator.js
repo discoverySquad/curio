@@ -13,6 +13,7 @@ import { useSelectedChild } from '../context/SelectedChildContext';
 
 import HomeScreen from '../screens/HomeScreen.js';
 import JournalScreen from '../screens/Journal.js';
+import ChangeAvatar from '../screens/ChangeAvatar.js';
 import Test from '../screens/Test.js';
 import ActivityDescription from '../screens/ActivityDescription.js';
 import TryAgain from '../screens/TryAgain.js';
@@ -50,7 +51,7 @@ const getFindTitle = (route) => {
 };
 
 const GreenHeader = ({ navigation, route, options, back }) => {
-    const title = options?.title || route?.name;
+    const title = options?.title ?? route.name;
     const showBackButton = back || options?.showBackButton;
     const screenBackgroundColor = options?.screenBackgroundColor || '#FFFFFF';
 
@@ -300,6 +301,7 @@ const JournalStack = () => {
     return (
         <Stack.Navigator screenOptions={greenHeaderOptions}>
             <Stack.Screen name="JournalHome" component={JournalScreen} options={{ title: 'Journal' }} />
+            <Stack.Screen name="AvatarChange" component={ChangeAvatar} options={{ title: '' }}/>
         </Stack.Navigator>
     );
 };
