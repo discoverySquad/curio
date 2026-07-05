@@ -59,6 +59,7 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
     React.useCallback(() => {
       const loadChild = async () => {
         try {
+            await new Promise(resolve => setTimeout(resolve, 500));
             let id = route?.params?.childId || selectedChild?._id;
 
           if (!id) {
@@ -204,12 +205,17 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
             </View>
             <View style={styles.exploration}>
               {child ? (
+                <> 
+                {/* test */}
+                {console.log("timeLimit:", child.timeLimit, "usageTimeToday:", child.usageTimeToday)} 
                 <Time
+                
                   childId={child._id}
                   timeLimit={child.timeLimit}
                   usageTimeToday={child.usageTimeToday}
                   onTimeUp={onLogout}
                 />
+                </>
               ) : (
                 <Text>Loading...</Text>
               )}

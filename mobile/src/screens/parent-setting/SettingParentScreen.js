@@ -56,7 +56,7 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
             const parentRes = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${parentId}`);
             const parentData= await parentRes.json();
 
-            console.log("parentData:", JSON.stringify(parentData, null, 2)); //test
+            // console.log("parentData:", JSON.stringify(parentData, null, 2)); //test
 
             setNotificationOn(parentData.notification); 
 
@@ -222,7 +222,7 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
                 >
                   <View style={styles.avatarWrapper}>
                     <Image
-                      source={{uri: avatars[child.avatar]}}
+                      source={{uri: avatars[parseInt(child.avatar)]}}
                       style={[
                         styles.profileAvatar,
                         editMode && styles.profileAvatarEditMode
@@ -318,10 +318,10 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
             </Modal> */}
 
             <Modal
-    visible={optionsModalVisible}
-    transparent={true}
-    animationType='fade'
->
+            visible={optionsModalVisible}
+            transparent={true}
+            animationType='fade'
+            >
     <View style={styles.modalOverlay}>
         <View style={styles.modalBox}>
             <Text style={[styles.modalTitle, typography.h2]}>Are you sure?</Text>
@@ -495,7 +495,7 @@ editChildIcon: {
   width: "100%",
   height: "100%",
   borderRadius: 46,
-  backgroundColor: "#777",
+  backgroundColor: "rgba(0,0,0,0.45)",
   justifyContent: "center",
   alignItems: "center",
   opacity: 1,
@@ -504,7 +504,7 @@ editChildIcon: {
 editChildPencil: {
   width: 24,
   height: 24,
-  tintColor: '#333',
+  // tintColor: '#fff',
 },
 editProfile: {
   width: '100%',

@@ -55,7 +55,9 @@ const Time =({ childId, timeLimit, usageTimeToday, onTimeUp }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       const usedSeconds = limitSecondsRef.current - remainingSecondsRef.current;
+      console.log("30sec save - usedSeconds:", usedSeconds);  //test
       saveUsageTime(childId, usedSeconds);
+      console.log("unmount save - usedSeconds:", usedSeconds); //test
     }, 30000);
     return () => clearInterval(interval);
   }, []);
