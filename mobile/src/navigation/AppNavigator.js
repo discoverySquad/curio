@@ -48,7 +48,7 @@ const getFindTitle = (route) => {
         return title;
     }
 
-    return `Find ${title}`;
+    return `Find a ${title}`;
 };
 
 const GreenHeader = ({ navigation, route, options, back }) => {
@@ -68,11 +68,7 @@ const GreenHeader = ({ navigation, route, options, back }) => {
     return (
         <View style={{ backgroundColor: screenBackgroundColor }}>
             <SafeAreaView edges={['top']} style={{ backgroundColor: colors.primary }}>
-                <View
-                    style={{
-                        backgroundColor: screenBackgroundColor,
-                    }}
-                >
+                <View style={{ backgroundColor: screenBackgroundColor }}>
                     <View
                         style={{
                             height: 76,
@@ -148,14 +144,14 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
         <View style={{ backgroundColor: '#FFFFFF' }}>
             <View
                 style={{
-                    height: 86,
+                    height: 70,
                     backgroundColor: colors.primary,
-                    borderTopLeftRadius: 28,
-                    borderTopRightRadius: 28,
+                    borderTopLeftRadius: 24,
+                    borderTopRightRadius: 24,
                     flexDirection: 'row',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    gap: 50,
+                    gap: 44,
                     overflow: 'hidden',
                     elevation: 0,
                     shadowOpacity: 0,
@@ -187,8 +183,8 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                             onPress={onPress}
                             android_ripple={null}
                             style={{
-                                width: 84,
-                                height: 68,
+                                width: 78,
+                                height: 56,
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 backgroundColor: 'transparent',
@@ -313,7 +309,7 @@ const ScanStack = () => {
             screenOptions={{
                 ...greenHeaderOptions,
                 contentStyle: {
-                    backgroundColor: '#000000',
+                    backgroundColor: '#FFFFFF',
                 },
             }}
         >
@@ -333,8 +329,29 @@ const ScanStack = () => {
                 })}
             />
 
-            <Stack.Screen name="Feedback" component={Feedback} options={{ title: 'Explore the World!' }} />
-            <Stack.Screen name="TryAgain" component={TryAgain} options={{ title: 'Try Again' }} />
+            <Stack.Screen
+                name="Feedback"
+                component={Feedback}
+                options={{
+                    title: 'Explore the World!',
+                    screenBackgroundColor: '#FFFFFF',
+                    contentStyle: {
+                        backgroundColor: '#FFFFFF',
+                    },
+                }}
+            />
+
+            <Stack.Screen
+                name="TryAgain"
+                component={TryAgain}
+                options={{
+                    title: 'Try Again',
+                    screenBackgroundColor: '#FFFFFF',
+                    contentStyle: {
+                        backgroundColor: '#FFFFFF',
+                    },
+                }}
+            />
         </Stack.Navigator>
     );
 };
