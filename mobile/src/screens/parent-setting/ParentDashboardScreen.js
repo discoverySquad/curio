@@ -3,7 +3,8 @@ import { useState, useLayoutEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 
 import CustomButton from '../../components/CustomButton.js'
-import colors from '../../constants/colors.js'
+import colors from '../../constants/colors.js';
+import {fonts} from '../../constants/fonts.js'
 
 
 // const DUMMY_CHILD_ID = '6a28f66e68e34f4224b78383';
@@ -49,35 +50,12 @@ export default function ParentDashboardScreen({ navigation, route, user }) {
         <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
             
 
-            {/* <Button title='Settings - Parent Account' onPress={() => navigation.navigate('SettingParentScreen')} /> */}
-            {/* <Button
-                title="Create Child Profile"
-                onPress={() =>
-                    navigation.navigate('CreateChild', {
-                        // parentId: user?.id,
-                        parentId: "6a15ddc0752c37728664b230", //temp
-                    })
-                }
-            /> */}
-
-            {/* <Button title="Select Child Profile" onPress={() => navigation.navigate('SelectChild')} /> */}
-            {/* <Button title="Edit Parent Account" onPress={() => navigation.navigate('EditParentAccount')} /> */}
-
-            {/* <Button
-                title="Start Scanning"
-                onPress={() =>
-                    navigation.navigate('Scan', {
-                        childId: DUMMY_CHILD_ID,
-                    })
-                }
-            /> */}
-
             <View style={styles.mainTable}>
                 <Image style={styles.lock} source={require('../../assets/lock.png')} />
                 <Text style={styles.mainText}>Parent Account</Text>
                 <Text style={styles.subText}>Enter your password to manage your settings</Text>
 
-                <TextInput style={styles.input} placeholder="Enter Password" value={password} onChangeText={setPassword} secureTextEntry />
+                <TextInput style={styles.input} placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
                 <Text style={styles.forgetPassword}>Forget password?</Text>
 
                 <CustomButton label="Unlock Settings" onPress={handlePress} />
@@ -113,9 +91,10 @@ const styles = StyleSheet.create({
     mainText: {
         fontSize: 28,
         fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: 32,
         textAlign: 'center',
         color: colors.neutral,
+        fontFamily: fonts.heading,
     },
     subText: {
         fontSize: 18,
@@ -131,12 +110,12 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     input: {
-        height: 56,
+        height: 60,
         borderColor: '#ccc',
         borderWidth: 1,
         backgroundColor: '#fff',
         borderRadius: 32,
-        padding: 16,
+        padding: 24,
         marginVertical: 4,
         marginHorizontal: 0,
         color: colors.neutralInk,

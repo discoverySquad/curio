@@ -7,6 +7,7 @@ import { useSelectedChild } from '../context/SelectedChildContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import colors from "../constants/colors.js";
+import {fonts} from "../constants/fonts.js";
 import { Lock } from 'lucide-react-native';
 import { Trophy } from 'lucide-react-native';
 
@@ -21,40 +22,7 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
   const { selectedChild, setSelectedChild } = useSelectedChild();
   const [todayMissionCount, setTodayMissionCount] = useState(0);
   const goalTotal = 5;
-  // const [timeLimit, setTimeLimit] = useState("");
 
-  // useEffect(() => {
-  //   console.log("route params =", route?.params);
-  //   console.log("childId =", childId);
-
-  //   if (!childId) return;
-
-  //   const getChild = async () => {
-  //     try {
-  //       const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${childId}`;
-  //       // const url = `${process.env.EXPO_PUBLIC_API_URL}/api/child/${CHILD_ID}`;
-  //       console.log('url:', url);
-
-  //       const response = await fetch(url);
-  //       console.log('Response status:', response.status);
-
-  //       if (!response.ok) {
-  //         const errorData = await response.json().catch(() => ({}));
-  //         console.error('API Error:', response.status, errorData);
-  //         return;
-  //       }
-
-  //       const data = await response.json();
-  //       console.log('API response:', data);
-  //       console.log('timeLimit:', data.timeLimit, 'type:', typeof data.timeLimit);
-  //       console.log('usageTimeToday:', data.usageTimeToday, 'type:', typeof data.usageTimeToday);
-  //       setChild(data);
-  //     } catch (error) {
-  //       console.log('Fetch error:', error)
-  //     }
-  //   };
-  //   getChild();
-  // }, [childId]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -211,7 +179,9 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
       <TouchableOpacity
         style={styles.settingFlex}
         onPress={() =>
-          navigation.navigate("ParentDashboard")}
+          navigation.navigate("Parent", {
+            screen: "ParentDashboard",
+          })}
       >
         <Lock size={16} />
         <Text style={styles.settingText}>Parent Settings</Text>
@@ -243,6 +213,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 700,
     marginBottom: 24,
+    fontFamily: fonts.heading,
+  },
+  text: {
+    color: colors.neutral,
   },
   text1: {
     fontSize: 20,
@@ -257,10 +231,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 400,
     marginBottom: 20,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: 700
   },
   goalHeader: {
     flexDirection: 'row',
@@ -285,7 +255,9 @@ cupIcon: {
   cardTitle: {
     fontSize: 24,
     fontWeight: 700,
-    paddingBottom: 10
+    paddingBottom: 10,
+    fontFamily: fonts.heading,
+    color: colors.neutral,
   },
   goalRow: {
     flexDirection: "row",
@@ -304,15 +276,14 @@ cupIcon: {
   },
   progressBarFill: {
     height: "100%",
-    borderColor: colors.neutralClay,
-    borderWidth: 1,
     backgroundColor: colors.secondary,
     borderRadius: 20,
   },
   break: {
     fontSize: 14,
-    fontWeight: 700,
-    paddingTop: 5
+    fontWeight: 600,
+    paddingTop: 5,
+    color: colors.neutral,
   },
   settingFlex: {
     flex: 1,

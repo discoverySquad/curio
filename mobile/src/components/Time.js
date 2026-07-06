@@ -1,6 +1,8 @@
 import React from "react";
 import {useEffect, useState, useRef} from "react";
 import {Text, StyleSheet, AppState} from "react-native";
+import {fonts} from "../constants/fonts.js"
+import colors from "../constants/colors.js"
 
 // save time left in DB
 const saveUsageTime = async (childId, usedSeconds) => {
@@ -91,8 +93,10 @@ const Time =({ childId, timeLimit, usageTimeToday, onTimeUp }) => {
 
 const styles = StyleSheet.create({
   time:{
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: "700",
+    fontFamily: fonts.heading,
+    color: colors.neutral,
   },
 });
 
