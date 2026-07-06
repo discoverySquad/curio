@@ -267,7 +267,7 @@ const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild' }) => {
                 )}
             </Stack.Screen>
 
-            <Stack.Screen name="ParentDashboard" options={{ title: 'Parent Dashboard' }}>
+            <Stack.Screen name="ParentDashboard" options={{ title: 'Settings', showBackButton: true }}>
                 {(props) => <ParentDashboardScreen {...props} user={user} />}
             </Stack.Screen>
 
@@ -359,7 +359,7 @@ const ScanStack = () => {
 const ParentStack = ({ user, onLogout }) => {
     return (
         <Stack.Navigator screenOptions={greenHeaderOptions}>
-            <Stack.Screen name="ParentDashboard" options={{ title: 'Parent Dashboard' }}>
+            <Stack.Screen name="ParentDashboard" options={{ title: 'Settings', showBackButton: true }}>
                 {(props) => <ParentDashboardScreen {...props} user={user} />}
             </Stack.Screen>
 
