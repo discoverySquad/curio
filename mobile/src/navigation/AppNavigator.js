@@ -55,6 +55,7 @@ const GreenHeader = ({ navigation, route, options, back }) => {
     const title = options?.title ?? route.name;
     const showBackButton = back || options?.showBackButton;
     const screenBackgroundColor = options?.screenBackgroundColor || '#FFFFFF';
+    const headerRight = options?.headerRight;
 
     const handleBack = () => {
         if (navigation.canGoBack()) {
@@ -83,6 +84,7 @@ const GreenHeader = ({ navigation, route, options, back }) => {
                             shadowOpacity: 0,
                             shadowColor: 'transparent',
                             borderBottomWidth: 0,
+                            position: 'relative',
                         }}
                     >
                         {showBackButton ? (
@@ -115,6 +117,18 @@ const GreenHeader = ({ navigation, route, options, back }) => {
                         >
                             {title}
                         </Text>
+                        {headerRight ? (
+                            <View
+                                style={{
+                                    position: 'absolute',
+                                    right: 10,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                {headerRight({ tintColor: colors.surface, canGoBack: back })}
+                            </View>
+                        ) : null}
                     </View>
                 </View>
             </SafeAreaView>
@@ -231,7 +245,7 @@ const AuthStack = ({ setUser }) => {
     );
 };
 
-const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild' }) => {
+const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild', onLogout }) => {
     const parentId = user?.id || user?._id;
 
     return (
@@ -272,7 +286,21 @@ const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild' }) => {
             </Stack.Screen>
 
             <Stack.Screen name="SettingParentScreen" options={{ title: 'Settings' }}>
-                {(props) => <SettingParentScreen {...props} user={user} />}
+                {(props) => <SettingParentScreen {...props} user={user} onLogout={onLogout}/>}
+            </Stack.Screen>
+
+            <Stack.Screen name="EditChild" component={EditChildScreen} options={{ title: 'Edit Profile' }} />
+
+            <Stack.Screen name="ScreenTime" component={ScreenTime} options={{ title: 'Screen Time' }} />
+
+            <Stack.Screen name="SelectCategory" component={SelectCategory} options={{ title: 'Choose Activity' }} />
+
+            <Stack.Screen name="EditParentAccount" options={{ title: 'Edit Account' }}>
+                {(props) => <EditParentAccount {...props} user={user} />}
+            </Stack.Screen>
+
+            <Stack.Screen name="ChangePassword" options={{ title: 'Change Password' }}>
+                {(props) => <ChangePassword {...props} user={user} />}
             </Stack.Screen>
         </Stack.Navigator>
     );
@@ -478,7 +506,7 @@ const AppNavigator = () => {
             {!user ? (
                 <AuthStack setUser={setUser} />
             ) : !selectedChild ? (
-                <SetupStack user={user} setUser={setUserState} initialRouteName={setupStartRoute} />
+                <SetupStack user={user} setUser={setUserState} initialRouteName={setupStartRoute} onLogout={logout} />
             ) : (
                 <MainTabs user={user} onLogout={logout} />
             )}
