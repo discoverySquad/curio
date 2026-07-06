@@ -2,6 +2,7 @@ import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
 import colors from "../constants/colors";
+import { fonts } from "../constants/fonts.js";
 
 const CustomButton = ({ label, onPress }) => {
   return(
@@ -23,8 +24,9 @@ const styles = StyleSheet.create({
   label: {
     color: '#FFFFFF',
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: '700',
     letterSpacing: 0.3,
+    fontFamily: fonts.heading,
   },
 });
 
