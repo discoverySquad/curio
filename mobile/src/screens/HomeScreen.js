@@ -134,25 +134,6 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      {/* <Text style={styles.text}>
-        Home Screen
-      </Text> */}
-
-      {/* <Button
-        title="Activity Description"
-        onPress={() => navigation.navigate("ActivityDescription")}
-      /> */}
-      {/* <Button
-        title="Try Again Page"
-        onPress={() => navigation.navigate("TryAgain")}
-      /> */}
-      {/* <Button
-        title="Feedback Page"
-        onPress={() => navigation.navigate("Feedback")}
-      /> */}
-
-      {/* temporally put here, should be on parent setting page */}
-      {/* <Button title='Screen Time' onPress={() => navigation.navigate("ScreenTime")} /> */}
 
       {/* card1 */}
       <View style={styles.homeCard}>
@@ -170,16 +151,16 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
 
       {/* card2 */}
       <View style={styles.homeCard}>
-        <View style={styles.goalHeader}>
-          <Text style={styles.cardTitle}>Today's Goal</Text>
-          <Trophy size={22} color={"#316828"}/>
+         <View style={styles.goalHeader}>
+            <Text style={styles.cardTitle}>Today's Goal</Text>
+            <Image source={require("../assets/cup.png")} style={styles.cupIcon} />
         </View>
         <View style={styles.goalRow}>
-          <Text style={styles.text2}>
-            {displayCount}/{goalTotal} missions done
-          </Text>
-          <Text style={styles.text2}>{percentage}%</Text>
-        </View>
+            <Text style={styles.text}>
+              {displayCount}/{goalTotal} missions done
+            </Text>
+            <Text style={styles.text}>{percentage}%</Text>
+         </View>
 
         <View style={styles.progressBarBackground}>
           <View
@@ -207,16 +188,15 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
             </View>
             <View style={styles.exploration}>
               {child ? (
-                <>
-                  {/* test */}
-                  {console.log("timeLimit:", child.timeLimit, "usageTimeToday:", child.usageTimeToday)}
-                  <Time
-                    childId={child._id}
-                    timeLimit={child.timeLimit}
-                    usageTimeToday={child.usageTimeToday}
-                    onTimeUp={onLogout}
-                  />
-                </>
+                
+                <Time
+                
+                  childId={child._id}
+                  timeLimit={child.timeLimit}
+                  usageTimeToday={child.usageTimeToday}
+                  onTimeUp={onLogout}
+                />
+                
               ) : (
                 <Text>Loading...</Text>
               )}
@@ -278,6 +258,21 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     marginBottom: 20,
   },
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: 700
+  },
+  goalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+ },
+cupIcon: {
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+} ,
   explorationTime: {
     flexDirection: 'row',
     gap: 28
