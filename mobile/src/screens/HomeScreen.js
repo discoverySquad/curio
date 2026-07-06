@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useFocusEffect } from "@react-navigation/native";
 import Time from '../components/Time.js';
 import CustomButton from '../components/CustomButton.js'
 import { useSelectedChild } from '../context/SelectedChildContext';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import colors from "../constants/colors.js";
+import { Lock } from 'lucide-react-native';
+import { Trophy } from 'lucide-react-native';
 
 const HomeScreen = ({ navigation, route, onLogout }) => {
 
@@ -59,8 +60,8 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
     React.useCallback(() => {
       const loadChild = async () => {
         try {
-            await new Promise(resolve => setTimeout(resolve, 500));
-            let id = route?.params?.childId || selectedChild?._id;
+          await new Promise(resolve => setTimeout(resolve, 500));
+          let id = route?.params?.childId || selectedChild?._id;
 
           if (!id) {
             const saved = await AsyncStorage.getItem('selectedChild');
@@ -86,7 +87,7 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
 
           if (missionRes.ok) {
             const missionData = await missionRes.json();
-             setTodayMissionCount(missionData.count);
+            setTodayMissionCount(missionData.count);
           }
 
           try {
@@ -98,10 +99,10 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
             console.log('Failed to update selectedChild in HomeScreen', e);
           }
 
-      } catch (error) {
-        console.log('Home load error:', error);
-      }
-    };
+        } catch (error) {
+          console.log('Home load error:', error);
+        }
+      };
 
       loadChild();
     }, [route?.params?.childId, selectedChild?._id])
@@ -126,7 +127,7 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
   };
 
   const displayCount =
-  todayMissionCount > goalTotal ? goalTotal : todayMissionCount;
+    todayMissionCount > goalTotal ? goalTotal : todayMissionCount;
 
   const percentage = Math.round((displayCount / goalTotal) * 100);
 
@@ -160,7 +161,7 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
             Ready for {"\n"}
             Today's adventure?
           </Text>
-          <Text style={styles.text}>Look around you... what will you find today?</Text>
+          <Text style={styles.text1}>Look around you... what will you find today?</Text>
         </View>
         <View style={styles.buttonSection}>
           <CustomButton label="Start Activity" onPress={handleStartActivity} />
@@ -169,17 +170,18 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
 
       {/* card2 */}
       <View style={styles.homeCard}>
-         <View style={styles.goalHeader}>
-            <Text style={styles.cardTitle}>Today's Goal</Text>
+        <View style={styles.goalHeader}>
+          <Text style={styles.cardTitle}>Today's Goal</Text>
+          <Trophy size={22} color={"#316828"}/>
         </View>
-         <View style={styles.goalRow}>
-            <Text style={styles.text}>
-              {displayCount}/{goalTotal} missions done
-            </Text>
-            <Text style={styles.text}>{percentage}%</Text>
-         </View>
+        <View style={styles.goalRow}>
+          <Text style={styles.text2}>
+            {displayCount}/{goalTotal} missions done
+          </Text>
+          <Text style={styles.text2}>{percentage}%</Text>
+        </View>
 
-         <View style={styles.progressBarBackground}>
+        <View style={styles.progressBarBackground}>
           <View
             style={[
               styles.progressBarFill,
@@ -188,7 +190,7 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
           />
         </View>
 
-        <Text style={styles.text}>
+        <Text style={styles.text3}>
           Keep going, {child?.name}! You are doing great explorer work!
         </Text>
       </View>
@@ -205,36 +207,35 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
             </View>
             <View style={styles.exploration}>
               {child ? (
-                <> 
-                {/* test */}
-                {console.log("timeLimit:", child.timeLimit, "usageTimeToday:", child.usageTimeToday)} 
-                <Time
-                
-                  childId={child._id}
-                  timeLimit={child.timeLimit}
-                  usageTimeToday={child.usageTimeToday}
-                  onTimeUp={onLogout}
-                />
+                <>
+                  {/* test */}
+                  {console.log("timeLimit:", child.timeLimit, "usageTimeToday:", child.usageTimeToday)}
+                  <Time
+                    childId={child._id}
+                    timeLimit={child.timeLimit}
+                    usageTimeToday={child.usageTimeToday}
+                    onTimeUp={onLogout}
+                  />
                 </>
               ) : (
                 <Text>Loading...</Text>
               )}
             </View>
             <View>
-              <Text>Great for breaks!</Text>
+              <Text style={styles.break}>Great for breaks!</Text>
             </View>
           </View>
         </View>
       </View>
-  
-    <Button 
-    title='Parent Settings' 
-    onPress={() => 
-      navigation.navigate("Parent", 
-      {screen: "ParentDashboard", 
-    })} 
-    />
 
+      <TouchableOpacity
+        style={styles.settingFlex}
+        onPress={() =>
+          navigation.navigate("ParentDashboard")}
+      >
+        <Lock size={16} />
+        <Text style={styles.settingText}>Parent Settings</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -248,50 +249,88 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   homeCard: {
-    backgroundColor:colors.tertiary,
+    backgroundColor: colors.tertiary,
     borderRadius: 20,
     padding: 24,
   },
+  goalHeader: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+
   title: {
     fontSize: 24,
     fontWeight: 700,
     marginBottom: 24,
   },
-  text: {
+  text1: {
+    fontSize: 20,
+    fontWeight: 500,
+    marginBottom: 20,
+  },
+  text2: {
+    fontSize: 14,
+    fontWeight: 500,
+  },
+  text3: {
     fontSize: 16,
+    fontWeight: 400,
     marginBottom: 20,
   },
   explorationTime: {
     flexDirection: 'row',
     gap: 28
-    
+
   },
   timeLeftBox: {
     justifyContent: 'center',
-    
+
+  },
+  cardTitle: {
+    fontSize: 24,
+    fontWeight: 700,
+    paddingBottom: 10
   },
   goalRow: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-},
-progressBarBackground: {
-  width: "100%",
-  height: 16,
-  backgroundColor: "#EAEAEA",
-  borderRadius: 20,
-  marginTop: 12,
-  marginBottom: 24,
-  borderWidth: 1,
-  borderColor: colors.neutralClay,
-},
-progressBarFill: {
-  height: "100%",
-  borderColor: colors.neutralClay,
-  borderWidth: 1,
-  backgroundColor: colors.secondary,
-  borderRadius: 20,
-},
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  progressBarBackground: {
+    width: "100%",
+    height: 16,
+    backgroundColor: "#EAEAEA",
+    borderRadius: 20,
+    marginTop: 12,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: colors.neutralClay,
+  },
+  progressBarFill: {
+    height: "100%",
+    borderColor: colors.neutralClay,
+    borderWidth: 1,
+    backgroundColor: colors.secondary,
+    borderRadius: 20,
+  },
+  break: {
+    fontSize: 14,
+    fontWeight: 700,
+    paddingTop: 5
+  },
+  settingFlex: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingTop: 40
+  },
+  settingText: {
+    textAlign: 'center',
+    fontSize: 16
+  }
 });
 
 
