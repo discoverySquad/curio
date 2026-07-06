@@ -7,7 +7,9 @@ import React from 'react';
 import CustomButton from '../../components/CustomButton.js'
 import { useSelectedChild } from '../../context/SelectedChildContext';
 import { typography } from '../../constants/fonts.js';
-import colors from '../../constants/colors.js'
+import colors from '../../constants/colors.js';
+import {fonts} from '../../constants/fonts.js';
+
 
 // const PARENT_ID = '6a15e296dd882ca29e6355ae';
 // const CHILD_ID  = '6a28f66e68e34f4224b78383';
@@ -195,12 +197,8 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
         <ScrollView style={styles.container}>
             
             <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Switch Profile</Text>
+                <Text style={[styles.sectionTitle, typography.h1]}>Switch Profile</Text>
 
-                {/* implement navigation when edit page is ready */}
-                {/* <TouchableOpacity onPress={handleTempClick}>
-                    <Image source={require('../../assets/pencil.png')} style={styles.pencilSmall} />
-                </TouchableOpacity> */}
             </View>
             
             <View style={styles.profilesGrid}>
@@ -240,14 +238,14 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
                           </TouchableOpacity>
                       )}
                   </View>
-                  <Text style={styles.profileName}>{child.name}</Text>
+                  <Text style={[styles.profileName, typography.h3]}>{child.name}</Text>
                 </TouchableOpacity>
                 
               </View>
             ))}
                 <TouchableOpacity style={styles.profileItem} onPress={() => navigation.navigate("CreateChild")}>
                   <Image source={require('../../assets/add.png')} style={styles.profileAvatar} resizeMode={"contain"} />
-                  <Text style={styles.profileName}>Add Profile</Text>
+                  <Text style={[styles.profileName, typography.h3]}>Add Profile</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={styles.editProfile}
@@ -280,18 +278,6 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
                     </TouchableOpacity>
                 </View>
             </View>
-
-            {/* <View style={styles.card}>
-                <View style={styles.row}>
-                        <Text style={styles.label}>Notification</Text>
-                        <Switch
-                        value={notificationOn}
-                        onValueChange={handleNotificationToggle}
-                        trackColor={{false: "#ccc", true: "#000000"}}
-                        thumbColor="#fff"
-                        />
-                </View>
-            </View> */}
 
             <CustomButton label="Log Out" onPress={handleLogout} />
 
@@ -373,8 +359,7 @@ const styles = StyleSheet.create({
     gap: 8, marginVertical: 12 
 },
   sectionTitle: { 
-    fontSize: 16,
-    fontWeight: '600' 
+    marginVertical: 32,
 },
   profilesGrid: {
      flexDirection: 'row',
