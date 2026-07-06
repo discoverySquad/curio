@@ -250,7 +250,7 @@ const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild', onLogout 
 
     return (
         <Stack.Navigator initialRouteName={initialRouteName} screenOptions={greenHeaderOptions}>
-            <Stack.Screen name="SelectChild" options={{ title: 'Select Child' }}>
+            <Stack.Screen name="SelectChild" options={{ title: 'Select Profile' }}>
                 {(props) => (
                     <SelectChild
                         {...props}

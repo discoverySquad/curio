@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, Button, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, ScrollView } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelectedChild } from '../../context/SelectedChildContext';
-
+import colors from '../../constants/colors';
+import { Lock } from 'lucide-react-native';
 // const PARENT_ID = '6a15e296dd882ca29e6355ae'; // temp
 
 const SelectChild = ({ navigation, route }) => {
@@ -125,9 +126,8 @@ const SelectChild = ({ navigation, route }) => {
                     );
                 })}
                 <TouchableOpacity style={styles.profileItem}>
-                    <View style={[styles.avatar, styles.addBtn]}>
-                        <Button
-                            title="+"
+                    <View style={styles.avatar}>
+                        <TouchableOpacity
                             onPress={async () => {
                                 const parentId = await getParentId();
 
@@ -135,18 +135,22 @@ const SelectChild = ({ navigation, route }) => {
                                     parentId,
                                 });
                             }}
-                            style={styles.addBtnText}
-                        ></Button>
+                        >
+                            <Image style={styles.addBtn} source={require('../../assets/add.png')} />
+                        </TouchableOpacity>
                     </View>
                     <Text style={styles.name}>Add{'\n'}Profile</Text>
                 </TouchableOpacity>
             </View>
 
-            <Button
-                title="Parent Settings"
-                onPress={() => 
+            <TouchableOpacity
+                style={styles.settingFlex}
+                onPress={() =>
                     navigation.navigate("ParentDashboard")}
-            />
+            >
+                <Lock size={16}/>
+                <Text style={styles.settingText}>Parent Settings</Text>
+            </TouchableOpacity>
         </ScrollView>
     );
 };
@@ -161,13 +165,16 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 30,
-        fontWeight: 'bold',
+        fontWeight: 700,
         textAlign: 'center',
-        marginBottom: 10
+        marginBottom: 10,
+        marginTop: 38,
+        color: colors.neutralInk
     },
     text: {
         textAlign: 'center',
-        marginBottom: 24
+        marginBottom: 24,
+        color: colors.neutralInk
     },
     box: {
         flexDirection: 'row',
@@ -182,8 +189,10 @@ const styles = StyleSheet.create({
         marginBottom: 16
     },
     name: {
-        fontSize: 12,
-        color: '#000000'
+        fontSize: 20,
+        fontWeight: 700,
+        textAlign: 'center',
+        color: colors.neutral
     },
     avatar: {
         width: 100,
@@ -192,16 +201,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#b0b0b0'
     },
     addBtn: {
-        backgroundColor: '#fff',
-        borderWidth: 2,
-        borderColor: '#b0b0b0',
-        borderStyle: 'dashed',
+        width: 100,
+        height: 100
+    },
+    settingFlex: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'center',
-        alignItems: 'center'
+        gap: 10
     },
-    addBtnText: {
-        fontSize: 24,
-        color: '#000000'
-    },
+    settingText: {
+        textAlign: 'center',
+        fontSize: 16
+    }
 });
 
