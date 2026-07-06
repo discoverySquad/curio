@@ -244,7 +244,7 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
               </View>
             ))}
                 <TouchableOpacity style={styles.profileItem} onPress={() => navigation.navigate("CreateChild")}>
-                  <Image source={require('../../assets/add.png')} style={styles.profileAvatar} resizeMode={"contain"} />
+                  <Image source={require('../../assets/add.png')} style={styles.addAvatar} resizeMode={"contain"} />
                   <Text style={[styles.profileName, typography.h3]}>Add Profile</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
@@ -281,29 +281,7 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
 
             <CustomButton label="Log Out" onPress={handleLogout} />
 
-            {/* <TouchableOpacity onPress={() => setDeleteModalVisible(true)}>
-                <Text style={styles.deleteLink}>Delete Account</Text>
-            </TouchableOpacity>
-
-            <Modal
-                visible={deleteModalVisible}
-                transparent={true}
-                animationType='fade'
-            >
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalBox}>
-                        <Text style={styles.modalTitle}>Are you sure?</Text>
-                        <Text style={styles.modalText}>This will remove the child profile and its saved progress. You cannot recover achievements, badges, or points after this action.</Text>
-                        <CustomButton label="Delete Account" onPress={handleDelete}></CustomButton>
-                    <TouchableOpacity onPress={() => setDeleteModalVisible(false)}>
-                        <Text style={styles.cancelText}>Cancel</Text>
-                    </TouchableOpacity>
-                    </View>
-                    
-                </View>
-            </Modal> */}
-
-            <Modal
+              <Modal
             visible={optionsModalVisible}
             transparent={true}
             animationType='fade'
@@ -360,6 +338,7 @@ const styles = StyleSheet.create({
 },
   sectionTitle: { 
     marginVertical: 32,
+    color: colors.neutral,
 },
   profilesGrid: {
      flexDirection: 'row',
@@ -385,17 +364,21 @@ const styles = StyleSheet.create({
     borderRadius: 46,
     backgroundColor: '#b0e6df',
   },
-
+ addAvatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 46,
+ },
   profileName: {
     fontSize: 14,
-    color: '#5a463d',
+    color: colors.neutral,
     marginTop: 8,
     textAlign: 'center',
   },
   card: { 
     backgroundColor: colors.tertiary,
-    borderRadius: 12, 
-    marginBottom: 10, 
+    borderRadius: 32, 
+    marginBottom: 24, 
     paddingHorizontal: 16, 
     paddingVertical: 24, 
     borderWidth: 0.5, 
@@ -407,13 +390,16 @@ const styles = StyleSheet.create({
     alignItems: 'center' 
 },
   label: { 
-    fontSize: 14, 
-    fontWeight: '600' 
+    fontSize: 24, 
+    fontWeight: '700', 
+    fontFamily: fonts.heading,
 },
   sub: { 
-    fontSize: 11, 
-    color: '#888', 
-    marginTop: 2 
+    fontFamily: fonts.heading,
+    fontSize: 20, 
+    fontWeight: '600', 
+    marginTop: 2,
+    color: colors.neutral,
 },
   pencil: { 
     width: 18, 

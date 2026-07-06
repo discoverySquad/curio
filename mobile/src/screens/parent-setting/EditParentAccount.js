@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, Button, Alert, Modal, TouchableOpacity } from 'react-native'
 import React from 'react'
 import CustomButton from '../../components/CustomButton'
-import colors from '../../constants/colors.js'
+import colors from '../../constants/colors.js';
+import { fonts } from "../../constants/fonts.js";
 
 const EditParentAccount = ({navigation, route, user}) => {
   // const PARENT_ID = '6a15e296dd882ca29e6355ae';// temporary
@@ -22,7 +23,6 @@ const EditParentAccount = ({navigation, route, user}) => {
       // console.log("parentId:", parentId);  // test
       const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/parent/${parentId}`);
       const data = await res.json();
-      // console.log("loaded parent data:", data);  // test
 
       setName(data.name);
       setEmail(data.email);
@@ -49,8 +49,7 @@ const EditParentAccount = ({navigation, route, user}) => {
       }
 
       const data = await res.json();
-      // console.log("response status:", res.status); //test
-      // console.log("updated parent: ", data);
+
       setShowModal(true)
       
     }catch(error){
@@ -87,7 +86,6 @@ const EditParentAccount = ({navigation, route, user}) => {
 
          <CustomButton style={styles.saveChangeButton} label="Save Changes" onPress={handleParentProfileChange} />
 
-         
       </View>
 
       <TouchableOpacity style={styles.changePasswordButton} onPress={handleParentPasswordChange}>
@@ -131,7 +129,8 @@ const styles = StyleSheet.create({
     },
     label: {
       fontSize: 14,
-      fontWeight: 600,
+      fontWeight: 700,
+      fontFamily: fonts.heading,
       color: "#000",
       marginTop: 24,
       marginBottom: 4,
@@ -157,17 +156,19 @@ const styles = StyleSheet.create({
     marginTop: 8,
     },
     changePasswordText: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 24,
+    fontWeight: '700',
     color: '#333',
+    fontFamily: fonts.heading,
   },
     input: {
         height: 56,
         backgroundColor: '#fff',
         borderRadius: 32,
-        paddingHorizontal: 8,
+        paddingHorizontal: 12,
         fontSize: 15,
-        marginVertical: 4,
+        color: colors.neutralStone,
+        // marginVertical: 4,
     },
     saveChangeButton: {
       marginTop: 24,

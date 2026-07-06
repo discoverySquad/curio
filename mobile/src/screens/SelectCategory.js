@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'rea
 import React from 'react'
 
 import colors from "../constants/colors.js";
+import { fonts } from '../constants/fonts.js';
 
 const SelectCategory = ({navigation}) => {
 
@@ -116,6 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     marginBottom: 0,
+    fontFamily: fonts.heading,
   },
   subText: {
     fontSize: 18,
@@ -138,6 +140,7 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     marginTop: 4,
     marginBottom: 8,
+    fontFamily: fonts.heading
   },
   textContent: {
     textAlign: 'center',
