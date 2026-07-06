@@ -105,6 +105,8 @@ const Feedback = ({ navigation, route }) => {
 
             <Text style={styles.message}>Nice Exploring! You scanned {objectName}. Keep looking around--the world is full of surprises.</Text>
 
+            <Text style={styles.objectName}>{objectName}</Text>
+
             <View style={styles.factsSection}>
                 {facts.length > 0 ? (
                     facts.map((fact, index) => (
@@ -180,6 +182,12 @@ const styles = StyleSheet.create({
     soundIcon: {
         width: 44,
         height: 44,
+    },
+    objectName:{
+        color: '#3D332E',
+        fontSize: 24,
+        marginBottom:10,
+        fontWeight:"bold"
     },
     message: {
         width: '100%',
