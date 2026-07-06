@@ -1,5 +1,6 @@
-import { View, Text, Button, StyleSheet, ScrollView, TextInput, Alert, Image } from 'react-native';
-import { useState } from 'react';
+import { View, Text, Button, StyleSheet, ScrollView, TextInput, Alert, Image, Pressable } from 'react-native';
+import { useState, useLayoutEffect } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 
 import CustomButton from '../../components/CustomButton.js'
 import colors from '../../constants/colors.js'
@@ -13,7 +14,6 @@ export default function ParentDashboardScreen({ navigation, route, user }) {
     const parentId = user?.id || user?._id;
     const [password, setPassword] = useState('');
     // const user = route.params?.user;
-    
 
     const handlePress = async () => {
         if(!password){
