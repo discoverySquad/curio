@@ -146,7 +146,7 @@ const SelectChild = ({ navigation, route }) => {
             <TouchableOpacity
                 style={styles.settingFlex}
                 onPress={() =>
-                    navigation.navigate("ParentDashboard")}
+                    navigation.navigate("EditParentAccount")}
             >
                 <Lock size={16}/>
                 <Text style={styles.settingText}>Parent Settings</Text>

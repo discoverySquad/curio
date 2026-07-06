@@ -244,7 +244,7 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
               </View>
             ))}
                 <TouchableOpacity style={styles.profileItem} onPress={() => navigation.navigate("CreateChild")}>
-                  <Image source={require('../../assets/add.png')} style={styles.profileAvatar} resizeMode={"contain"} />
+                  <Image source={require('../../assets/add.png')} style={styles.addAvatar} resizeMode={"contain"} />
                   <Text style={[styles.profileName, typography.h3]}>Add Profile</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
@@ -364,17 +364,21 @@ const styles = StyleSheet.create({
     borderRadius: 46,
     backgroundColor: '#b0e6df',
   },
-
+ addAvatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 46,
+ },
   profileName: {
     fontSize: 14,
-    color: '#5a463d',
+    color: colors.neutral,
     marginTop: 8,
     textAlign: 'center',
   },
   card: { 
     backgroundColor: colors.tertiary,
-    borderRadius: 12, 
-    marginBottom: 10, 
+    borderRadius: 32, 
+    marginBottom: 24, 
     paddingHorizontal: 16, 
     paddingVertical: 24, 
     borderWidth: 0.5, 
@@ -386,13 +390,16 @@ const styles = StyleSheet.create({
     alignItems: 'center' 
 },
   label: { 
-    fontSize: 14, 
-    fontWeight: '600', 
-    fontFamily: fonts.heading
+    fontSize: 24, 
+    fontWeight: '700', 
+    fontFamily: fonts.heading,
 },
   sub: { 
-    fontSize: 11, 
-    marginTop: 2 
+    fontFamily: fonts.heading,
+    fontSize: 20, 
+    fontWeight: '600', 
+    marginTop: 2,
+    color: colors.neutral,
 },
   pencil: { 
     width: 18, 
