@@ -85,9 +85,10 @@ export default function LoginScreen({ navigation, setUser }) {
 
     return (
         <KeyboardAvoidingView style={styles.keyboardView} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <Image source={{ uri: LEAF_BACKGROUND_URL }} style={styles.backgroundPattern} resizeMode="cover" />
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-                    <Image source={{ uri: LEAF_BACKGROUND_URL }} style={styles.backgroundPattern} resizeMode="cover" />
+                    
 
                     <Image source={{ uri: LOGO_URL }} style={styles.logo} resizeMode="contain" />
 
@@ -158,19 +159,20 @@ const styles = StyleSheet.create({
     keyboardView: {
         flex: 1,
         backgroundColor: '#F9FBF7',
+        position: 'relative'
     },
     scrollContent: {
         flexGrow: 1,
         justifyContent: 'center',
         paddingHorizontal: 28,
         paddingVertical: 34,
-        backgroundColor: '#F9FBF7',
+        // backgroundColor: '#F9FBF7',
     },
     backgroundPattern: {
         ...StyleSheet.absoluteFillObject,
         width: '100%',
         height: '100%',
-        opacity: 0.28,
+        opacity: 1,
     },
     logo: {
         width: 178,
