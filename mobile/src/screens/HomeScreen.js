@@ -133,25 +133,6 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      {/* <Text style={styles.text}>
-        Home Screen
-      </Text> */}
-
-      {/* <Button
-        title="Activity Description"
-        onPress={() => navigation.navigate("ActivityDescription")}
-      /> */}
-      {/* <Button
-        title="Try Again Page"
-        onPress={() => navigation.navigate("TryAgain")}
-      /> */}
-      {/* <Button
-        title="Feedback Page"
-        onPress={() => navigation.navigate("Feedback")}
-      /> */}
-
-      {/* temporally put here, should be on parent setting page */}
-      {/* <Button title='Screen Time' onPress={() => navigation.navigate("ScreenTime")} /> */}
 
       {/* card1 */}
       <View style={styles.homeCard}>
@@ -171,6 +152,7 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
       <View style={styles.homeCard}>
          <View style={styles.goalHeader}>
             <Text style={styles.cardTitle}>Today's Goal</Text>
+            <Image source={require("../assets/cup.png")} style={styles.cupIcon} />
         </View>
          <View style={styles.goalRow}>
             <Text style={styles.text}>
@@ -205,9 +187,7 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
             </View>
             <View style={styles.exploration}>
               {child ? (
-                <> 
-                {/* test */}
-                {console.log("timeLimit:", child.timeLimit, "usageTimeToday:", child.usageTimeToday)} 
+                
                 <Time
                 
                   childId={child._id}
@@ -215,7 +195,7 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
                   usageTimeToday={child.usageTimeToday}
                   onTimeUp={onLogout}
                 />
-                </>
+                
               ) : (
                 <Text>Loading...</Text>
               )}
@@ -261,6 +241,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 20,
   },
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: 700
+  },
+  goalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+ },
+cupIcon: {
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+} ,
   explorationTime: {
     flexDirection: 'row',
     gap: 28
@@ -274,13 +269,13 @@ const styles = StyleSheet.create({
   flexDirection: "row",
   justifyContent: "space-between",
   alignItems: "center",
+
 },
 progressBarBackground: {
   width: "100%",
   height: 16,
   backgroundColor: "#EAEAEA",
   borderRadius: 20,
-  marginTop: 12,
   marginBottom: 24,
   borderWidth: 1,
   borderColor: colors.neutralClay,

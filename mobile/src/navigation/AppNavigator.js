@@ -281,7 +281,7 @@ const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild' }) => {
 const HomeStack = ({ onLogout }) => {
     return (
         <Stack.Navigator screenOptions={greenHeaderOptions}>
-            <Stack.Screen name="Home" options={{ title: 'Explore the World!' }}>
+            <Stack.Screen name="Home" options={{ title: 'Curio' }}>
                 {(props) => <HomeScreen {...props} onLogout={onLogout} />}
             </Stack.Screen>
 
@@ -289,7 +289,7 @@ const HomeStack = ({ onLogout }) => {
             <Stack.Screen name="ActivityDescription" component={ActivityDescription} options={{ title: 'Explore the World!' }} />
             <Stack.Screen name="TryAgain" component={TryAgain} options={{ title: 'Try Again' }} />
             <Stack.Screen name="Feedback" component={Feedback} options={{ title: 'Explore the World!' }} />
-            <Stack.Screen name="SelectCategory" component={SelectCategory} options={{ title: 'Choose Activity' }} />
+            <Stack.Screen name="SelectCategory" component={SelectCategory} options={{ title: 'Explore the World!' }} />
         </Stack.Navigator>
     );
 };
@@ -363,12 +363,12 @@ const ParentStack = ({ user, onLogout }) => {
                 {(props) => <ParentDashboardScreen {...props} user={user} />}
             </Stack.Screen>
 
-            <Stack.Screen name="CreateChild" component={CreateChildScreen} options={{ title: 'Create Child Profile' }} />
+            <Stack.Screen name="CreateChild" component={CreateChildScreen} options={{ title: 'Parent Settings' }} />
             <Stack.Screen name="SelectChild" component={SelectChild} options={{ title: 'Select Child' }} />
             <Stack.Screen name="EditChild" component={EditChildScreen} options={{ title: 'Edit Profile' }} />
-            <Stack.Screen name="ScreenTime" component={ScreenTime} options={{ title: 'Screen Time' }} />
+            <Stack.Screen name="ScreenTime" component={ScreenTime} options={{ title: 'Explore the World' }} />
             <Stack.Screen name="SelectCategory" component={SelectCategory} options={{ title: 'Choose Activity' }} />
-            <Stack.Screen name="EditParentAccount" options={{ title: 'Edit Account' }} >
+            <Stack.Screen name="EditParentAccount" options={{ title: 'Edit Parent Account' }} >
                 {(props) => <EditParentAccount {...props} user={user} />}
             </Stack.Screen>
 
