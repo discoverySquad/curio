@@ -290,27 +290,49 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
         <View style={styles.modalBox}>
             <Text style={[styles.modalTitle, typography.h2]}>Are you sure?</Text>
             
-            <Text style={[styles.modalText, typography.body]}>This will archive the child profile. Achievements, badges, and points will be saved.</Text>
-            <CustomButton
+            <Text style={[styles.modalText, typography.body]}>This will remove your account and its saved progress. You cannot recover achievements or activities after this action.</Text>
+            {/* <CustomButton
                 style={[styles.archiveBtn,typography.heading]}
                 label="Archive Account"
                 onPress={() => {
                     setOptionsModalVisible(false);
                     handleArchive();
                 }}
-            />
+            /> */}
+            <TouchableOpacity
+                style={styles.archiveButton}
+                onPress={() => {
+                    setOptionsModalVisible(false);
+                    handleArchive();
+                }}
+                activeOpacity={0.8}
+            >
+                <Text style={[styles.archiveButtonText, typography.h3]}>Archive Account</Text>
+            </TouchableOpacity>
 
-            <CustomButton
+
+            {/* <CustomButton
                 style={[styles.deleteBtn,typography.heading]}
                 label="Delete Account"
                 onPress={() => {
                     setOptionsModalVisible(false);
                     handleDelete();
                 }}
-            />
+            /> */}
+
+            <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => {
+                    setOptionsModalVisible(false);
+                    handleDelete();
+                }}
+                activeOpacity={0.8}
+            >
+                <Text style={[styles.deleteButtonText, typography.h3]}>Delete Account</Text>
+            </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setOptionsModalVisible(false)}>
-                <Text style={[styles.cancelText, typography.body]}>Cancel</Text>
+                <Text style={[styles.cancelText, typography.section]}>Cancel</Text>
             </TouchableOpacity>
         </View>
     </View>
@@ -482,11 +504,42 @@ editProfile: {
   alignItems: 'center',
   marginTop: 4,
 },
+modaoBox:{
+  paddingHorizontal:34,
+  paddingVertical:21,
+},
+modalTitle:{
+  color:"#3D332E"
+},
 modalText:{
   textAlign:"center",
-  marginBottom: 10
+  alignSelf:"stretch",
+  marginBottom: 10,
+  lineHeight:24,
+  color:"#3D332E"
 },
-deleteBtn:{
-  marginBottom: 20
+deleteButton: {
+  width: '100%',
+  paddingVertical: 18,
+  borderRadius: 32,
+  backgroundColor: '#A64D3F', 
+  alignItems: 'center',
+  marginBottom: 20,
+},
+archiveButton: {
+  width: '100%',
+  paddingVertical: 18,
+  borderRadius: 32,
+  borderWidth: 2,
+  borderColor: '#F0BA7A', // Sandy Brown
+  backgroundColor: '#F9FBF7', // Soft Ivory
+  alignItems: 'center',
+  marginBottom: 12,
+},
+archiveButtonText:{
+  color:"#3D332E"
+},
+cancelText:{
+  paddingVertical:18
 }
 });
