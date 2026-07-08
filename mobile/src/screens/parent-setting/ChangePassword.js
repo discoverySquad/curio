@@ -6,6 +6,27 @@ import { Ionicons } from '@expo/vector-icons';
 import CustomButton from '../../components/CustomButton'
 import colors from '../../constants/colors';
 
+const PasswordInput = ({ label, value, onChangeText, show, onToggle }) => (
+    <View style={styles.fieldContainer}>
+      <Text style={styles.label}>{label}</Text>
+      <View style={styles.inputWrapper}>
+        <TextInput
+          style={styles.input}
+          value={value}
+          onChangeText={onChangeText}
+          secureTextEntry={!show}
+        />
+        <TouchableOpacity onPress={onToggle} style={styles.eyeButton}>
+          <Ionicons
+            name={show ? 'eye-off-outline' : 'eye-outline'}
+            size={20}
+            color="#888"
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
 const ChangePassword = ({ route, user }) => {
 
   // const user = route?.params?.user;
@@ -16,6 +37,16 @@ const ChangePassword = ({ route, user }) => {
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmError, setConfirmError] = useState("");
+  
+  const handleConfirmChange = (value) => {
+    setConfirmPassword(value);
+    if(value && value !== newPassword){
+      setConfirmError("Password dose not match")
+    }else{
+      setConfirmError("");
+    }
+  }
 
   const handleSavePassword = async() => {
 
@@ -65,26 +96,7 @@ const ChangePassword = ({ route, user }) => {
     }
   };
 
-  const PasswordInput = ({ label, value, onChangeText, show, onToggle }) => (
-    <View style={styles.fieldContainer}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.input}
-          value={value}
-          onChangeText={onChangeText}
-          secureTextEntry={!show}
-        />
-        <TouchableOpacity onPress={onToggle} style={styles.eyeButton}>
-          <Ionicons
-            name={show ? 'eye-off-outline' : 'eye-outline'}
-            size={20}
-            color="#888"
-          />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+  
 
   return (
     <ScrollView style={styles.container}>

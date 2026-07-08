@@ -296,6 +296,10 @@ cupIcon: {
   settingText: {
     textAlign: 'center',
     fontSize: 16
+  },
+  timeCircle: {
+    width: 85,
+    height: 85,
   }
 });
 
