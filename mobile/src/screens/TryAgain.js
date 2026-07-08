@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Pressable, Button, ScrollView, Image } from 're
 import React from 'react'
 
 import CustomButton from '../components/CustomButton.js'
-import { typography } from '../constants/fonts';
+import { typography } from '../constants/fonts.js';
 
 const TryAgain = ({ navigation, route }) => {
 
@@ -51,8 +51,8 @@ const TryAgain = ({ navigation, route }) => {
             <Text style={styles.tryAgainBtnText}>Try Again</Text>
         </Pressable> */}
 
-        <Pressable style={[styles.changeActivityBtn, typography.section]} onPress={() => navigation?.navigate('SelectCategory')}>
-            <Text style={styles.changeActivityBtnText}>Change Activity</Text>
+        <Pressable style={[styles.changeActivityBtn]} onPress={() => navigation?.navigate('SelectCategory')}>
+            <Text style={[styles.changeActivityBtnText, typography.h3]}>Change Activity</Text>
         </Pressable>
 
       
@@ -132,13 +132,20 @@ const styles= StyleSheet.create({
     //   fontWeight: '600',
     // },
     changeActivityBtn: {
+        marginTop: 35,
+        width: '100%',
+        height:67,
+        paddingVertical:17,
+        borderRadius: 32,
+        borderWidth: 2,
+        borderColor: '#F0BA7A', 
+        backgroundColor: '#F9FBF7', 
+        alignItems: 'center',
+        marginBottom: 12,
       
     },
     changeActivityBtnText: {
-      color: '#3D332E',
-      fontSize: 16,
-      fontWeight: '600',
-      marginVertical:18
+      color: '#3D332E'
     }
 })
 

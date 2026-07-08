@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Image, ActivityIndicator, ScrollView } from 'react-native';
 import * as Speech from 'expo-speech';
 import { Ionicons } from '@expo/vector-icons';
-
+import { typography } from '../constants/fonts.js';
 import CustomButton from '../components/CustomButton.js';
 
 const ActivityDescription = ({ navigation, route }) => {
@@ -176,7 +176,7 @@ const ActivityDescription = ({ navigation, route }) => {
                     })
                 }
             >
-                <Text style={styles.changeActivityBtnText}>Change Activity</Text>
+                <Text style={[styles.changeActivityBtnText, typography.h3]}>Change Activity</Text>
             </Pressable>
         </ScrollView>
     );
@@ -240,12 +240,13 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         gap:24,
         backgroundColor: '#F0BA7A',
-        width: '100%',
+        width: 358,
         minHeight: 110,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 32,
-        paddingHorizontal: 20,
+        paddingHorizontal: 24,
+        paddingVertical:24,
         marginBottom: 41,
     },
     infoIcon:{
@@ -257,19 +258,26 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: '#000000',
         width:206,
-        lineHeight:24
+        lineHeight:24,
+        fontWeight:500
     },
     buttonSection: {
         width: '100%',
-        marginBottom: 12,
+        // marginBottom: 12,
     },
     changeActivityBtn: {
-        marginTop: 4,
+        marginTop: 35,
+        width: '100%',
+        paddingVertical: 17,
+        borderRadius: 32,
+        borderWidth: 2,
+        borderColor: '#F0BA7A', // Sandy Brown
+        backgroundColor: '#F9FBF7', // Soft Ivory
+        alignItems: 'center',
+        marginBottom: 12,
     },
     changeActivityBtnText: {
-        color: '#111111',
-        fontSize: 14,
-        fontWeight: '600',
+        color: '#3D332E',
     },
     errorText: {
         fontSize: 16,

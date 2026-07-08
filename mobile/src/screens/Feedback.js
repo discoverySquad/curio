@@ -5,6 +5,7 @@ import * as Speech from 'expo-speech';
 import { useSelectedChild } from '../context/SelectedChildContext';
 import { apiRequest } from '../services/api.js';
 import CustomButton from '../components/CustomButton.js';
+import { typography } from '../constants/fonts.js';
 
 const Feedback = ({ navigation, route }) => {
     const result = route.params?.result || {};
@@ -105,7 +106,7 @@ const Feedback = ({ navigation, route }) => {
 
             <Text style={styles.message}>Nice Exploring! You scanned {objectName}. Keep looking around--the world is full of surprises.</Text>
 
-            <Text style={styles.objectName}>{objectName}</Text>
+            <Text style={[styles.objectName, typography.h2]}>{objectName}</Text>
 
             <View style={styles.factsSection}>
                 {facts.length > 0 ? (
@@ -126,7 +127,7 @@ const Feedback = ({ navigation, route }) => {
             </View>
 
             <Pressable style={styles.changeActivityBtn} onPress={goToChangeCategory}>
-                <Text style={styles.changeActivityBtnText}>Change Activity</Text>
+                <Text style={[styles.changeActivityBtnText, typography.h3]}>Change Activity</Text>
             </Pressable>
         </ScrollView>
     );
@@ -185,9 +186,7 @@ const styles = StyleSheet.create({
     },
     objectName:{
         color: '#3D332E',
-        fontSize: 24,
-        marginBottom:10,
-        fontWeight:"bold"
+        marginVertical:41
     },
     message: {
         width: '100%',
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 20,
         color: '#3D332E',
-        marginBottom: 28,
+        // marginBottom: 28,
     },
     factsSection: {
         width: '100%',
@@ -210,7 +209,8 @@ const styles = StyleSheet.create({
         borderRadius: 24,
         justifyContent: 'center',
         paddingHorizontal: 24,
-        paddingVertical: 18,
+        paddingVertical: 24,
+        marginBottom:24
     },
     factText: {
         fontSize: 15,
@@ -221,18 +221,24 @@ const styles = StyleSheet.create({
     buttonSection: {
         width: '100%',
         maxWidth: 318,
-        marginBottom: 12,
+        // marginBottom: 12,
     },
     changeActivityBtn: {
-        paddingVertical: 8,
-        paddingHorizontal: 16,
+        marginTop: 35,
+        width: '100%',
+        height:67,
+        paddingVertical:17,
+        borderRadius: 32,
+        borderWidth: 2,
+        borderColor: '#F0BA7A', 
+        backgroundColor: '#F9FBF7', 
+        alignItems: 'center',
+        marginBottom: 12,
+      
     },
     changeActivityBtnText: {
-        color: '#3D332E',
-        fontSize: 13,
-        fontWeight: '700',
-        textAlign: 'center',
-    },
+      color: '#3D332E'
+    }
 });
 
 export default Feedback;

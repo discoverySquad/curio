@@ -15,11 +15,12 @@ const CustomButton = ({ label, onPress }) => {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.primary,
-    borderRadius: 30,
-    paddingVertical: 16,
+    borderRadius: 32,
+    paddingVertical: 18,
     alignItems: 'center',
     justifyContent: 'center',
     width: "100%",
+    height:67
   },
   label: {
     color: '#FFFFFF',
