@@ -175,13 +175,16 @@ export default function EditChildScreen({ navigation, route }){
           <View style={styles.modalOverlay}>
               <View style={styles.modalBox}>
                   <Text style={[styles.modalTitle, typography.h2]}>Are you sure?</Text>
-                  <Text style={[styles.modalText, typography.body]}>This will archive the child profile. Achievements, badges, and points will be saved.</Text>
-                  <CustomButton 
-                  label="Archive Profile"
-                  style={typography.heading} 
-                  onPress={handleArchive} />
+                  <Text style={[styles.modalText, typography.body]}>This will remove the child profile and its saved progress. You cannot recover achievements or activities after this action.</Text>
+                  <TouchableOpacity
+                    style={styles.archiveButton}
+                    onPress={handleArchive}
+                    activeOpacity={0.8}
+                  >
+                  <Text style={[styles.archiveButtonText, typography.h3]}>Archive Profile</Text>
+                  </TouchableOpacity>
                   <TouchableOpacity onPress={() => setArchiveModalVisible(false)}>
-                      <Text style={[styles.cancelText, typography.body]}>Cancel</Text>
+                      <Text style={[styles.cancelText, typography.section]}>Cancel</Text>
                   </TouchableOpacity>
               </View>
           </View>
@@ -291,16 +294,27 @@ archiveLink: {
     fontSize: 18,
     fontWeight: "700",
     marginBottom: 12,
+    color:"#574239"
   },
   modalText: {
-    fontSize: 13,
-    color: '#555',
+    color: '#3D332E',
     textAlign: 'center',
     marginBottom: 16,
+    lineHeight:24
+  },
+  archiveButton: {
+    width: '100%',
+    paddingVertical: 18,
+    borderRadius: 32,
+    backgroundColor: '#A64D3F', 
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  archiveButtonText:{
+    color:"#F9FBF7",
   },
   cancelText: {
-    fontSize: 12,
-    color: '#555',
-    marginTop: 20,
+    paddingVertical:18,
+    color:"#3D332E"
   },
 });
