@@ -69,6 +69,7 @@ const EditParentAccount = ({navigation, route, user}) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.formContainer}>
+        <View style={styles.inputBox}>
          <Text style={styles.label}>Name</Text>
          <TextInput 
           style={styles.input} 
@@ -83,8 +84,9 @@ const EditParentAccount = ({navigation, route, user}) => {
           keyboardType='email-address'
           autoCapitalize='none' 
          />
+        </View>
 
-         <CustomButton style={styles.saveChangeButton} label="Save Changes" onPress={handleParentProfileChange} />
+        <CustomButton style={styles.saveChangeButton} label="Save Changes" onPress={handleParentProfileChange} />
 
       </View>
 
@@ -170,8 +172,8 @@ const styles = StyleSheet.create({
         color: colors.neutralStone,
         // marginVertical: 4,
     },
-    saveChangeButton: {
-      marginTop: 24,
+    inputBox: {
+      marginBottom: 24,
     },
     modalOverlay: {
       flex: 1,
