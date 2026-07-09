@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
         borderColor: '#F0BA7A',
         backgroundColor: '#F9FBF7',
         alignItems: 'center',
-        marginBottom: 12,
+        marginBottom: 48,
     },
     changeActivityBtnText: {
         color: '#3D332E',
