@@ -150,7 +150,6 @@ const greenHeaderOptions = {
 };
 
 const getActiveRouteName = (route) => {
-    // route.state が存在する = ネストされたStack/Tabナビゲーターを持つタブ
     if (!route.state || !route.state.routes) {
         return route.name;
     }
