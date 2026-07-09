@@ -115,15 +115,6 @@ export default function EditChildScreen({ navigation, route }){
 
     return(
       <View style={styles.container}>
-        {/* <View style={styles.titleRow}>
-          <Text style={styles.title}>Edit Profile</Text>
-          <TouchableOpacity onPress={() => setArchiveModalVisible(true)}>
-            <Image 
-              source={require('../../assets/Archive.png')}
-              style={{ width: 20, height: 20, tintColor: '#888' }}
-            />
-            </TouchableOpacity>
-        </View> */}
 
         <View style={styles.box}>
           <Text style={styles.label}>First name or nickname</Text>
@@ -242,6 +233,8 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     borderColor: '#F2F4F0',
+    backgroundColor: '#F2F4F0',
+    marginBottom: 8,
   },
   avatarContainer: {
     flexDirection: 'row',
