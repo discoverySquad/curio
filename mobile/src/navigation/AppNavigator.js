@@ -40,6 +40,11 @@ const Tab = createBottomTabNavigator();
 const HomeIcon = require('../assets/home_icon.png');
 const JournalIcon = require('../assets/journal_icon.png');
 
+const TAB_INITIAL_SCREENS = {
+    HomeTab: 'Home',
+    Journal: 'JournalHome',
+};
+
 const getFindTitle = (route) => {
     const rawTitle = route?.params?.activityTitle || route?.params?.taskName || route?.params?.task || 'Object';
     const title = String(rawTitle).trim();
@@ -144,13 +149,37 @@ const greenHeaderOptions = {
     },
 };
 
+const getActiveRouteName = (route) => {
+    // route.state が存在する = ネストされたStack/Tabナビゲーターを持つタブ
+    if (!route.state || !route.state.routes) {
+        return route.name;
+    }
+
+    const nestedRoute = route.state.routes[route.state.index ?? route.state.routes.length - 1];
+    return getActiveRouteName(nestedRoute);
+};
+
 const CustomTabBar = ({ state, descriptors, navigation }) => {
     const hiddenRoutes = ['Scan', 'Parent'];
-    const currentRoute = state.routes[state.index];
+    // const currentRoute = state.routes[state.index];
 
-    if (hiddenRoutes.includes(currentRoute.name)) {
+    // if (hiddenRoutes.includes(currentRoute.name)) {
+    //     return null;
+    // }
+
+    const alwaysShowScreens = ['Feedback', 'TryAgain'];
+
+    const currentRoute = state.routes[state.index];
+    const activeNestedRouteName = getActiveRouteName(currentRoute);
+
+    const shouldHide =
+        hiddenRoutes.includes(currentRoute.name) &&
+        !alwaysShowScreens.includes(activeNestedRouteName);
+
+    if (shouldHide) {
         return null;
     }
+
 
     const visibleRoutes = state.routes.filter((route) => !hiddenRoutes.includes(route.name));
 
@@ -186,8 +215,19 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                             canPreventDefault: true,
                         });
 
+                        // if (!isFocused && !event.defaultPrevented) {
+                        //     navigation.navigate(route.name);
+                        // }
+
                         if (!isFocused && !event.defaultPrevented) {
-                            navigation.navigate(route.name);
+                            const initialScreen = TAB_INITIAL_SCREENS[route.name];
+
+                            if (initialScreen) {
+            
+                                navigation.navigate(route.name, { screen: initialScreen });
+                            } else {
+                                navigation.navigate(route.name);
+                            }
                         }
                     };
 
@@ -350,7 +390,7 @@ const ScanStack = () => {
                 options={({ route }) => ({
                     title: getFindTitle(route),
                     showBackButton: true,
-                    screenBackgroundColor: '#000000',
+                    screenBackgroundColor: '#316828',
                     contentStyle: {
                         backgroundColor: '#000000',
                     },
