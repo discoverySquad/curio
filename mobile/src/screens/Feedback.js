@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Image, ScrollView } from 'react-native';
 import * as Speech from 'expo-speech';
+import { useAudioPlayer } from 'expo-audio';
 
 import { useSelectedChild } from '../context/SelectedChildContext';
 import { apiRequest } from '../services/api.js';
@@ -14,12 +15,16 @@ const Feedback = ({ navigation, route }) => {
     const categoryName = route.params?.categoryName || route.params?.category || 'Nature';
 
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const successSound = useAudioPlayer(require('../assets/sounds/success.mp3'));
 
     const objectName = result?.objectName || 'what you found';
     const facts = Array.isArray(result?.facts) ? result.facts.slice(0, 3) : [];
     const imageUri = route.params?.imageUri || result?.imageUri || result?.photoUri;
 
     useEffect(() => {
+        successSound.seekTo(0);
+        successSound.play();
+
         if (facts.length > 0 && childId) {
             apiRequest('/api/gamification/fact', 'POST', { childId, count: facts.length }).catch((error) =>
                 console.log('viewFact failed:', error.message || error),
@@ -184,9 +189,9 @@ const styles = StyleSheet.create({
         width: 44,
         height: 44,
     },
-    objectName:{
+    objectName: {
         color: '#3D332E',
-        marginVertical:41
+        marginVertical: 41,
     },
     message: {
         width: '100%',
@@ -210,7 +215,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: 24,
         paddingVertical: 24,
-        marginBottom:24
+        marginBottom: 24,
     },
     factText: {
         fontSize: 15,
@@ -226,19 +231,18 @@ const styles = StyleSheet.create({
     changeActivityBtn: {
         marginTop: 35,
         width: '100%',
-        height:67,
-        paddingVertical:17,
+        height: 67,
+        paddingVertical: 17,
         borderRadius: 32,
         borderWidth: 2,
-        borderColor: '#F0BA7A', 
-        backgroundColor: '#F9FBF7', 
+        borderColor: '#F0BA7A',
+        backgroundColor: '#F9FBF7',
         alignItems: 'center',
         marginBottom: 12,
-      
     },
     changeActivityBtnText: {
-      color: '#3D332E'
-    }
+        color: '#3D332E',
+    },
 });
 
 export default Feedback;
