@@ -7,6 +7,9 @@ import { useSelectedChild } from '../../context/SelectedChildContext';
 import * as SecureStore from 'expo-secure-store';
 import { apiRequest } from '../../services/api.js';
 
+import { fonts } from '../../constants/fonts.js';
+import colors from '../../constants/colors.js';
+
 export default function CreateChildScreen({ navigation, route }) {
     const [name, setName] = useState('');
     const [selected, setSelected] = useState('');
@@ -40,72 +43,72 @@ export default function CreateChildScreen({ navigation, route }) {
         return user?.id || user?._id;
     };
 
-const handleCreateChild = async () => {
-    console.log('response:', data);
+    const handleCreateChild = async () => {
+        console.log('response:', data);
 
-    if (!name.trim()) {
-        Alert.alert('Missing name', 'Please enter a child name.');
-        return;
-    }
-
-    if (!selected) {
-        Alert.alert('Missing grade', 'Please select a grade.');
-        return;
-    }
-
-    try {
-        setSaving(true);
-
-        const token = await SecureStore.getItemAsync('token');
-        const parentId = await getParentId();
-
-        if (!parentId) {
-            Alert.alert('Error', 'parentId is missing. Please log in again.');
+        if (!name.trim()) {
+            Alert.alert('Missing name', 'Please enter a child name.');
             return;
         }
 
-        const createdChild = await apiRequest(
-            '/api/child',
-            'POST',
-            {
+        if (!selected) {
+            Alert.alert('Missing grade', 'Please select a grade.');
+            return;
+        }
+
+        try {
+            setSaving(true);
+
+            const token = await SecureStore.getItemAsync('token');
+            const parentId = await getParentId();
+
+            if (!parentId) {
+                Alert.alert('Error', 'parentId is missing. Please log in again.');
+                return;
+            }
+
+            const createdChild = await apiRequest(
+                '/api/child',
+                'POST',
+                {
+                    name: name.trim(),
+                    grade: selected,
+                    avatar: selectedAvatar,
+                    parentId,
+                    timeLimit: 0,
+                },
+                token,
+            );
+
+            console.log('API_URL check start');
+            console.log('payload:', {
                 name: name.trim(),
                 grade: selected,
                 avatar: selectedAvatar,
                 parentId,
-                timeLimit: 0,
-            },
-            token,
-        );
+            });
 
-        console.log('API_URL check start');
-        console.log('payload:', {
-            name: name.trim(),
-            grade: selected,
-            avatar: selectedAvatar,
-            parentId,
-        });
+            await AsyncStorage.setItem('selectedChild', JSON.stringify(createdChild));
+            setSelectedChild(createdChild);
 
-        await AsyncStorage.setItem('selectedChild', JSON.stringify(createdChild));
-        setSelectedChild(createdChild);
+            const userStr = await SecureStore.getItemAsync('user');
+            const user = userStr ? JSON.parse(userStr) : null;
 
-        const userStr = await SecureStore.getItemAsync('user');
-        const user = userStr ? JSON.parse(userStr) : null;
+            if (user) {
+                const updatedUser = {
+                    ...user,
+                    childId: [...(user.childId || []), createdChild._id],
+                };
 
-        if (user) {
-            const updatedUser = {
-                ...user,
-                childId: [...(user.childId || []), createdChild._id],
-            };
-
-            await SecureStore.setItemAsync('user', JSON.stringify(updatedUser));
+                await SecureStore.setItemAsync('user', JSON.stringify(updatedUser));
+            }
+        } catch (error) {
+            console.log('Create child error:', error);
+            Alert.alert('Error', error.message || 'Could not create child profile.');
+        } finally {
+            setSaving(false);
         }
-    } catch (error) {
-        console.log('Create child error:', error);
-        Alert.alert('Error', error.message || 'Could not create child profile.');
-    } finally {
-        setSaving(false);
-    }
-};
+    };
 
     return (
         <View style={styles.container}>
@@ -128,6 +131,7 @@ const handleCreateChild = async () => {
                 <Text style={styles.label}>Grade</Text>
                 <SelectList
                     boxStyles={styles.selectBox}
+                    inputStyles={styles.inputStyles}
                     dropdownStyles={styles.dropdown}
                     setSelected={(val) => setSelected(val)}
                     data={data}
@@ -149,6 +153,7 @@ const handleCreateChild = async () => {
                 </View>
             </View>
 
+
             <TouchableOpacity style={styles.btn} onPress={handleCreateChild} disabled={saving}>
                 <Text style={styles.btnText}>{saving ? 'Saving...' : 'Create Profile'}</Text>
             </TouchableOpacity>
@@ -163,38 +168,54 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 24,
     },
-    box: {
-        alignSelf: 'center',
-        backgroundColor: 'white',
-        width: 340,
-        border: '2px',
-        borderColor: '#ECEEEB',
-        padding: 20,
-        borderRadius: 20,
-    },
     title: {
-        fontSize: 26,
-        fontWeight: 'bold',
+        fontFamily: fonts.heading,
+        fontSize: 36,
+        fontWeight: 700,
+        marginBottom: 10
     },
     text: {
+        fontFamily: fonts.body,
+        fontSize: 16,
+        fontWeight: 400,
         marginBottom: 20,
     },
     input: {
         borderWidth: 1,
-        borderColor: '#F2F4F0',
-        padding: 12,
-        borderRadius: 20,
+        borderColor: colors.surface,
+        backgroundColor: colors.surface,
+        paddingHorizontal: 14,
+        paddingVertical: 18,
+        borderRadius: 30,
         marginBottom: 12,
     },
     label: {
-        fontSize: 12,
+        fontSize: 14,
+        fontWeight: 700,
         marginBottom: 6,
     },
+    box: {
+        backgroundColor: colors.tertiary,
+        borderRadius: 32,
+        paddingHorizontal: 20,
+        paddingVertical: 30
+    },
     selectBox: {
+        backgroundColor: colors.surface,
+        borderColor: colors.surface,
         borderWidth: 1,
-        borderColor: '#F2F4F0',
+        borderRadius: 30,
+        height: 50,
+        marginBottom: 12
+    },
+    inputStyles: {
+        fontSize: 16,
+        paddingVertical: 0,
+        marginTop: 5,
+    },
+    dropdown: {
+        borderWidth: 1,
         borderRadius: 20,
-        marginBottom: 12,
     },
     avatarContainer: {
         justifyContent: 'space-evenly',
@@ -209,7 +230,7 @@ const styles = StyleSheet.create({
         padding: 2,
     },
     selectedAvatar: {
-        borderColor: '#000000',
+        borderColor: colors.primary,
     },
     avatar: {
         width: 75,
@@ -217,18 +238,20 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     btn: {
-        width: 340,
-        height: 50,
-        backgroundColor: 'grey',
-        borderRadius: 30,
+        width: '100%',
+        height: 67,
+        backgroundColor: colors.primary,
+        borderRadius: 32,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 50,
     },
     btnText: {
         fontSize: 24,
-        fontWeight: 'bold',
+        fontWeight: 700,
         textAlign: 'center',
-        color: 'white',
+        color: '#FFFFFF',
+        letterSpacing: 0.3,
+        fontFamily: fonts.heading,
     },
 });
