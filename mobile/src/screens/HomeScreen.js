@@ -11,6 +11,13 @@ import {fonts} from "../constants/fonts.js";
 import { Lock } from 'lucide-react-native';
 import { Trophy } from 'lucide-react-native';
 
+const MASCOT_IMAGES = [
+  "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Mascot_1.png",
+  "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Mascot_2.png",
+  "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Mascot_3.png",
+  "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Mascot_4.png",
+];
+
 const HomeScreen = ({ navigation, route, onLogout }) => {
 
   // const childId = route?.params?.childId;
@@ -22,7 +29,9 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
   const { selectedChild, setSelectedChild } = useSelectedChild();
   const [todayMissionCount, setTodayMissionCount] = useState(0);
   const goalTotal = 5;
-
+  const [mascotImage] = useState(
+    MASCOT_IMAGES[Math.floor(Math.random() * MASCOT_IMAGES.length)]
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -103,6 +112,16 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
 
+      {/* mascot */}
+      <View style={styles.mascotSection}>
+        <View style={styles.mascotWrapper}>
+          <Image 
+          source={{uri: mascotImage}}
+          style={styles.mascotImage}
+          resizeMode='contain'
+          />
+        </View>
+
       {/* card1 */}
       <View style={styles.homeCard}>
         <View style={styles.titleSection}>
@@ -115,6 +134,7 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
         <View style={styles.buttonSection}>
           <CustomButton label="Start Activity" onPress={handleStartActivity} />
         </View>
+      </View>
       </View>
 
       {/* card2 */}
@@ -202,6 +222,21 @@ const styles = StyleSheet.create({
     backgroundColor: colors.tertiary,
     borderRadius: 20,
     padding: 24,
+  },
+  mascotSection: {
+    position: "relative",
+    marginTop: 16,
+  },
+  mascotWrapper:{
+    alignItems: "center",
+    zIndex: -2,
+    position: "relative",
+    marginBottom: -55,
+    paddingRight: 35,
+  },
+  mascotImage: {
+    width: 280,
+    height: 280,
   },
   goalHeader: {
     flex: 1,
