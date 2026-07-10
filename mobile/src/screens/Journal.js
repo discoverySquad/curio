@@ -169,9 +169,10 @@ const JournalScreen = ({ route }) => {
 
 
                     <View style={styles.badgeInfo}>
-                        <Text style={[styles.badgeName, !badge.earned && styles.textLocked]}>
-                            {badge.name}
-                        </Text>
+                        <View style={styles.titleRow}>
+                            <Text style={styles.badgeName}>{badge.name}</Text>
+                            {!badge.earned && <Lock size={18} />}
+                        </View>
                         <Text style={[styles.badgeDesc, !badge.earned && styles.textLocked]}>
                             {badge.description}
                         </Text>
@@ -181,12 +182,12 @@ const JournalScreen = ({ route }) => {
                     </View>
 
 
-                    <View style={styles.badgeRight}>
+                    {/* <View style={styles.badgeRight}>
                         {badge.earned
                             ? null
                             : <Lock size={18}></Lock>
                         }
-                    </View>
+                    </View> */}
                 </View>
             ))}
 
@@ -220,22 +221,29 @@ const styles = StyleSheet.create({
         position: 'relative',
         width: 100,
         height: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     avatar: {
-        width: 80, height: 80, borderRadius: 40,
+        width: 100,
+        height: 100,
+        borderRadius: 50,
         backgroundColor: '#D9D9D9',
-        justifyContent: 'center', alignItems: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     avatarImage: {
-        width: 100, height: 100, borderRadius: 40
+        width: 100,
+        height: 100,
+        borderRadius: 50
     },
     avatarEmoji: {
         fontSize: 36
     },
     pen: {
         position: 'absolute',
-        right: 45,
-        bottom: -26,
+        right: -14,
+        bottom: -14,
         width: 28,
         height: 28,
         zIndex: 10,
@@ -264,10 +272,11 @@ const styles = StyleSheet.create({
         height: 18,
         borderRadius: 15,
         borderWidth: 1,
-        borderColor: colors.neutralClay
+        borderColor: colors.neutralClay,
+        overflow: 'hidden',
     },
     progressBarFill: {
-        height: 18,
+        height: '100%',
         borderRadius: 15,
         backgroundColor: colors.secondary
     },
@@ -302,7 +311,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 14,
-        position: 'relative'
+        position: 'relative',
+        alignItems: 'center',
     },
     badgeCardLocked: {
         backgroundColor: '#F2F4F0',
@@ -327,6 +337,11 @@ const styles = StyleSheet.create({
         height: 80,
         resizeMode: 'contain',
     },
+    titleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+},
     badgeName: {
         fontSize: 24,
         fontWeight: '700'
@@ -341,11 +356,6 @@ const styles = StyleSheet.create({
     },
     textLocked: {
         color: '#999'
-    },
-    badgeRight: {
-        position: 'absolute',
-        top: 50,
-        right: 30,
     },
 });
 
