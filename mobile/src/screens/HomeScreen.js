@@ -172,7 +172,7 @@ const HomeScreen = ({ navigation, route, onLogout }) => {
           </View>
           <View style={styles.timeLeftBox}>
             <View>
-              <Text style={styles.cardTitle}>Exploration Time</Text>
+              <Text style={styles.cardTitle}>Exploration{"\n"}Time</Text>
             </View>
             <View style={styles.exploration}>
               {child ? (
@@ -252,6 +252,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.neutral,
+    fontWeight: 700,
   },
   text1: {
     fontSize: 20,
