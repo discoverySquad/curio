@@ -55,7 +55,7 @@ export default function ParentDashboardScreen({ navigation, route, user }) {
                 <Text style={styles.mainText}>Parent Account</Text>
                 <Text style={styles.subText}>Enter your password to manage your settings</Text>
 
-                <TextInput style={styles.input} placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
+                <TextInput style={styles.input} placeholder="Password" placeholderTextColor={colors.neutralInk} value={password} onChangeText={setPassword} secureTextEntry />
                 <Text style={styles.forgetPassword}>Forget password?</Text>
 
                 <CustomButton label="Unlock Settings" onPress={handlePress} />
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         padding: 24,
         borderRadius: 32,
         width: "90%",
-        height: 500,
+        // height: 500,
         backgroundColor: colors.tertiary,
     },
     mainText: {
@@ -101,12 +101,15 @@ const styles = StyleSheet.create({
         marginBottom: 48,
         textAlign: 'center',
         color: colors.neutral,
+        paddingHorizontal: 4,
+        fontWeight: 500,
     },
     lock: {
         alignSelf: 'center',
-        width: 60,
-        height: 60,
-        marginBottom: 20,
+        width: 83,
+        height: 83,
+        marginTop: 10,
+        marginBottom: 32,
         resizeMode: 'contain',
     },
     input: {
@@ -124,6 +127,8 @@ const styles = StyleSheet.create({
         marginBottom: 24,
         marginTop: 8,
         textAlign: "right",
-
+        fontWeight: 700,
+        fontSize: 14,
+        fontFamily: fonts.heading,
     }
 });

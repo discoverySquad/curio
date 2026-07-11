@@ -250,7 +250,7 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
                 <TouchableOpacity 
                     style={styles.editProfile}
                     onPress={() => setEditMode(!editMode)}>
-                    <Text>{editMode ? "Cancel" : "Edit Profile"}</Text>
+                    <Text style={styles.editBtn}>{editMode ? "Cancel" : "Edit Profile"}</Text>
                 </TouchableOpacity>
             </View>
 
@@ -397,11 +397,16 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: 'center',
   },
+  editBtn: {
+    fontWeight: 700,
+    fontSize: 16,
+    fontFamily: fonts.heading,
+  },
   card: { 
     backgroundColor: colors.tertiary,
     borderRadius: 32, 
     marginBottom: 24, 
-    paddingHorizontal: 16, 
+    paddingHorizontal: 24, 
     paddingVertical: 24, 
     borderWidth: 0.5, 
     borderColor: '#e0e0e0' 
