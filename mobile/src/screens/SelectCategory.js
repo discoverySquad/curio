@@ -47,7 +47,7 @@ const SelectCategory = ({navigation}) => {
 
        {/* selection 3 */}     
        
-       <TouchableOpacity onPress={handlePress} activeOpacity={0.8}>
+       <TouchableOpacity onPress={() =>handlePress('colors')} activeOpacity={0.8}>
         <View style={styles.card}>
           <Image 
             source={{ uri: "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Colours.png"}}
@@ -61,7 +61,7 @@ const SelectCategory = ({navigation}) => {
 
        {/* selection 4 */}     
        
-       <TouchableOpacity onPress={handlePress} activeOpacity={0.8}>
+       <TouchableOpacity onPress={() => handlePress('textures')} activeOpacity={0.8}>
         <View style={styles.card}>
           <Image 
             source={{ uri: "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Textures.png"}}
@@ -75,7 +75,7 @@ const SelectCategory = ({navigation}) => {
 
        {/* selection 5 */}  
 
-       <TouchableOpacity onPress={handlePress} activeOpacity={0.8}>
+       <TouchableOpacity onPress={() => handlePress('animals')} activeOpacity={0.8}>
         <View style={styles.card}>
           <Image 
             source={{ uri: "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Animals.png"}}
@@ -89,7 +89,7 @@ const SelectCategory = ({navigation}) => {
 
        {/* selection 6 */}  
 
-       <TouchableOpacity onPress={handlePress} activeOpacity={0.8}>
+       <TouchableOpacity onPress={() => handlePress('food')} activeOpacity={0.8}>
         <View style={styles.card}>
           <Image 
             source={{ uri: "https://curio4985-bucket.s3.us-east-1.amazonaws.com/Food.png"}}
