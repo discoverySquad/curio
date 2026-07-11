@@ -279,7 +279,9 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
                 </View>
             </View>
 
-            <CustomButton label="Log Out" onPress={handleLogout} />
+            <View style={styles.logoutButton}>
+              <CustomButton label="Log Out" onPress={handleLogout} />
+            </View>
 
               <Modal
             visible={optionsModalVisible}
@@ -344,8 +346,9 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
 const styles = StyleSheet.create({
   container:{
     flex: 1,
-    backgroundColor: '#f5f5f5',
-    padding: 16
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    marginBottom: 32,
     },
   centered:{ 
     flex: 1, 
@@ -546,5 +549,8 @@ archiveButtonText:{
 },
 cancelText:{
   paddingVertical:18
+},
+logoutButton: {
+  marginBottom: 48,
 }
 });
