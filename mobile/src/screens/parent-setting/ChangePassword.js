@@ -27,7 +27,7 @@ const PasswordInput = ({ label, value, onChangeText, show, onToggle }) => (
     </View>
   );
 
-const ChangePassword = ({ route, user }) => {
+const ChangePassword = ({ route, user, navigation }) => {
 
   // const user = route?.params?.user;
 
@@ -38,6 +38,8 @@ const ChangePassword = ({ route, user }) => {
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmError, setConfirmError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   
   const handleConfirmChange = (value) => {
     setConfirmPassword(value);
@@ -89,7 +91,8 @@ const ChangePassword = ({ route, user }) => {
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
-        
+        navigation.goBack();
+
     }catch(error){
       console.error("Change password error:", error);
       Alert.alert("Error", "Something went wrong. Please try again.");
