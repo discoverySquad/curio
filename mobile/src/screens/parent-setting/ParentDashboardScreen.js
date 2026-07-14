@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, ScrollView, TextInput, Alert, Image, Pressable } from 'react-native';
+import { View, Text, Button, StyleSheet, ScrollView, TextInput, Alert, Image, Pressable, TouchableOpacity } from 'react-native';
 import { useState, useLayoutEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -14,6 +14,7 @@ export default function ParentDashboardScreen({ navigation, route, user }) {
     // const parentId = "6a15ddc0752c37728664b230";
     const parentId = user?.id || user?._id;
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     // const user = route.params?.user;
 
     const handlePress = async () => {
@@ -55,8 +56,22 @@ export default function ParentDashboardScreen({ navigation, route, user }) {
                 <Text style={styles.mainText}>Parent Account</Text>
                 <Text style={styles.subText}>Enter your password to manage your settings</Text>
 
-                <TextInput style={styles.input} placeholder="Password" placeholderTextColor={colors.neutralInk} value={password} onChangeText={setPassword} secureTextEntry />
-                <Text style={styles.forgetPassword}>Forget password?</Text>
+                <View style={styles.inputWrapper}>
+                <View style={styles.passwordFieldWrapper}>
+                    <TextInput style={styles.input} placeholder="Password" placeholderTextColor={colors.neutralInk} value={password} onChangeText={setPassword} onChangeText={setPassword} secureTextEntry={!showPassword} />
+                    <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.eyeButton}
+                    >
+                    <Ionicons
+                        name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                        size={20}
+                        color="#888"
+                    />
+                    </TouchableOpacity>
+                    </View>
+                    <Text style={styles.forgetPassword}>Forget password?</Text>
+                </View>
 
                 <CustomButton label="Unlock Settings" onPress={handlePress} />
             </View>
@@ -112,17 +127,17 @@ const styles = StyleSheet.create({
         marginBottom: 32,
         resizeMode: 'contain',
     },
-    input: {
-        height: 60,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        backgroundColor: '#fff',
-        borderRadius: 32,
-        padding: 24,
-        marginVertical: 4,
-        marginHorizontal: 0,
-        color: colors.neutralInk,
-    },
+    // input: {
+    //     height: 60,
+    //     borderColor: '#ccc',
+    //     borderWidth: 1,
+    //     backgroundColor: '#fff',
+    //     borderRadius: 32,
+    //     padding: 24,
+    //     marginVertical: 4,
+    //     marginHorizontal: 0,
+    //     color: colors.neutralInk,
+    // },
     forgetPassword: {
         marginBottom: 24,
         marginTop: 8,
@@ -130,5 +145,27 @@ const styles = StyleSheet.create({
         fontWeight: 700,
         fontSize: 14,
         fontFamily: fonts.heading,
-    }
+    },
+    passwordFieldWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    },
+    eyeButton: {
+    paddingHorizontal: 8,
+    },
+    passwordFieldWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    backgroundColor: '#fff',
+    borderRadius: 32,
+    padding: 24,
+    marginVertical: 4,
+    marginHorizontal: 0,
+    color: colors.neutralInk,
+},
+input: {
+  flex: 1,
+},
 });

@@ -334,7 +334,7 @@ const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild', onLogout 
 
             <Stack.Screen name="SelectCategory" component={SelectCategory} options={{ title: 'Choose Activity' }} />
 
-            <Stack.Screen name="EditParentAccount" options={{ title: 'Edit Account' }}>
+            <Stack.Screen name="EditParentAccount" options={{ title: 'Edit Parent Account' }}>
                 {(props) => <EditParentAccount {...props} user={user} />}
             </Stack.Screen>
 

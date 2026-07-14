@@ -250,11 +250,12 @@ const styles = StyleSheet.create({
   avatarWrapper: {
     // borderWidth: 2,
     // borderColor: '#777',
-    borderRadius: 40,
-    padding: 2,
+    borderRadius: 50,
+    // padding: 2,
   },
   selectedAvatar: {
-    borderColor: '#000',
+    borderColor: colors.primary,
+    borderWidth: 2,
   },
   avatar: {
     width: 92,
