@@ -98,40 +98,6 @@ const ScreenTime = ({ navigation, route }) => {
                         </TouchableOpacity>
                     ))}
 
-                    {/* <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => {
-                        setSelectedTime(20);
-                        saveTime(20);
-                    }}
-                >
-                    <Text>20m</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => {
-                        setSelectedTime(30);
-                        saveTime(30);
-                    }}
-                >
-                    <Text>30m</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => {
-                        setSelectedTime(60);
-                        saveTime(60);
-                    }}
-                >
-                    <Text>60m</Text>
-                </TouchableOpacity>
-
-                {selectedTime && (
-                    <Text>Selected: {selectedTime} minutes</Text>
-                )} */}
-
                     {/* custom input */}
                     <View style={[styles.optionBox, styles.flex]}>
                         <Image style={styles.customIcon} source={require('../../assets/custom.png')} />
@@ -145,10 +111,12 @@ const ScreenTime = ({ navigation, route }) => {
                         />
                     </View>
 
-                    <CustomButton
-                        label={saving ? "Saving..." : "Save Limit"}
-                        onPress={saving ? undefined : saveTime}
-                    />
+                    <View style={{ marginTop: 10, width: '100%' }}>
+                        <CustomButton
+                            label={saving ? "Saving..." : "Save Limit"}
+                            onPress={saving ? undefined : saveTime}
+                        />
+                    </View>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
@@ -178,8 +146,9 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginVertical: 10,
         width: '100%',
-        height: 50,
+        height: 60,
         alignItems: "center",
+        justifyContent: 'center'
     },
     flex: {
         flexDirection: 'row',
@@ -209,7 +178,8 @@ const styles = StyleSheet.create({
     },
     saveButtonText: {
         color: colors.neutralMist
-    }
+    },
+    marginBottom: 10
 });
 
 export default ScreenTime;
