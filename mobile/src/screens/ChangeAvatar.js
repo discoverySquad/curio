@@ -5,6 +5,8 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, Pressable } fro
 
 import colors from '../constants/colors';
 import { useSelectedChild } from '../context/SelectedChildContext';
+import { fonts } from '../constants/fonts';
+import CustomButton from '../components/CustomButton';
 
 
 const ChangeAvatar = () => {
@@ -118,7 +120,7 @@ const ChangeAvatar = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Change Avatar</Text>
+            <Text style={styles.title}>Choose an Avatar</Text>
 
             <View style={styles.avatarContainer}>
                 {avatars.map((avatar, index) => (
@@ -135,9 +137,12 @@ const ChangeAvatar = () => {
                 ))}
             </View>
 
-            <Pressable style={styles.btn} onPress={handleSave}>
+            {/* <Pressable style={styles.btn} onPress={handleSave}>
                 <Text style={styles.btnText}>Save Changes</Text>
-            </Pressable>
+            </Pressable> */}
+            <CustomButton 
+            label={"Save Changes"}
+            onPress={handleSave} />
         </View>
     );
 };
@@ -152,6 +157,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     title: {
+        fontFamily: fonts.heading,
         fontSize: 30,
         fontWeight: 700,
         textAlign: 'center',
@@ -161,39 +167,26 @@ const styles = StyleSheet.create({
     avatarContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'center',
-        gap: 12,
+        justifyContent: 'space-evenly',
+        gap: 5,
         backgroundColor: colors.tertiary,
-        paddingVertical: 40,
+        paddingVertical: 30,
         paddingHorizontal: 24,
-        borderRadius: 30
+        borderRadius: 30,
+        marginBottom: 50
     },
     avatarWrapper: {
-        padding: 6,
-        borderRadius: 50,
+        borderWidth: 2,
+        borderColor: 'transparent',
+        borderRadius: 40,
+        padding: 2,
     },
     selectedAvatar: {
-        borderWidth: 3,
         borderColor: colors.primary,
     },
     avatar: {
         width: 70,
         height: 70,
         borderRadius: 35,
-    },
-    btn: {
-        width: 340,
-        height: 50,
-        backgroundColor: colors.primary,
-        borderRadius: 30,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 50,
-    },
-    btnText: {
-        fontSize: 24,
-        fontWeight: 700,
-        textAlign: 'center',
-        color: 'white',
     },
 });

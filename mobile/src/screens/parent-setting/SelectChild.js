@@ -6,6 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelectedChild } from '../../context/SelectedChildContext';
 import colors from '../../constants/colors';
 import { Lock } from 'lucide-react-native';
+import { fonts } from '../../constants/fonts';
+
 // const PARENT_ID = '6a15e296dd882ca29e6355ae'; // temp
 
 const SelectChild = ({ navigation, route }) => {
@@ -139,7 +141,7 @@ const SelectChild = ({ navigation, route }) => {
                             <Image style={styles.addBtn} source={require('../../assets/add.png')} />
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.name}>Add{'\n'}Profile</Text>
+                    <Text style={styles.name}>Add Profile</Text>
                 </TouchableOpacity>
             </View>
 
@@ -164,6 +166,7 @@ const styles = StyleSheet.create({
         padding: 16
     },
     title: {
+        fontFamily: fonts.heading,
         fontSize: 30,
         fontWeight: 700,
         textAlign: 'center',
@@ -172,6 +175,7 @@ const styles = StyleSheet.create({
         color: colors.neutralInk
     },
     text: {
+        fontSize: 16,
         textAlign: 'center',
         marginBottom: 24,
         color: colors.neutralInk
@@ -179,8 +183,10 @@ const styles = StyleSheet.create({
     box: {
         flexDirection: 'row',
         flexWrap: 'wrap',
+        alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 16
+        marginTop: 30,
+        marginBottom: 100
     },
     profileItem: {
         width: '35%',
@@ -189,6 +195,7 @@ const styles = StyleSheet.create({
         marginBottom: 16
     },
     name: {
+        fontFamily: fonts.heading,
         fontSize: 20,
         fontWeight: 700,
         textAlign: 'center',
@@ -197,12 +204,14 @@ const styles = StyleSheet.create({
     avatar: {
         width: 100,
         height: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
         borderRadius: 50,
-        backgroundColor: '#b0b0b0'
+        // backgroundColor: '#b0b0b0'
     },
     addBtn: {
-        width: 100,
-        height: 100
+        width: 95,
+        height: 95
     },
     settingFlex: {
         flex: 1,
