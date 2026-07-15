@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
     objectName: {
         color: '#3D332E',
         marginVertical: 41,
+        textAlign:"center"
     },
     message: {
         width: '100%',
