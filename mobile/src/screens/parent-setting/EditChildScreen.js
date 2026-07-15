@@ -107,7 +107,7 @@ export default function EditChildScreen({ navigation, route }){
         );
         setArchiveModalVisible(false); 
         Alert.alert("Archived", "Child profile archived");
-        navigation.navigate("SelectChildStart");
+        navigation.navigate("SettingParentScreen");
       }catch(error){
         Alert.alert("Error", "Could not archive child profile");
       } 
