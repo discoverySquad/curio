@@ -137,7 +137,7 @@ export default function EditChildScreen({ navigation, route }){
               : undefined
             }/>
 
-            <Text style={styles.label}>Choose an Avatar</Text>
+            <Text style={styles.avatarLabel}>Choose an Avatar</Text>
               
             <View style={styles.avatarContainer}>
               {avatars.map((avatar, index) => (
@@ -214,8 +214,14 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    marginBottom: 6,
-    fontWeight: '600',
+    marginBottom: 8,
+    fontWeight: '700',
+  },
+  avatarLabel: {
+    fontSize: 12,
+    marginTop: 32,
+    marginBottom: 8,
+    fontWeight: '700',
   },
   input: {
     borderWidth: 1,
@@ -223,7 +229,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F4F0',
     padding: 12,
     borderRadius: 32,
-    marginBottom: 12,
+    marginBottom: 32,
     height: 60,
   },
   selectBox: {

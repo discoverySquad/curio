@@ -116,12 +116,13 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 24,
     fontWeight: '700',
-    marginBottom: 0,
+    marginBottom: 4,
     fontFamily: fonts.heading,
   },
   subText: {
     fontSize: 18,
-    marginBottom: 16,
+    marginBottom: 28,
+    fontWeight: 500,
   },
   card: {
     width: 280,
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor:colors.tertiary,
     borderRadius: 20,
     padding: 36,
-    marginBottom: 24,
+    marginBottom: 60,
     justifyContent: 'center',
     alignItems: "center",
     boxShadow: '0px 10px 30px -5px #D6D6D6',
