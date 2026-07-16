@@ -34,6 +34,8 @@ import ChangePassword from '../screens/parent-setting/ChangePassword.js';
 
 import ScanScreen from '../screens/ScanScreen.js';
 
+import {fonts} from "../constants/fonts.js"
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -115,9 +117,10 @@ const GreenHeader = ({ navigation, route, options, back }) => {
                             numberOfLines={1}
                             style={{
                                 color: colors.surface,
-                                fontSize: 17,
+                                fontSize: 24,
                                 fontWeight: '700',
                                 textAlign: 'center',
+                                fontFamily: fonts.heading,
                             }}
                         >
                             {title}

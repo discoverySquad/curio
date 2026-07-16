@@ -20,7 +20,7 @@ const PasswordInput = ({ label, value, onChangeText, show, onToggle }) => (
           <Ionicons
             name={show ? 'eye-off-outline' : 'eye-outline'}
             size={20}
-            color="#888"
+            color={"#3D332E"}
           />
         </TouchableOpacity>
       </View>
@@ -152,8 +152,9 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 8,
+    fontWeight: '700',
+    marginTop: 16,
+    marginBottom: 12,
     color: '#333',
   },
   inputWrapper: {
@@ -171,12 +172,13 @@ const styles = StyleSheet.create({
   },
   eyeButton: {
     paddingLeft: 8,
+    // color: colors.neutralInk,
   },
   eyeIcon: {
     fontSize: 18,
   },
   buttonContainer: {
-    marginTop: 8,
+    marginTop: 32,
   },
 })
 

@@ -30,4 +30,5 @@ export const typography = {
         fontSize: 16, 
         fontWeight: '400',
     },
+    
 };

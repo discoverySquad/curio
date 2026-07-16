@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 48,
         textAlign: 'center',
-        color: colors.neutral,
+        color: colors.neutralInk,
         paddingHorizontal: 4,
         fontWeight: 500,
     },
@@ -146,10 +146,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: fonts.heading,
     },
-    passwordFieldWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    },
     eyeButton: {
     paddingHorizontal: 8,
     },
@@ -160,12 +156,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: '#fff',
     borderRadius: 32,
-    padding: 24,
+    paddingHorizontal: 24,
     marginVertical: 4,
     marginHorizontal: 0,
     color: colors.neutralInk,
+    height: 60,
 },
 input: {
   flex: 1,
+},
+inputWrapper: {
+marginBottom: 12,
 },
 });

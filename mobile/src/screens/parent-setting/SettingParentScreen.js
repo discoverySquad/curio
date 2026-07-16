@@ -359,7 +359,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8, marginVertical: 12 
+    gap: 8, 
+    marginVertical: 12 
 },
   sectionTitle: { 
     marginVertical: 32,
@@ -437,8 +438,8 @@ const styles = StyleSheet.create({
     tintColor: '#888' 
 },
   pencilSmall: { 
-    width: 32, 
-    height: 32, 
+    width: 36, 
+    height: 36, 
 },
 editRow: {
   flexDirection: 'row',
@@ -551,6 +552,7 @@ cancelText:{
   paddingVertical:18
 },
 logoutButton: {
-  marginBottom: 48,
+  marginTop: 32,
+  marginBottom: 90,
 }
 });

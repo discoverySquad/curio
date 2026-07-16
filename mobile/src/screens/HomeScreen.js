@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.heading,
   },
   text: {
-    color: colors.neutral,
+    color: colors.neutralInk,
     fontWeight: 700,
   },
   text1: {
@@ -293,7 +293,7 @@ cupIcon: {
     fontWeight: 700,
     paddingBottom: 10,
     fontFamily: fonts.heading,
-    color: colors.neutral,
+    color: colors.neutralInk,
   },
   goalRow: {
     flexDirection: "row",
@@ -319,7 +319,7 @@ cupIcon: {
     fontSize: 14,
     fontWeight: 600,
     paddingTop: 5,
-    color: colors.neutral,
+    color: colors.neutralInk,
   },
   settingFlex: {
     flex: 1,
@@ -327,7 +327,8 @@ cupIcon: {
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    paddingTop: 40
+    paddingTop: 40,
+    marginBottom: 48,
   },
   settingText: {
     textAlign: 'center',
@@ -336,6 +337,9 @@ cupIcon: {
   timeCircle: {
     width: 85,
     height: 85,
+  },
+  circle: {
+    justifyContent: "center",
   }
 });
 

@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     fontFamily: fonts.heading,
-    color: colors.neutral,
+    color: colors.neutralInk,
   },
 });
 
