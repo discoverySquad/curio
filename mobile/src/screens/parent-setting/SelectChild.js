@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, ScrollView } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import React from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelectedChild } from '../../context/SelectedChildContext';
@@ -13,9 +15,11 @@ import { fonts } from '../../constants/fonts';
 const SelectChild = ({ navigation, route }) => {
     const [children, setChildren] = useState([]);
 
-    useEffect(() => {
-        ShowChildren();
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            ShowChildren();
+        }, [])
+    );
 
     const getParentId = async () => {
         if (route?.params?.parentId) {

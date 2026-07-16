@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, ScrollView } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelectedChild } from '../../context/SelectedChildContext';
@@ -16,6 +16,7 @@ export default function CreateChildScreen({ navigation, route }) {
     const [selectedAvatar, setSelectedAvatar] = useState(0);
     const [saving, setSaving] = useState(false);
     const { setSelectedChild } = useSelectedChild();
+    const source = route?.params?.source;
 
     const data = [
         { key: '1', value: 'Kindergarten' },
@@ -88,8 +89,8 @@ export default function CreateChildScreen({ navigation, route }) {
                 parentId,
             });
 
-            await AsyncStorage.setItem('selectedChild', JSON.stringify(createdChild));
-            setSelectedChild(createdChild);
+            // await AsyncStorage.setItem('selectedChild', JSON.stringify(createdChild));
+            // setSelectedChild(createdChild);
 
             const userStr = await SecureStore.getItemAsync('user');
             const user = userStr ? JSON.parse(userStr) : null;
@@ -102,6 +103,33 @@ export default function CreateChildScreen({ navigation, route }) {
 
                 await SecureStore.setItemAsync('user', JSON.stringify(updatedUser));
             }
+            Alert.alert(
+                'Profile Created!',
+                `${createdChild.name}'s profile is ready.`,
+                [
+                    {
+                        text: "Let's Explore!",
+                        onPress: async () => {
+                            await AsyncStorage.setItem(
+                                'selectedChild',
+                                JSON.stringify(createdChild)
+                            );
+
+                            setSelectedChild(createdChild);
+
+                            if (source === 'initialSetup') {
+                                // Sign Up → Create Profile → Home
+                                navigation.navigate('Home');
+                                return;
+                            }
+
+                            // Switch Profile → Create Profile → Switch Profile
+                            navigation.goBack();
+                        },
+                    },
+                ],
+                { cancelable: false }
+            );
         } catch (error) {
             console.log('Create child error:', error);
             Alert.alert('Error', error.message || 'Could not create child profile.');
@@ -111,53 +139,55 @@ export default function CreateChildScreen({ navigation, route }) {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Create New Profile</Text>
-            <Text style={styles.text}> Setting up a new adventure for your little explorer.</Text>
+        <ScrollView>
+            <View style={styles.container}>
+                <Text style={styles.title}>Create New Profile</Text>
+                <Text style={styles.text}> Setting up a new adventure for your little explorer.</Text>
 
-            <View style={styles.box}>
-                <Text style={styles.label} aria-label="Label for Username" nativeID="labelUsername">
-                    First name or nickname
-                </Text>
-                <TextInput
-                    style={styles.input}
-                    aria-label="input"
-                    aria-labelledby="labelUsername"
-                    placeholder="e.g. Leo"
-                    value={name}
-                    onChangeText={setName}
-                />
+                <View style={styles.box}>
+                    <Text style={styles.label} aria-label="Label for Username" nativeID="labelUsername">
+                        First name or nickname
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        aria-label="input"
+                        aria-labelledby="labelUsername"
+                        placeholder="e.g. Leo"
+                        value={name}
+                        onChangeText={setName}
+                    />
 
-                <Text style={styles.label}>Grade</Text>
-                <SelectList
-                    boxStyles={styles.selectBox}
-                    inputStyles={styles.inputStyles}
-                    dropdownStyles={styles.dropdown}
-                    setSelected={(val) => setSelected(val)}
-                    data={data}
-                    save="value"
-                    search={false}
-                />
+                    <Text style={styles.label}>Grade</Text>
+                    <SelectList
+                        boxStyles={styles.selectBox}
+                        inputStyles={styles.inputStyles}
+                        dropdownStyles={styles.dropdown}
+                        setSelected={(val) => setSelected(val)}
+                        data={data}
+                        save="value"
+                        search={false}
+                    />
 
-                <Text style={styles.label}>Choose an Avatar</Text>
-                <View style={styles.avatarContainer}>
-                    {avatars.map((avatar, index) => (
-                        <TouchableOpacity
-                            key={index}
-                            onPress={() => setSelectedAvatar(index)}
-                            style={[styles.avatarWrapper, selectedAvatar === index && styles.selectedAvatar]}
-                        >
-                            <Image source={{ uri: avatar }} style={styles.avatar} />
-                        </TouchableOpacity>
-                    ))}
+                    <Text style={styles.label}>Choose an Avatar</Text>
+                    <View style={styles.avatarContainer}>
+                        {avatars.map((avatar, index) => (
+                            <TouchableOpacity
+                                key={index}
+                                onPress={() => setSelectedAvatar(index)}
+                                style={[styles.avatarWrapper, selectedAvatar === index && styles.selectedAvatar]}
+                            >
+                                <Image source={{ uri: avatar }} style={styles.avatar} />
+                            </TouchableOpacity>
+                        ))}
+                    </View>
                 </View>
+
+
+                <TouchableOpacity style={styles.btn} onPress={handleCreateChild} disabled={saving}>
+                    <Text style={styles.btnText}>{saving ? 'Saving...' : 'Create Profile'}</Text>
+                </TouchableOpacity>
             </View>
-
-
-            <TouchableOpacity style={styles.btn} onPress={handleCreateChild} disabled={saving}>
-                <Text style={styles.btnText}>{saving ? 'Saving...' : 'Create Profile'}</Text>
-            </TouchableOpacity>
-        </View>
+        </ScrollView>
     );
 }
 
@@ -172,13 +202,15 @@ const styles = StyleSheet.create({
         fontFamily: fonts.heading,
         fontSize: 36,
         fontWeight: 700,
-        marginBottom: 10
+        marginBottom: 10,
+        textAlign: 'center'
     },
     text: {
         fontFamily: fonts.body,
         fontSize: 16,
         fontWeight: 400,
         marginBottom: 20,
+        textAlign: 'center'
     },
     input: {
         borderWidth: 1,
@@ -190,6 +222,7 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     label: {
+        fontFamily: fonts.heading,
         fontSize: 14,
         fontWeight: 700,
         marginBottom: 6,
@@ -216,6 +249,8 @@ const styles = StyleSheet.create({
     dropdown: {
         borderWidth: 1,
         borderRadius: 20,
+        backgroundColor: colors.surface,
+        borderColor: colors.surface,
     },
     avatarContainer: {
         justifyContent: 'space-evenly',

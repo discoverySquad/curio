@@ -314,6 +314,7 @@ const SetupStack = ({ user, setUser, initialRouteName = 'SelectChild', onLogout 
                             params: {
                                 ...(props.route.params || {}),
                                 parentId,
+                                source: props.route.params?.source || (initialRouteName === 'CreateChild' ? 'initialSetup' : undefined),
                             },
                         }}
                     />
@@ -364,7 +365,7 @@ const HomeStack = ({ onLogout }) => {
 const JournalStack = () => {
     return (
         <Stack.Navigator screenOptions={greenHeaderOptions}>
-            <Stack.Screen name="JournalHome" component={JournalScreen} options={{ title: 'Journal' }} />
+            <Stack.Screen name="JournalHome" component={JournalScreen} options={{ title: 'Explore the World!' }} />
             <Stack.Screen name="AvatarChange" component={ChangeAvatar} options={{ title: '' }}/>
         </Stack.Navigator>
     );
