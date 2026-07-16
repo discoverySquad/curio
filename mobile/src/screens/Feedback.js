@@ -89,7 +89,7 @@ const Feedback = ({ navigation, route }) => {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-            <Text style={styles.title}>Mission Complete!</Text>
+            <Text style={[styles.title, typography.h2]}>Mission Complete!</Text>
 
             <View style={styles.imageCard}>
                 {imageUri ? (
@@ -146,16 +146,18 @@ const styles = StyleSheet.create({
     content: {
         alignItems: 'center',
         paddingHorizontal: 28,
-        paddingTop: 26,
+        paddingTop: 34,
         paddingBottom: 38,
     },
     title: {
         width: '100%',
         fontSize: 24,
-        fontWeight: '800',
+        fontWeight: '700',
         textAlign: 'center',
-        marginBottom: 28,
+        marginBottom: 40,
         color: '#574239',
+        alignSelf: 'stretch',
+        lineHeight:36
     },
     imageCard: {
         width: '100%',
@@ -192,6 +194,7 @@ const styles = StyleSheet.create({
     objectName: {
         color: '#3D332E',
         marginVertical: 41,
+        textAlign:"center"
     },
     message: {
         width: '100%',
