@@ -243,7 +243,7 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
                 
               </View>
             ))}
-                <TouchableOpacity style={styles.profileItem} onPress={() => navigation.navigate("CreateChild")}>
+                <TouchableOpacity style={styles.profileItem} onPress={() => navigation.navigate("CreateChild", { source: 'switchProfile' })}>
                   <Image source={require('../../assets/add.png')} style={styles.addAvatar} resizeMode={"contain"} />
                   <Text style={[styles.profileName, typography.h3]}>Add Profile</Text>
                 </TouchableOpacity>
