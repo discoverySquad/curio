@@ -102,11 +102,7 @@ const Feedback = ({ navigation, route }) => {
             </View>
 
             <Pressable style={styles.soundButton} onPress={toggleSpeech}>
-                <Image
-                    source={isSpeaking ? require('../assets/State=Pressed.png') : require('../assets/State=Default.png')}
-                    style={styles.soundIcon}
-                    resizeMode="contain"
-                />
+                <Image source={require('../assets/Sound Button.png')} style={styles.soundIcon} resizeMode="contain" />
             </Pressable>
 
             <Text style={styles.message}>Nice Exploring! You scanned {objectName}. Keep looking around--the world is full of surprises.</Text>
