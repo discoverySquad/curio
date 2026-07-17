@@ -288,6 +288,7 @@ const styles = StyleSheet.create({
         height: 18,
         borderWidth: 1,
         borderColor: '#3D332E',
+        backgroundColor: '#FFFFFF',
         borderRadius: 4,
         justifyContent: 'center',
         alignItems: 'center',
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: '800',
         color: '#3D332E',
-        textDecorationLine: 'underline',
-        marginRight: 4,
+        // textDecorationLine: 'underline',
+        marginRight: 1,
     },
 });

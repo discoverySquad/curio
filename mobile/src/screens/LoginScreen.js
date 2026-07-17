@@ -15,7 +15,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { fonts } from '../constants/fonts.js';
 import { apiRequest } from '../services/api.js';
 
 const LOGO_URL = 'https://curio4985-bucket.s3.us-east-1.amazonaws.com/CurioLogo_Large_Green.png';
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     keyboardView: {
         flex: 1,
         backgroundColor: '#F9FBF7',
-        position: 'relative'
+        position: 'relative',
     },
     scrollContent: {
         flexGrow: 1,
@@ -192,26 +192,29 @@ const styles = StyleSheet.create({
         paddingBottom: 28,
     },
     welcomeTitle: {
+        fontFamily: 'Quicksand_700Bold',
         fontSize: 22,
-        fontWeight: '800',
+        lineHeight: 30,
         textAlign: 'center',
         color: '#3D332E',
         marginBottom: 26,
     },
     subtitle: {
+        fontFamily: 'Quicksand_600SemiBold',
         fontSize: 14,
+        lineHeight: 20,
         textAlign: 'center',
         marginBottom: 30,
         color: '#3D332E',
-        fontWeight: '500',
     },
     firstTimeSubtitle: {
         marginTop: 8,
         marginBottom: 34,
     },
     label: {
+        fontFamily: 'Quicksand_700Bold',
         fontSize: 12,
-        fontWeight: '700',
+        lineHeight: 16,
         marginBottom: 8,
         color: '#3D332E',
     },
@@ -221,6 +224,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 28,
         marginBottom: 22,
+        fontFamily: 'Quicksand_400Regular',
         fontSize: 14,
         color: '#111111',
     },
@@ -234,6 +238,7 @@ const styles = StyleSheet.create({
     },
     passwordInput: {
         height: '100%',
+        fontFamily: 'Quicksand_400Regular',
         fontSize: 14,
         color: '#111111',
         paddingLeft: 20,
@@ -254,31 +259,35 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     forgotText: {
+        fontFamily: 'Quicksand_700Bold',
         fontSize: 12,
-        fontWeight: '800',
+        lineHeight: 16,
         color: '#111111',
     },
     errorText: {
+        fontFamily: 'Quicksand_600SemiBold',
         fontSize: 13,
+        lineHeight: 18,
         marginBottom: 12,
         color: '#111111',
         textAlign: 'center',
-        fontWeight: '600',
     },
     primaryButton: {
         height: 58,
-        borderRadius: 30,
-        backgroundColor: '#316828',
-        justifyContent: 'center',
+        borderRadius: 32,
+        backgroundColor: '#2F6F2D',
         alignItems: 'center',
+        justifyContent: 'center',
+    },
+    primaryButtonText: {
+        fontFamily: 'Quicksand_700Bold',
+        color: '#FFFFFF',
+        fontSize: 17,
+        lineHeight: 24,
+        textAlign: 'center',
     },
     disabledButton: {
         opacity: 0.7,
-    },
-    primaryButtonText: {
-        color: '#FFFFFF',
-        fontSize: 17,
-        fontWeight: '800',
     },
     divider: {
         height: 1,
@@ -286,14 +295,17 @@ const styles = StyleSheet.create({
         marginVertical: 24,
     },
     linkText: {
+        fontFamily: 'Quicksand_400Regular',
         textAlign: 'center',
         fontSize: 13,
+        lineHeight: 18,
         color: '#111111',
     },
     linkStrong: {
+        fontFamily: 'Quicksand_700Bold',
         textAlign: 'center',
         fontSize: 13,
-        fontWeight: '800',
+        lineHeight: 18,
         color: '#111111',
         marginTop: 2,
         textDecorationLine: 'underline',

@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, Modal, StyleSheet, ActivityIndicator, Alert, Pressable, Animated } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -16,6 +17,13 @@ export default function ScanScreen({ navigation, route }) {
     const [loading, setLoading] = useState(false);
     const [warning, setWarning] = useState(null);
     const [torchOn, setTorchOn] = useState(false);
+    useFocusEffect(
+        useCallback(() => {
+            return () => {
+                setTorchOn(false);
+            };
+        }, []),
+    );
 
     const { selectedChild, setSelectedChild } = useSelectedChild();
     const childId = selectedChild?._id;
@@ -80,6 +88,8 @@ export default function ScanScreen({ navigation, route }) {
                 quality: 0.4,
             });
 
+            setTorchOn(false);
+            
             const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [{ resize: { width: 640 } }], {
                 compress: 0.5,
                 format: ImageManipulator.SaveFormat.JPEG,
@@ -107,6 +117,7 @@ export default function ScanScreen({ navigation, route }) {
                 });
 
                 if (!verifyData.isMatch) {
+                    setTorchOn(false);
                     navigation.navigate('TryAgain', {
                         childId,
                         categoryName,
@@ -159,6 +170,8 @@ export default function ScanScreen({ navigation, route }) {
                 console.log('Failed to update selectedChild from gamification response', error);
             }
 
+            setTorchOn(false);
+            
             navigation.navigate('Feedback', {
                 result: {
                     ...scanData,

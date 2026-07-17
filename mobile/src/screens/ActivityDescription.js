@@ -131,8 +131,6 @@ const ActivityDescription = ({ navigation, route }) => {
 
             {task?.img ? <Image source={{ uri: task.img }} style={styles.taskImage} /> : null}
 
-            
-
             {/* <View style={styles.soundRow}>
                 <Pressable style={styles.speakerButton} onPress={toggleSpeech}>
                     <Ionicons name={isSpeaking ? 'volume-mute' : 'volume-high'} size={22} color="#FFFFFF" />
@@ -140,17 +138,14 @@ const ActivityDescription = ({ navigation, route }) => {
             </View> */}
 
             <View style={styles.soundRow}>
-                <Pressable
-                    onPress={toggleSpeech}
-                    onPressIn={() => setIsPressed(true)}
-                    onPressOut={() => setIsPressed(false)}
-                >
-
-                <Image
-                    source={require('../assets/Sound Button.png')}
-                    style={{ width: 44, height: 44 }}
-                    resizeMode="contain"
-                />
+                <Pressable style={styles.soundButton} onPress={toggleSpeech}>
+                    {({ pressed }) => (
+                        <Image
+                            source={pressed || isSpeaking ? require('../assets/State=Pressed.png') : require('../assets/State=Default.png')}
+                            style={styles.soundIcon}
+                            resizeMode="contain"
+                        />
+                    )}
                 </Pressable>
             </View>
 
@@ -208,7 +203,7 @@ const styles = StyleSheet.create({
         height: 318,
         borderRadius: 35,
         // marginVertical: 16,
-        marginTop:40,
+        marginTop: 40,
     },
     description: {
         width: '100%',
@@ -221,8 +216,8 @@ const styles = StyleSheet.create({
     soundRow: {
         width: '100%',
         alignItems: 'flex-start',
-        marginBottom: 15,
-        marginTop:41
+        marginBottom: 20,
+        marginTop: 41,
     },
     speakerButton: {
         width: 42,
@@ -233,9 +228,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#4D4D4D',
     },
     tipContainer: {
-        flex:1,
-        flexDirection:'row',
-        gap:24,
+        flex: 1,
+        flexDirection: 'row',
+        gap: 24,
         backgroundColor: '#F0BA7A',
         width: 358,
         minHeight: 110,
@@ -243,20 +238,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 32,
         paddingHorizontal: 24,
-        paddingVertical:24,
+        paddingVertical: 24,
         marginBottom: 41,
     },
-    infoIcon:{
-        width:80,
-        height:80
+    infoIcon: {
+        width: 80,
+        height: 80,
     },
     tipText: {
         fontSize: 16,
         textAlign: 'left',
         color: '#000000',
-        width:206,
-        lineHeight:24,
-        fontWeight:500
+        width: 206,
+        lineHeight: 24,
+        fontWeight: 500,
     },
     buttonSection: {
         width: '100%',
@@ -281,6 +276,17 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#111111',
         marginBottom: 20,
+    },
+    soundButton: {
+        width: 42,
+        height: 42,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    soundIcon: {
+        width: 42,
+        height: 42,
     },
 });
 
