@@ -145,15 +145,12 @@ const ActivityDescription = ({ navigation, route }) => {
                     onPressIn={() => setIsPressed(true)}
                     onPressOut={() => setIsPressed(false)}
                 >
-                    <Image
-                        source={
-                            isSpeaking
-                                ? require('../assets/State=Pressed.png')
-                                : require('../assets/State=Default.png')
-                        }
-                        style={{ width: 44, height: 44 }}
-                        resizeMode="contain"
-                    />
+
+                <Image
+                    source={require('../assets/Sound Button.png')}
+                    style={{ width: 44, height: 44 }}
+                    resizeMode="contain"
+                />
                 </Pressable>
             </View>
 
