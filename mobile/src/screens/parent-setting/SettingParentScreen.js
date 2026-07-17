@@ -179,7 +179,7 @@ export default function SettingParentScreen({ navigation, route, user, onLogout 
             >
                 <Image 
                     source={require('../../assets/Delete-Profile-Icon-Parent.png')}
-                    style={{ width: 32, height: 26 }}
+                    style={{ width: 32, height: 26, resizeMode:"contain"  }}
                 />
             </TouchableOpacity>
         ),

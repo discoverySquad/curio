@@ -57,7 +57,7 @@ export default function EditChildScreen({ navigation, route }){
             <TouchableOpacity onPress={() => setArchiveModalVisible(true)}>
                 <Image 
                     source={require('../../assets/Delete-Profile-Icon.png')}
-                    style={{ width: 32, height: 26, }}
+                    style={{ width: 32, height: 26, resizeMode:"contain" }}
                 />
             </TouchableOpacity>
         ),

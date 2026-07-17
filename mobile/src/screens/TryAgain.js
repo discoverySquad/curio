@@ -47,7 +47,7 @@ const TryAgain = ({ navigation, route }) => {
 
             <View style={styles.tipBox}>
                 <Image style={styles.infoIcon} source={require('../assets/Background_icon.png')} />
-                <Text style={[styles.tipText, typography.section]}>Need a hand? Ask an adult to help you hind a matching pattern!</Text>
+                <Text style={[styles.tipText, typography.section]}>Need a hand? Ask an adult to help you find a matching pattern!</Text>
             </View>
 
             <View style={styles.buttonSection}>
