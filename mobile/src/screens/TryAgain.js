@@ -1,12 +1,11 @@
-import { View, Text, StyleSheet, Pressable, Button, ScrollView, Image } from 'react-native';
-import React, { useEffect } from 'react';
-import { useAudioPlayer } from 'expo-audio';
-
+import { View, Text, StyleSheet, Pressable, ScrollView, Image } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useAudioPlayer, setAudioModeAsync } from 'expo-audio';
 import CustomButton from '../components/CustomButton.js';
 import { typography } from '../constants/fonts.js';
 
 const TryAgain = ({ navigation, route }) => {
-    const failSound = useAudioPlayer(require('../assets/sounds/fail.mp3'));
 
     const childId = route?.params?.childId;
     const categoryName = route?.params?.categoryName;
@@ -14,10 +13,24 @@ const TryAgain = ({ navigation, route }) => {
     const activityId = route?.params?.activityId;
     const activityDescription = route?.params?.activityDescription;
 
-    useEffect(() => {
+const failSound = useAudioPlayer(require('../assets/sounds/fail.mp3'));
+
+useEffect(() => {
+    setAudioModeAsync({
+        playsInSilentMode: true,
+    }).catch((error) => {
+        console.log('Audio mode error:', error);
+    });
+}, []);
+
+useFocusEffect(
+    useCallback(() => {
         failSound.seekTo(0);
         failSound.play();
-    }, []);
+
+        return undefined;
+    }, [failSound]),
+);
 
     const avator = [
         'https://curio4985-bucket.s3.us-east-1.amazonaws.com/Mascot_Wrong_Answer_1.png',

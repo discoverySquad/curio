@@ -15,6 +15,7 @@ const Feedback = ({ navigation, route }) => {
     const categoryName = route.params?.categoryName || route.params?.category || 'Nature';
 
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [isPressed, setIsPressed] = useState(false);
     const successSound = useAudioPlayer(require('../assets/sounds/success.mp3'));
 
     const objectName = result?.objectName || 'what you found';
@@ -101,9 +102,17 @@ const Feedback = ({ navigation, route }) => {
                 )}
             </View>
 
-            <Pressable style={styles.soundButton} onPress={toggleSpeech}>
-                <Image source={require('../assets/Sound Button.png')} style={styles.soundIcon} resizeMode="contain" />
-            </Pressable>
+            <View style={styles.soundRow}>
+                <Pressable style={styles.soundButton} onPress={toggleSpeech}>
+                    {({ pressed }) => (
+                        <Image
+                            source={pressed || isSpeaking ? require('../assets/State=Pressed.png') : require('../assets/State=Default.png')}
+                            style={styles.soundIcon}
+                            resizeMode="contain"
+                        />
+                    )}
+                </Pressable>
+            </View>
 
             <Text style={styles.message}>Nice Exploring! You scanned {objectName}. Keep looking around--the world is full of surprises.</Text>
 
@@ -153,7 +162,7 @@ const styles = StyleSheet.create({
         marginBottom: 40,
         color: '#574239',
         alignSelf: 'stretch',
-        lineHeight:36
+        lineHeight: 36,
     },
     imageCard: {
         width: '100%',
@@ -183,22 +192,35 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         marginBottom: 12,
     },
+    soundButton: {
+        width: 42,
+        height: 42,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
     soundIcon: {
-        width: 44,
-        height: 44,
+        width: 42,
+        height: 42,
+    },
+    soundRow: {
+        width: '100%',
+        alignItems: 'flex-start',
+        marginBottom: 20,
+        marginTop: 41,
     },
     objectName: {
         color: '#3D332E',
         marginVertical: 41,
-        textAlign:"center"
+        textAlign: 'center',
     },
     message: {
         width: '100%',
-        maxWidth: 318,
-        fontSize: 14,
-        lineHeight: 20,
-        color: '#3D332E',
-        // marginBottom: 28,
+        fontSize: 16,
+        lineHeight: 22,
+        textAlign: 'left',
+        color: '#222222',
+        marginBottom: 41,
     },
     factsSection: {
         width: '100%',
